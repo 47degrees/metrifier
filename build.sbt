@@ -7,6 +7,8 @@ lazy val V = new {
 lazy val root = project
   .in(file("."))
   .settings(name := "metrifier")
+  .aggregate(shared, http/*, `frees-rpc`*/, bench)
+  .dependsOn(shared, http/*, `frees-rpc`*/, bench)
 
 lazy val shared = project
   .in(file("shared"))
