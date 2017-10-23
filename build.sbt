@@ -7,8 +7,7 @@ lazy val V = new {
 lazy val root = project
   .in(file("."))
   .settings(name := "metrifier")
-  .aggregate(shared, http /*, `frees-rpc`*/, bench)
-  .dependsOn(shared, http /*, `frees-rpc`*/, bench)
+  .aggregate(shared, http, `frees-rpc`, bench)
 
 lazy val shared = project
   .in(file("shared"))
@@ -16,13 +15,11 @@ lazy val shared = project
 
 lazy val http = project
   .in(file("http"))
-  .aggregate(shared)
   .dependsOn(shared)
   .settings(moduleName := "http")
 
 lazy val `frees-rpc` = project
   .in(file("frees-rpc"))
-  .aggregate(shared)
   .dependsOn(shared)
   .settings(moduleName := "frees-rpc")
   .settings(
@@ -35,17 +32,10 @@ lazy val `frees-rpc` = project
       "io.frees" %% "frees-rpc"               % V.freesRPC
     )
   )
-  .settings(
-    Seq(
-      addCompilerPlugin("org.scalameta" % "paradise" % "3.0.0-M10" cross CrossVersion.full),
-      libraryDependencies += "org.scalameta" %% "scalameta" % "1.8.0",
-      scalacOptions += "-Xplugin-require:macroparadise",
-      scalacOptions in (Compile, console) ~= (_ filterNot (_ contains "paradise")) // macroparadise plugin doesn't work in repl yet.
-    ): _*
-  )
+  .settings(scalaMetaSettings: _*)
 
 lazy val bench = project
   .in(file("bench"))
-  .aggregate(http, `frees-rpc`)
   .dependsOn(http, `frees-rpc`)
   .settings(moduleName := "bench")
+  .settings(scalaMetaSettings: _*)
