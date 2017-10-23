@@ -7,8 +7,8 @@ lazy val V = new {
 lazy val root = project
   .in(file("."))
   .settings(name := "metrifier")
-  .aggregate(shared, http/*, `frees-rpc`*/, bench)
-  .dependsOn(shared, http/*, `frees-rpc`*/, bench)
+  .aggregate(shared, http /*, `frees-rpc`*/, bench)
+  .dependsOn(shared, http /*, `frees-rpc`*/, bench)
 
 lazy val shared = project
   .in(file("shared"))
@@ -16,10 +16,14 @@ lazy val shared = project
 
 lazy val http = project
   .in(file("http"))
+  .aggregate(shared)
+  .dependsOn(shared)
   .settings(moduleName := "http")
 
 lazy val `frees-rpc` = project
   .in(file("frees-rpc"))
+  .aggregate(shared)
+  .dependsOn(shared)
   .settings(moduleName := "frees-rpc")
   .settings(
     libraryDependencies ++= Seq(
@@ -42,4 +46,6 @@ lazy val `frees-rpc` = project
 
 lazy val bench = project
   .in(file("bench"))
+  .aggregate(http, `frees-rpc`)
+  .dependsOn(http, `frees-rpc`)
   .settings(moduleName := "bench")
