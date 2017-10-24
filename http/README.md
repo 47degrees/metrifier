@@ -16,92 +16,41 @@ And you will get:
 PersonService has started at 0.0.0.0:8080
 ```
 
+#### Get the list of people
+
+`GET http://0.0.0.0:8080/person`
+
+
 #### Get a person
 
 `GET http://0.0.0.0:8080/person/[ID]`
 
+#### Get the linked people for a given person
+
+`GET http://0.0.0.0:8080/person/[ID]/links`
+
+#### Create a person
+
+`POST http://0.0.0.0:8080/person`
+
 Request example:
-
-[http://0.0.0.0:8080/person/1](http://0.0.0.0:8080/person/1)
-
-Response example:
 
 ```javascript
 {
     "name": {
         "title": "mr",
-        "first": "romain",
-        "last": "hoogmoed"
+        "first": "rafa",
+        "last": "paradea"
     },
     "location": {
-        "street": "1861 jan pieterszoon coenstraat",
-        "city": "maasdriel",
-        "state": "zeeland",
-        "postCode": 69217
+        "street": "percebes 40",
+        "city": "coto la campa",
+        "state": "cadiz",
+        "postCode": 11130
     },
-    "email": "romain.hoogmoed@example.com",
-    "id": "1",
+    "email": "rafa.paradela@example.com",
+    "id": "54",
     "picture": null,
     "gender": "male"
-}
-```
-
-#### Link two people
-
-`POST http://0.0.0.0:8080/person/link`
-
-Request example:
-
-```javascript
-{
-	"id1": "1",
-	"id2": "2"
-}
-```
-
-Response example:
-
-```javascript
-{
-    "link": {
-        "p1": {
-            "name": {
-                "title": "mr",
-                "first": "romain",
-                "last": "hoogmoed"
-            },
-            "location": {
-                "street": "1861 jan pieterszoon coenstraat",
-                "city": "maasdriel",
-                "state": "zeeland",
-                "postCode": 69217
-            },
-            "email": "romain.hoogmoed@example.com",
-            "id": "1",
-            "picture": null,
-            "gender": "male"
-        },
-        "p2": {
-            "name": {
-                "title": "mademoiselle",
-                "first": "morgane",
-                "last": "lefebvre"
-            },
-            "location": {
-                "street": "2260 rue de gerland",
-                "city": "vucherens",
-                "state": "graubünden",
-                "postCode": 2877
-            },
-            "email": "morgane.lefebvre@example.com",
-            "id": "2",
-            "picture": {
-                "large": "https://randomuser.me/api/portraits/women/62.jpg",
-                "medium": "https://randomuser.me/api/portraits/med/women/62.jpg",
-                "thumbnail": "https://randomuser.me/api/portraits/thumb/women/62.jpg"
-            },
-            "gender": "female"
-        }
-    }
 }
 ```
