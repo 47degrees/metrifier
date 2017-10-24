@@ -3,20 +3,21 @@ package handlers
 
 import freestyle.Capture
 import journal.Logger
+import metrifier.model._
 import metrifier.protocols._
 
 class PersonServiceHandler[F[_]](implicit C: Capture[F]) extends PersonService.Handler[F] {
 
   val logger: Logger = Logger[this.type]
 
-  override def listUsers(b: Boolean): F[PersonList] = C.capture {
-    logger.info(s" ### listUsers ### ")
-    services.listUsers
+  override def listPersons(b: Boolean): F[PersonList] = C.capture {
+    logger.info(s" ### listPersons ### ")
+    services.listPersons
   }
 
-  override def getUser(id: String): F[Person] = C.capture {
-    logger.info(s" ### getUser($id) ### ")
-    services.getUser(id)
+  override def getPerson(id: String): F[Person] = C.capture {
+    logger.info(s" ### getPerson($id) ### ")
+    services.getPerson(id)
   }
 
   override def getPersonLinks(id: String): F[PersonLinkList] = C.capture {

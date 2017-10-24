@@ -17,14 +17,15 @@ package metrifier
 package http
 
 
-import metrifier.implicits._
 import org.http4s.Method._
 import org.http4s.client.Client
 import org.http4s.client.blaze.PooledHttp1Client
 import org.http4s.{Request, Uri}
 
-import scalaz.concurrent.Task
+import metrifier.codecs._
+import metrifier.model._
 
+import scalaz.concurrent.Task
 
 object ClientApp {
 
@@ -33,11 +34,11 @@ object ClientApp {
     val client = new HttpClient(PooledHttp1Client())
 
     val aggregation: Task[PersonAggregation] = for {
-      personList <- client.listUsers
-      p1         <- client.getUser("1")
-      p2         <- client.getUser("2")
-      p3         <- client.getUser("3")
-      p4         <- client.getUser("4")
+      personList <- client.listPersons
+      p1         <- client.getPerson("1")
+      p2         <- client.getPerson("2")
+      p3         <- client.getPerson("3")
+      p4         <- client.getPerson("4")
       p1Links    <- client.getPersonLinks(p1.id)
       p3Links    <- client.getPersonLinks(p3.id)
       pNew       <- client.createPerson(
@@ -69,9 +70,9 @@ object ClientApp {
 
 class HttpClient(c: Client) {
 
-  def listUsers: Task[PersonList] = c.expect[PersonList](url("/person"))
+  def listPersons: Task[PersonList] = c.expect[PersonList](url("/person"))
 
-  def getUser(id: String): Task[Person]  = c.expect[Person](url(s"/person/$id"))
+  def getPerson(id: String): Task[Person]  = c.expect[Person](url(s"/person/$id"))
 
   def getPersonLinks(id: String): Task[PersonLinkList] =  c.expect[PersonLinkList](url(s"/person/$id/links"))
 
@@ -98,6 +99,6 @@ class HttpClient(c: Client) {
   }
 
 
-  def url(path: String): Uri = Uri(path = s"http://$host:$port$path")
+  def url(path: String): Uri = Uri(path = s"http://${HttpConf.host}:${HttpConf.port}$path")
 
 }

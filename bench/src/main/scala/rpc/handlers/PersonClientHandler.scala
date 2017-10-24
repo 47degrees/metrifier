@@ -5,6 +5,7 @@ import cats._
 import cats.implicits._
 import io.grpc.StatusRuntimeException
 import journal.Logger
+import metrifier.model._
 import metrifier.protocols._
 import metrifier.rpc._
 
@@ -16,13 +17,13 @@ class SampleClientHandler[F[_]: Monad](
 
   val logger: Logger = Logger[this.type]
 
-  override def listUsers: F[List[Person]] =
+  override def listPersons: F[PersonList] =
     M.handleErrorWith {
-      logger.info(s"*** listUsers ***")
-      client.listUsers(true)
+      logger.info(s"*** listPersons ***")
+      client.listPersons(true)
         .map { personList: PersonList =>
           logger.info(s"Found '${personList.count}' persons: ${personList.persons}")
-          personList.persons
+          personList
         }
     } {
       case e: StatusRuntimeException =>
@@ -30,11 +31,11 @@ class SampleClientHandler[F[_]: Monad](
         M.raiseError(e)
     }
 
-  override def getUser(id: String): F[Person] =
+  override def getPerson(id: String): F[Person] =
     M.handleErrorWith {
-      logger.info(s"*** getUser($id) ***")
+      logger.info(s"*** getPerson($id) ***")
       client
-        .getUser(id)
+        .getPerson(id)
         .map { person: Person =>
           logger.info(s"Found person with ID $id: $person")
           person
@@ -45,14 +46,14 @@ class SampleClientHandler[F[_]: Monad](
         M.raiseError(e)
     }
 
-  override def getPersonLinks(id: String): F[List[PersonLink]] =
+  override def getPersonLinks(id: String): F[PersonLinkList] =
     M.handleErrorWith {
       logger.info(s"*** getPersonLinks($id) ***")
       client
         .getPersonLinks(id)
         .map { personLinkList: PersonLinkList =>
           logger.info(s"Person with ID $id has '${personLinkList.count}' links: ${personLinkList.links}")
-          personLinkList.links
+          personLinkList
         }
     } {
       case e: StatusRuntimeException =>

@@ -1,5 +1,7 @@
 package metrifier
 
+import metrifier.model._
+
 object database {
 
   val p1: Person = Person(
