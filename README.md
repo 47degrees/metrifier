@@ -9,7 +9,7 @@ Comparing HTTP endpoints against frees-rpc services.
 * Run Server:
 
 ```bash
-sbt "http/runMain metrifier.Server"
+sbt "http/runMain metrifier.HttpServer"
 ```
 
 * Run Client:

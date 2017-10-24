@@ -18,6 +18,7 @@ package metrifier
 
 import freestyle._
 import freestyle.rpc.protocol._
+import metrifier.model._
 
 @option(name = "java_package", value = "metriefier", quote = true)
 @option(name = "java_multiple_files", value = "true", quote = false)
@@ -28,9 +29,9 @@ object protocols {
   @service
   trait PersonService {
 
-    @rpc def listUsers(b: Boolean): FS[PersonList]
+    @rpc def listPersons(b: Boolean): FS[PersonList]
 
-    @rpc def getUser(id: String): FS[Person]
+    @rpc def getPerson(id: String): FS[Person]
 
     @rpc def getPersonLinks(id: String): FS[PersonLinkList]
 

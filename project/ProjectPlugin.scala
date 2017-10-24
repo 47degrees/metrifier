@@ -7,6 +7,15 @@ object ProjectPlugin extends AutoPlugin {
 
   object autoImport {
 
+    lazy val V = new {
+      lazy val frees              = "0.4.1"
+      lazy val freesRPC           = "0.1.1"
+      lazy val monix              = "3.0.0-M1"
+      lazy val http4sV            = "0.15.12a"
+      lazy val argonautV          = "6.2"
+      lazy val argonautShapelessV = "1.2.0-M5"
+    }
+
     lazy val scalaMetaSettings: Seq[Def.Setting[_]] =
       Seq(
         addCompilerPlugin("org.scalameta" % "paradise" % "3.0.0-M10" cross CrossVersion.full),
@@ -15,6 +24,15 @@ object ProjectPlugin extends AutoPlugin {
         scalacOptions in (Compile, console) ~= (_ filterNot (_ contains "paradise")) // macroparadise plugin doesn't work in repl yet.
       )
 
+    lazy val httpDependencies: Seq[ModuleID] = Seq(
+      "org.http4s"                 %% "http4s-dsl"             % V.http4sV,
+      "org.http4s"                 %% "http4s-blaze-server"    % V.http4sV,
+      "org.http4s"                 %% "http4s-blaze-client"    % V.http4sV,
+      "org.http4s"                 %% "http4s-argonaut"        % V.http4sV,
+      "com.github.alexarchambault" %% "argonaut-shapeless_6.2" % V.argonautShapelessV,
+      "io.argonaut"                %% "argonaut"               % V.argonautV,
+      "io.argonaut"                %% "argonaut-scalaz"        % V.argonautV
+    )
   }
 
   override def projectSettings: Seq[Def.Setting[_]] =

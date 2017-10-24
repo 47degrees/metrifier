@@ -18,7 +18,7 @@ package metrifier
 package rpc
 
 import freestyle._
-import metrifier.protocols._
+import metrifier.model._
 import monix.eval.Task
 import metrifier.rpc.client.implicits._
 
@@ -28,11 +28,11 @@ import scala.concurrent.duration._
 @free
 trait SampleClient {
 
-  def listUsers: FS[List[Person]]
+  def listPersons: FS[PersonList]
 
-  def getUser(id: String): FS[Person]
+  def getPerson(id: String): FS[Person]
 
-  def getPersonLinks(id: String): FS[List[PersonLink]]
+  def getPersonLinks(id: String): FS[PersonLinkList]
 
   def createPerson(
       id: String,
@@ -54,16 +54,15 @@ trait SampleClient {
 object ClientProgram {
 
   //TODO Proper PersonAggregation is defined at metrifier.implicits#PersonAggregation
-  type PersonAggregation =
-    (Person, Person, Person, Person, List[PersonLink], List[PersonLink], List[Person])
+
 
   def clientProgram[M[_]](implicit APP: SampleClient[M]): FreeS[M, PersonAggregation] = {
     for {
-      personList <- APP.listUsers
-      p1         <- APP.getUser("1")
-      p2         <- APP.getUser("2")
-      p3         <- APP.getUser("3")
-      p4         <- APP.getUser("4")
+      personList <- APP.listPersons
+      p1         <- APP.getPerson("1")
+      p2         <- APP.getPerson("2")
+      p3         <- APP.getPerson("3")
+      p4         <- APP.getPerson("4")
       p1Links    <- APP.getPersonLinks(p1.id)
       p3Links    <- APP.getPersonLinks(p3.id)
       pNew <- APP.createPerson(
@@ -81,7 +80,7 @@ object ClientProgram {
         pictureMedium = None,
         pictureThumbnail = None
       )
-    } yield (p1, p2, p3, p4, p1Links, p3Links, personList :+ pNew)
+    } yield (p1, p2, p3, p4, p1Links, p3Links, personList.add(pNew))
   }
 }
 
@@ -89,7 +88,7 @@ object ClientApp {
 
   def main(args: Array[String]): Unit = {
 
-    val result: ClientProgram.PersonAggregation = Await.result(
+    val result: PersonAggregation = Await.result(
       ClientProgram.clientProgram[SampleClient.Op].interpret[Task].runAsync,
       Duration.Inf)
 
