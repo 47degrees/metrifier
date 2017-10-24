@@ -10,7 +10,7 @@ class PersonServiceHandler[F[_]](implicit C: Capture[F]) extends PersonService.H
 
   val logger: Logger = Logger[this.type]
 
-  override def listPersons(b: Boolean): F[PersonList] = C.capture {
+  override def listPersons(b: String): F[PersonList] = C.capture {
     logger.info(s" ### listPersons ### ")
     services.listPersons
   }
