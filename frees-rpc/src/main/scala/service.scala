@@ -29,7 +29,7 @@ object protocols {
   @service
   trait PersonService {
 
-    @rpc def listPersons(b: Boolean): FS[PersonList]
+    @rpc def listPersons(b: String): FS[PersonList]
 
     @rpc def getPerson(id: String): FS[Person]
 

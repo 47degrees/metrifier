@@ -59,7 +59,7 @@ object ClientApp {
 
     val result: PersonAggregation = aggregation.unsafePerformSync
 
-    println(result)
+    println(s"Result = $result")
 
   }
 

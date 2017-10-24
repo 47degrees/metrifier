@@ -53,9 +53,6 @@ trait SampleClient {
 
 object ClientProgram {
 
-  //TODO Proper PersonAggregation is defined at metrifier.implicits#PersonAggregation
-
-
   def clientProgram[M[_]](implicit APP: SampleClient[M]): FreeS[M, PersonAggregation] = {
     for {
       personList <- APP.listPersons

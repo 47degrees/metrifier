@@ -20,7 +20,7 @@ class SampleClientHandler[F[_]: Monad](
   override def listPersons: F[PersonList] =
     M.handleErrorWith {
       logger.info(s"*** listPersons ***")
-      client.listPersons(true)
+      client.listPersons("foo")
         .map { personList: PersonList =>
           logger.info(s"Found '${personList.count}' persons: ${personList.persons}")
           personList
