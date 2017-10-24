@@ -4,11 +4,6 @@ lazy val V = new {
   lazy val monix    = "3.0.0-M1"
 }
 
-lazy val root = project
-  .in(file("."))
-  .settings(name := "metrifier")
-  .aggregate(shared, http, `frees-rpc`, bench)
-
 lazy val shared = project
   .in(file("shared"))
   .settings(moduleName := "shared")
@@ -24,12 +19,8 @@ lazy val `frees-rpc` = project
   .settings(moduleName := "frees-rpc")
   .settings(
     libraryDependencies ++= Seq(
-      "io.frees" %% "frees-core"              % V.frees,
-      "io.frees" %% "frees-async"             % V.frees,
-      "io.frees" %% "frees-async-cats-effect" % V.frees,
-      "io.frees" %% "frees-config"            % V.frees,
-      "io.frees" %% "frees-logging"           % V.frees,
-      "io.frees" %% "frees-rpc"               % V.freesRPC
+      "io.frees" %% "frees-rpc"               % V.freesRPC,
+      "io.frees" %% "frees-async-cats-effect" % V.frees
     )
   )
   .settings(scalaMetaSettings: _*)

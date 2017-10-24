@@ -28,11 +28,11 @@ import scala.concurrent.duration._
 @free
 trait SampleClient {
 
-  def listUsers: FS[List[PersonProto]]
+  def listUsers: FS[List[Person]]
 
-  def getUser(id: String): FS[PersonProto]
+  def getUser(id: String): FS[Person]
 
-  def getPersonLinks(id: String): FS[List[PersonLinkProto]]
+  def getPersonLinks(id: String): FS[List[PersonLink]]
 
   def createPerson(
       id: String,
@@ -47,7 +47,7 @@ trait SampleClient {
       email: String,
       pictureLarge: Option[String] = None,
       pictureMedium: Option[String] = None,
-      pictureThumbnail: Option[String] = None): FS[PersonProto]
+      pictureThumbnail: Option[String] = None): FS[Person]
 
 }
 

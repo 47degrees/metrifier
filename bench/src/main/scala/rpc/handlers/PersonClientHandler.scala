@@ -16,12 +16,13 @@ class SampleClientHandler[F[_]: Monad](
 
   val logger: Logger = Logger[this.type]
 
-  override def listUsers: F[List[PersonProto]] =
+  override def listUsers: F[List[Person]] =
     M.handleErrorWith {
       logger.info(s"*** listUsers ***")
-      client.listUsers
-        .map { persons: List[PersonProto] =>
-          logger.info(s"Found '${persons.size}' persons: $persons")
+      client.listUsers(true)
+        .map { personList: PersonList =>
+          logger.info(s"Found '${personList.count}' persons: ${personList.persons}")
+          personList.persons
         }
     } {
       case e: StatusRuntimeException =>
@@ -29,13 +30,14 @@ class SampleClientHandler[F[_]: Monad](
         M.raiseError(e)
     }
 
-  override def getUser(id: String): F[PersonProto] =
+  override def getUser(id: String): F[Person] =
     M.handleErrorWith {
       logger.info(s"*** getUser($id) ***")
       client
         .getUser(id)
-        .map { person: PersonProto =>
+        .map { person: Person =>
           logger.info(s"Found person with ID $id: $person")
+          person
         }
     } {
       case e: StatusRuntimeException =>
@@ -43,13 +45,14 @@ class SampleClientHandler[F[_]: Monad](
         M.raiseError(e)
     }
 
-  override def getPersonLinks(id: String): F[List[PersonLinkProto]] =
+  override def getPersonLinks(id: String): F[List[PersonLink]] =
     M.handleErrorWith {
       logger.info(s"*** getPersonLinks($id) ***")
       client
         .getPersonLinks(id)
-        .map { links: List[PersonLink] =>
-          logger.info(s"Person with ID $id has '${links.size}' links: $links")
+        .map { personLinkList: PersonLinkList =>
+          logger.info(s"Person with ID $id has '${personLinkList.count}' links: ${personLinkList.links}")
+          personLinkList.links
         }
     } {
       case e: StatusRuntimeException =>
@@ -70,18 +73,18 @@ class SampleClientHandler[F[_]: Monad](
       email: String,
       pictureLarge: Option[String] = None,
       pictureMedium: Option[String] = None,
-      pictureThumbnail: Option[String] = None): F[PersonProto] =
+      pictureThumbnail: Option[String] = None): F[Person] =
     M.handleErrorWith {
       logger.info(s"*** createPerson ***")
 
-      val picture: Option[PictureProto] = pictureLarge map (pl =>
-        PictureProto(pl, pictureMedium.getOrElse(""), pictureThumbnail.getOrElse("")))
+      val picture: Option[Picture] = pictureLarge map (pl =>
+        Picture(pl, pictureMedium.getOrElse(""), pictureThumbnail.getOrElse("")))
 
-      val p: Person = PersonProto(
+      val p: Person = Person(
         id = id,
-        name = PersonNameProto(title = nameTitle, first = nameFirst, last = nameLast),
+        name = PersonName(title = nameTitle, first = nameFirst, last = nameLast),
         gender = gender,
-        location = LocationProto(
+        location = Location(
           street = locationStreet,
           city = locationStreet,
           state = locationState,
@@ -92,8 +95,9 @@ class SampleClientHandler[F[_]: Monad](
 
       client
         .createPerson(p)
-        .map { person: PersonProto =>
+        .map { person: Person =>
           logger.info(s"Person was created successfully $p")
+          person
         }
     } {
       case e: StatusRuntimeException =>

@@ -35,8 +35,6 @@ import scala.util.{Failure, Success, Try}
 
 trait PersonServiceExecutionContext {
 
-  val logger: Logger = Logger[this.type]
-
   implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
   implicit val S: monix.execution.Scheduler =
     monix.execution.Scheduler.Implicits.global

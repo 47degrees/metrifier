@@ -21,6 +21,8 @@ import cats.implicits._
 import freestyle._
 import freestyle.implicits._
 import freestyle.config.implicits._
+import freestyle.async.implicits._
+import freestyle.asyncCatsEffect.implicits._
 import freestyle.rpc.client._
 import metrifier.protocols.PersonService
 import metrifier.rpc.handlers._

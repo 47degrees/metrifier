@@ -24,39 +24,17 @@ import freestyle.rpc.protocol._
 @option(name = "java_outer_classname", value = "Metrifier", quote = true)
 object protocols {
 
-  @message
-  case class PersonProto(
-      id: String,
-      name: PersonNameProto,
-      gender: String,
-      location: LocationProto,
-      email: String,
-      picture: Option[PictureProto])
-
-  @message
-  case class PersonNameProto(title: String, first: String, last: String)
-
-  @message
-  case class LocationProto(street: String, city: String, state: String, postCode: Int)
-
-  @message
-  case class PictureProto(large: String, medium: String, thumbnail: String)
-
-  @message
-  case class PersonLinkProto(p1: PersonProto, p2: PersonProto)
-
   @free
   @service
-  @debug
   trait PersonService {
 
-    @rpc def listUsers(b: Boolean): FS[List[PersonProto]]
+    @rpc def listUsers(b: Boolean): FS[PersonList]
 
-    @rpc def getUser(id: String): FS[PersonProto]
+    @rpc def getUser(id: String): FS[Person]
 
-    @rpc def getPersonLinks(id: String): FS[List[PersonLinkProto]]
+    @rpc def getPersonLinks(id: String): FS[PersonLinkList]
 
-    @rpc def createPerson(person: PersonProto): FS[PersonProto]
+    @rpc def createPerson(person: Person): FS[Person]
 
   }
 
