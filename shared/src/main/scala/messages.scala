@@ -1,5 +1,9 @@
 package metrifier
 
+case class PersonList(persons: List[Person], count: Int)
+
+case class PersonLinkList(links: List[PersonLink], count: Int)
+
 case class Person(
     id: String,
     name: PersonName,
