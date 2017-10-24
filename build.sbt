@@ -2,6 +2,9 @@ lazy val V = new {
   lazy val frees    = "0.4.0"
   lazy val freesRPC = "0.1.0"
   lazy val monix    = "3.0.0-M1"
+  lazy val http4sV  = "0.15.12a"
+  lazy val argonautV = "6.2"
+  lazy val argonautShapelessV = "1.2.0-M5"
 }
 
 lazy val root = project
@@ -17,6 +20,17 @@ lazy val shared = project
 lazy val http = project
   .in(file("http"))
   .settings(moduleName := "http")
+  .settings(
+    libraryDependencies ++= Seq(
+      "org.http4s" %% "http4s-dsl" % V.http4sV,
+      "org.http4s" %% "http4s-blaze-server" % V.http4sV,
+      "org.http4s" %% "http4s-argonaut" % V.http4sV,
+      "com.github.alexarchambault" %% "argonaut-shapeless_6.2" % V.argonautShapelessV,
+      "io.argonaut"  %% "argonaut"              % V.argonautV,
+      "io.argonaut"  %% "argonaut-scalaz"       % V.argonautV,
+    )
+  )
+  .dependsOn(shared)
 
 lazy val `frees-rpc` = project
   .in(file("frees-rpc"))

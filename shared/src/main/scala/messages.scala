@@ -22,3 +22,9 @@ case class DatabaseException(message: String, maybeCause: Option[Throwable] = No
   maybeCause foreach initCause
 
 }
+
+//Requests
+case class Link2PeopleRequest(id1: String, id2: String)
+
+//Responses
+case class Link2PeopleResponse(link: PersonLink)
