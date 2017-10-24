@@ -4,6 +4,20 @@
 
 Comparing HTTP endpoints against frees-rpc services.
 
+## http
+
+* Run Server:
+
+```bash
+sbt "http/runMain metrifier.Server"
+```
+
+* Run Client:
+
+```bash
+sbt "bench/runMain metrifier.http.ClientApp"
+```
+
 ## frees-rpc
 
 * Run Server:

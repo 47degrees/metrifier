@@ -53,6 +53,7 @@ trait SampleClient {
 
 object ClientProgram {
 
+  //TODO Proper PersonAggregation is defined at metrifier.implicits#PersonAggregation
   type PersonAggregation =
     (Person, Person, Person, Person, List[PersonLink], List[PersonLink], List[Person])
 
