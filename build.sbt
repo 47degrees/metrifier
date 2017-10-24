@@ -1,6 +1,6 @@
 lazy val V = new {
-  lazy val frees    = "0.4.0"
-  lazy val freesRPC = "0.1.0"
+  lazy val frees    = "0.4.1"
+  lazy val freesRPC = "0.1.1"
   lazy val monix    = "3.0.0-M1"
 }
 
