@@ -32,22 +32,27 @@ object Main extends ServerApp {
   val printOutStarted: Task[Unit] = Task.delay(println(s"PersonService has started at $host:$port"))
 
   val httpServices: HttpService = HttpService {
+    case GET -> Root / "person" => getPeople.flatMap(Ok(_))
     case GET -> Root / "person" / id => getPerson(id).flatMap(Ok(_))
+    case GET -> Root / "person" / id / "links" => getLinkedPeople(id).flatMap(Ok(_))
     case req @ POST -> Root / "person" / "link" =>
-      req.attemptAs[Link2PeopleRequest].run flatMap {
+      req.attemptAs[Person].run flatMap {
         case -\/(failed) => BadRequest(failed.toString)
-        case \/-(r) => link2People(r).flatMap(Ok(_))
+        case \/-(p) => addPerson(p).flatMap(Ok(_))
       }
 
   }
 
+  def getPeople: Task[List[Person]] = Task.now(database.persons)
+
   def getPerson(id: String): Task[Person] = Task.fromDisjunction(database.persons.find(_.id == id).\/>(PersonNotFound(id)))
 
-  def link2People(req: Link2PeopleRequest): Task[Link2PeopleResponse] = for {
-      p1 <- getPerson(req.id1)
-      p2 <- getPerson(req.id2)
-      link = PersonLink(p1, p2)
-    } yield Link2PeopleResponse(link)
+  def getLinkedPeople(id: String): Task[List[PersonLink]] = Task.now(database.personLinks.filter(link => link.p1.id == id || link.p2.id == id))
+
+  def addPerson(p: Person): Task[Person] = {
+    Thread.sleep(100)
+    Task.now(p)
+  }
 
   //Exceptions
   final case class PersonNotFound(id: String) extends RuntimeException(s"Unable to retrieve person: $id") with NoStackTrace
@@ -58,18 +63,19 @@ object Main extends ServerApp {
   implicit val arPictureEncoder: CodecJson[Picture] = CodecJson.derive[Picture]
   implicit val arPersonEncoder: CodecJson[Person] = CodecJson.derive[Person]
   implicit val arPersonLinkEncoder: CodecJson[PersonLink] = CodecJson.derive[PersonLink]
-  implicit val arLink2PeopleRequestEncoder: CodecJson[Link2PeopleRequest] = CodecJson.derive[Link2PeopleRequest]
-  implicit val arLink2PeopleResponseEncoder: CodecJson[Link2PeopleResponse] = CodecJson.derive[Link2PeopleResponse]
 
   //Decoders
   implicit val personNameEncoder: EntityEncoder[PersonName] = jsonEncoderOf[PersonName]
   implicit val locationEncoder: EntityEncoder[Location] = jsonEncoderOf[Location]
   implicit val pictureEncoder: EntityEncoder[Picture] = jsonEncoderOf[Picture]
   implicit val personEncoder: EntityEncoder[Person] = jsonEncoderOf[Person]
-  implicit val link2PeopleResponseEncoder: EntityEncoder[Link2PeopleResponse] = jsonEncoderOf[Link2PeopleResponse]
+  implicit val personListEncoder: EntityEncoder[List[Person]] = jsonEncoderOf[List[Person]]
 
   //Encoders
-  implicit val entityDecoder: EntityDecoder[Link2PeopleRequest] = jsonOf[Link2PeopleRequest]
+  implicit val personNameDecoder: EntityDecoder[PersonName] = jsonOf[PersonName]
+  implicit val locationDecoder: EntityDecoder[Location] = jsonOf[Location]
+  implicit val pictureDecoder: EntityDecoder[Picture] = jsonOf[Picture]
+  implicit val personDecoder: EntityDecoder[Person] = jsonOf[Person]
 
 
 }
