@@ -46,7 +46,7 @@ Response example:
 
 ##### Link two people
 
-`GET http://0.0.0.0:8080/person/link`
+`POST http://0.0.0.0:8080/person/link`
 
 Request example:
 
