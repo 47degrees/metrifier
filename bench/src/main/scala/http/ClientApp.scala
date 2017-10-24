@@ -16,7 +16,6 @@
 package metrifier
 package http
 
-
 import org.http4s.Method._
 import org.http4s.client.Client
 import org.http4s.client.blaze.PooledHttp1Client
@@ -31,7 +30,7 @@ object ClientApp {
 
   def main(args: Array[String]): Unit = {
 
-    val client = new HttpClient(PooledHttp1Client())
+    val client = new HttpClient(PooledHttp1Client(), HttpConf.host, HttpConf.port)
 
     val aggregation: Task[PersonAggregation] = for {
       personList <- client.listPersons
@@ -41,7 +40,7 @@ object ClientApp {
       p4         <- client.getPerson("4")
       p1Links    <- client.getPersonLinks(p1.id)
       p3Links    <- client.getPersonLinks(p3.id)
-      pNew       <- client.createPerson(
+      pNew <- client.createPerson(
         id = "5",
         nameTitle = "ms",
         nameFirst = "valentine",
@@ -58,47 +57,51 @@ object ClientApp {
       )
     } yield (p1, p2, p3, p4, p1Links, p3Links, personList.add(pNew))
 
-//    val result: PersonAggregation = aggregation.unsafePerformSync
-//
-//    println(result)
+    val result: PersonAggregation = aggregation.unsafePerformSync
+
+    println(result)
 
   }
-
 
 }
 
+class HttpClient(c: Client, host: String, port: Int) {
 
-class HttpClient(c: Client) {
+  private[this] val baseUrl = s"http://$host:$port"
+  private[this] val baseUri: Uri = Uri
+    .fromString(baseUrl)
+    .fold(e => throw e, qValue => qValue) / "person"
 
-  def listPersons: Task[PersonList] = c.expect[PersonList](url("/person"))
+  def listPersons: Task[PersonList] = c.expect[PersonList](baseUri)
 
-  def getPerson(id: String): Task[Person]  = c.expect[Person](url(s"/person/$id"))
+  def getPerson(id: String): Task[Person] = c.expect[Person](baseUri / id)
 
-  def getPersonLinks(id: String): Task[PersonLinkList] =  c.expect[PersonLinkList](url(s"/person/$id/links"))
+  def getPersonLinks(id: String): Task[PersonLinkList] =
+    c.expect[PersonLinkList](baseUri / id / "links")
 
-  def createPerson( id: String,
-                    nameTitle: String,
-                    nameFirst: String,
-                    nameLast: String,
-                    gender: String,
-                    locationStreet: String,
-                    locationCity: String,
-                    locationState: String,
-                    locationPostCode: Int,
-                    email: String,
-                    pictureLarge: Option[String] = None,
-                    pictureMedium: Option[String] = None,
-                    pictureThumbnail: Option[String] = None): Task[Person] = {
+  def createPerson(
+      id: String,
+      nameTitle: String,
+      nameFirst: String,
+      nameLast: String,
+      gender: String,
+      locationStreet: String,
+      locationCity: String,
+      locationState: String,
+      locationPostCode: Int,
+      email: String,
+      pictureLarge: Option[String] = None,
+      pictureMedium: Option[String] = None,
+      pictureThumbnail: Option[String] = None): Task[Person] = {
 
-    val picture: Option[Picture] = pictureLarge map (pl => Picture(pl, pictureMedium.getOrElse(""), pictureThumbnail.getOrElse("")))
+    val picture: Option[Picture] = pictureLarge map (pl =>
+      Picture(pl, pictureMedium.getOrElse(""), pictureThumbnail.getOrElse("")))
     val name: PersonName = PersonName(title = nameTitle, first = nameFirst, last = nameLast)
-    val location: Location = Location(locationStreet, locationStreet, locationState, locationPostCode)
+    val location: Location =
+      Location(locationStreet, locationStreet, locationState, locationPostCode)
     val newPerson: Person = Person(id, name, gender, location, email, picture)
 
-    c.expect[Person](Request(POST, url("/person")).withBody(newPerson))
+    c.expect[Person](Request(POST, baseUri).withBody(newPerson))
   }
-
-
-  def url(path: String): Uri = Uri(path = s"http://${HttpConf.host}:${HttpConf.port}$path")
 
 }
