@@ -1,6 +1,8 @@
+[TOC]
+
 ### PersonService
 
-##### How to run
+#### How to run
 
 Execute:
 
@@ -14,7 +16,7 @@ And you will get:
 PersonService has started at 0.0.0.0:8080
 ```
 
-##### Get a person
+#### Get a person
 
 `GET http://0.0.0.0:8080/person/[ID]`
 
@@ -24,7 +26,7 @@ Request example:
 
 Response example:
 
-```json
+```javascript
 {
     "name": {
         "title": "mr",
@@ -44,13 +46,13 @@ Response example:
 }
 ```
 
-##### Link two people
+#### Link two people
 
-`GET http://0.0.0.0:8080/person/link`
+`POST http://0.0.0.0:8080/person/link`
 
 Request example:
 
-```json
+```javascript
 {
 	"id1": "1",
 	"id2": "2"
@@ -59,7 +61,7 @@ Request example:
 
 Response example:
 
-```json
+```javascript
 {
     "link": {
         "p1": {
