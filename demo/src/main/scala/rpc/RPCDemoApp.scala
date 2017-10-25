@@ -13,33 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package metrifier
 package demo
-package http
+package rpc
 
-import org.http4s.client.blaze.PooledHttp1Client
-import metrifier.http.client._
-import metrifier.http.codecs._
-import metrifier.http.server.HttpConf
+import freestyle._
 import metrifier.shared.model._
+import metrifier.rpc.client.RPCClient
+import metrifier.demo.rpc.implicits._
+import monix.eval.Task
 
-import scalaz.concurrent.Task
+import scala.concurrent.Await
+import scala.concurrent.duration._
 
-object ClientApp {
+object RPCDemoApp {
 
-  def main(args: Array[String]): Unit = {
-
-    val client = new HttpClient(PooledHttp1Client(), HttpConf.host, HttpConf.port)
-
-    val aggregation: Task[PersonAggregation] = for {
-      personList <- client.listPersons
-      p1         <- client.getPerson("1")
-      p2         <- client.getPerson("2")
-      p3         <- client.getPerson("3")
-      p4         <- client.getPerson("4")
-      p1Links    <- client.getPersonLinks(p1.id)
-      p3Links    <- client.getPersonLinks(p3.id)
-      pNew <- client.createPerson(
+  def clientProgram[M[_]](implicit APP: RPCClient[M]): FreeS[M, PersonAggregation] = {
+    for {
+      personList <- APP.listPersons
+      p1         <- APP.getPerson("1")
+      p2         <- APP.getPerson("2")
+      p3         <- APP.getPerson("3")
+      p4         <- APP.getPerson("4")
+      p1Links    <- APP.getPersonLinks(p1.id)
+      p3Links    <- APP.getPersonLinks(p3.id)
+      pNew <- APP.createPerson(
         id = "5",
         nameTitle = "ms",
         nameFirst = "valentine",
@@ -55,8 +54,12 @@ object ClientApp {
         pictureThumbnail = None
       )
     } yield (p1, p2, p3, p4, p1Links, p3Links, personList.add(pNew))
+  }
 
-    val result: PersonAggregation = aggregation.unsafePerformSync
+  def main(args: Array[String]): Unit = {
+
+    val result: PersonAggregation =
+      Await.result(clientProgram[RPCClient.Op].interpret[Task].runAsync, Duration.Inf)
 
     println(s"Result = $result")
 

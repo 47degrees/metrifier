@@ -33,6 +33,11 @@ object ProjectPlugin extends AutoPlugin {
       "io.argonaut"                %% "argonaut"               % V.argonautV,
       "io.argonaut"                %% "argonaut-scalaz"        % V.argonautV
     )
+
+    lazy val rpcDependencies: Seq[ModuleID] = Seq(
+      "io.frees" %% "frees-rpc"               % V.freesRPC,
+      "io.frees" %% "frees-async-cats-effect" % V.frees
+    )
   }
 
   override def projectSettings: Seq[Def.Setting[_]] =

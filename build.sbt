@@ -5,25 +5,21 @@ lazy val shared = project
 lazy val http = project
   .in(file("http"))
   .dependsOn(shared)
+  .aggregate(shared)
   .settings(moduleName := "http")
   .settings(libraryDependencies ++= httpDependencies)
-  .dependsOn(shared)
 
 lazy val `frees-rpc` = project
   .in(file("frees-rpc"))
   .dependsOn(shared)
+  .aggregate(shared)
   .settings(moduleName := "frees-rpc")
-  .settings(
-    libraryDependencies ++= Seq(
-      "io.frees" %% "frees-rpc"               % V.freesRPC,
-      "io.frees" %% "frees-async-cats-effect" % V.frees
-    )
-  )
+  .settings(libraryDependencies ++= rpcDependencies)
   .settings(scalaMetaSettings: _*)
 
-lazy val bench = project
-  .in(file("bench"))
-  .dependsOn(http, `frees-rpc`, shared)
-  .settings(moduleName := "bench")
+lazy val demo = project
+  .in(file("demo"))
+  .dependsOn(http, `frees-rpc`)
+  .aggregate(http, `frees-rpc`)
+  .settings(moduleName := "demo")
   .settings(scalaMetaSettings: _*)
-  .settings(libraryDependencies ++= httpDependencies)

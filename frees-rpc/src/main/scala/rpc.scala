@@ -18,12 +18,6 @@ package metrifier
 package rpc
 
 import cats.{Comonad, ~>}
-import cats.implicits._
-import freestyle.implicits._
-import freestyle.config.implicits._
-import freestyle.async.implicits._
-import freestyle.rpc.server._
-import journal.Logger
 import monix.eval.Task
 
 import scala.concurrent.{Await, ExecutionContext, Future}
@@ -39,14 +33,11 @@ trait PersonServiceEC {
 
 trait FutureInstances extends freestyle.rpc.client.FutureInstances {
 
-  val logger: Logger = Logger[this.type]
-
   protected val atMostDuration: FiniteDuration = 10.seconds
 
   implicit def futureComonad(implicit ec: ExecutionContext): Comonad[Future] =
     new Comonad[Future] {
       def extract[A](x: Future[A]): A = {
-        logger.info(s"${Thread.currentThread().getName} Waiting $atMostDuration for $x...")
         Await.result(x, atMostDuration)
       }
 
@@ -59,7 +50,6 @@ trait FutureInstances extends freestyle.rpc.client.FutureInstances {
   implicit val future2Task: Future ~> Task =
     new (Future ~> Task) {
       override def apply[A](fa: Future[A]): Task[A] = {
-        logger.info(s"${Thread.currentThread().getName} Deferring Future to Task...")
         Task.deferFuture(fa)
       }
     }

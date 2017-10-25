@@ -13,7 +13,6 @@ import metrifier.shared.model._
 import metrifier.shared.services._
 import codecs._
 
-
 object HttpServer extends ServerApp {
 
   override def server(args: List[String]): Task[Server] = for {
