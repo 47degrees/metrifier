@@ -34,8 +34,23 @@ sbt "frees-rpc/runMain metrifier.rpc.server.RPCServer"
 sbt "demo/runMain metrifier.demo.rpc.RPCDemoApp"
 ```
 
-
 ## Running Benchmarks
+
+### http
+
+* Run Server:
+
+```bash
+sbt "http/runMain metrifier.http.server.HttpServer"
+```
+
+* Run Benchmarks:
+
+```bash
+sbt "bench/jmh:run -i 10 -wi 10 -f 2 -t 1 metrifier.benchmark.HttpBenchmark"
+```
+
+Which means "10 iterations", "10 warm-up iterations", "2 fork", "1 thread".
 
 ### frees-rpc
 
@@ -50,3 +65,5 @@ sbt "frees-rpc/runMain metrifier.rpc.server.RPCServer"
 ```bash
 sbt "bench/jmh:run -i 10 -wi 10 -f 2 -t 1 metrifier.benchmark.RPCBenchmark"
 ```
+
+Which means "10 iterations", "10 warm-up iterations", "2 fork", "1 thread".
