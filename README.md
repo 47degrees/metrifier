@@ -154,6 +154,10 @@ Source | Mode | Cnt | Score | Error | Units
 HttpBenchmark.programComposition | thrpt | 20 | 8.492 | 0.089 | ops/s
 RPCBenchmark.programComposition | thrpt | 20 | 8.755 | 0.064 | ops/s
 
-##### Conclusion
+##### Comparing both in a Radar Chart
+
+![bench](radar-chart.png)
+
+#### Conclusion
 
 Using JMH, we have checked out quickly the performance characteristics for both service architectures, and we can say that the RPC approach is noticeably faster.
