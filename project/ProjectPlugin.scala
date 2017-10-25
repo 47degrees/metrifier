@@ -10,7 +10,6 @@ object ProjectPlugin extends AutoPlugin {
     lazy val V = new {
       lazy val frees              = "0.4.1"
       lazy val freesRPC           = "0.1.1"
-      lazy val monix              = "3.0.0-M1"
       lazy val http4sV            = "0.15.12a"
       lazy val argonautV          = "6.2"
       lazy val argonautShapelessV = "1.2.0-M5"

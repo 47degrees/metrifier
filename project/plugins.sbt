@@ -1,1 +1,1 @@
-addSbtPlugin("io.frees" % "sbt-frees-protogen" % "0.0.11")
+addSbtPlugin("pl.project13.scala" % "sbt-jmh"            % "0.2.27")
