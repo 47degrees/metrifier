@@ -15,8 +15,7 @@
  */
 
 package metrifier
-package runtime
-
+package rpc
 
 import cats.{Comonad, ~>}
 import cats.implicits._
@@ -26,14 +25,11 @@ import freestyle.async.implicits._
 import freestyle.rpc.server._
 import journal.Logger
 import monix.eval.Task
-import metrifier.handlers.PersonServiceHandler
-import metrifier.protocols.PersonService
 
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration._
-import scala.util.{Failure, Success, Try}
 
-trait PersonServiceExecutionContext {
+trait PersonServiceEC {
 
   implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
   implicit val S: monix.execution.Scheduler =
@@ -77,41 +73,4 @@ trait TaskInstances {
 
 }
 
-trait ServerConf {
-
-  def getConf(grpcConfigs: List[GrpcConfig]): ServerW =
-    BuildServerFromConfig[ServerConfig.Op]("rpc.server.port", grpcConfigs)
-      .interpret[Try] match {
-      case Success(c) => c
-      case Failure(e) =>
-        e.printStackTrace()
-        throw new RuntimeException("Unable to load the server configuration", e)
-    }
-
-}
-
-
-trait PersonServiceRuntime extends PersonServiceExecutionContext with FutureInstances with TaskInstances
-
-object server {
-
-  trait Implicits extends PersonServiceRuntime with ServerConf {
-
-    import freestyle.rpc.server.handlers._
-    import freestyle.rpc.server.implicits._
-
-    implicit val personServiceHandler: PersonService.Handler[Future] =
-      new PersonServiceHandler[Future]
-
-    val grpcConfigs: List[GrpcConfig] = List(
-      AddService(PersonService.bindService[PersonService.Op, Future])
-    )
-
-    implicit val grpcServerHandler: GrpcServer.Op ~> Future =
-      new GrpcServerHandler[Future] andThen
-        new GrpcKInterpreter[Future](getConf(grpcConfigs).server)
-  }
-
-  object implicits extends Implicits
-
-}
+trait PersonServiceRuntime extends PersonServiceEC with FutureInstances with TaskInstances

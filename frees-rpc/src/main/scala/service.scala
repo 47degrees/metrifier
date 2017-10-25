@@ -15,10 +15,11 @@
  */
 
 package metrifier
+package rpc
 
 import freestyle._
 import freestyle.rpc.protocol._
-import metrifier.model._
+import metrifier.shared.model._
 
 @option(name = "java_package", value = "metriefier", quote = true)
 @option(name = "java_multiple_files", value = "true", quote = false)

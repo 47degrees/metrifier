@@ -1,4 +1,5 @@
 package metrifier
+package shared
 
 object model {
 

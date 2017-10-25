@@ -1,26 +1,26 @@
 package metrifier
-package rpc.handlers
+package rpc
+package client
 
 import cats._
 import cats.implicits._
 import io.grpc.StatusRuntimeException
 import journal.Logger
-import metrifier.model._
-import metrifier.protocols._
-import metrifier.rpc._
+import metrifier.shared.model._
+import protocols._
 
-
-class SampleClientHandler[F[_]: Monad](
+class RPCClientHandler[F[_]: Monad](
     implicit client: PersonService.Client[F],
     M: MonadError[F, Throwable])
-    extends SampleClient.Handler[F] {
+    extends RPCClient.Handler[F] {
 
   val logger: Logger = Logger[this.type]
 
   override def listPersons: F[PersonList] =
     M.handleErrorWith {
       logger.info(s"*** listPersons ***")
-      client.listPersons("foo")
+      client
+        .listPersons("foo")
         .map { personList: PersonList =>
           logger.info(s"Found '${personList.count}' persons: ${personList.persons}")
           personList
@@ -52,7 +52,8 @@ class SampleClientHandler[F[_]: Monad](
       client
         .getPersonLinks(id)
         .map { personLinkList: PersonLinkList =>
-          logger.info(s"Person with ID $id has '${personLinkList.count}' links: ${personLinkList.links}")
+          logger.info(
+            s"Person with ID $id has '${personLinkList.count}' links: ${personLinkList.links}")
           personLinkList
         }
     } {

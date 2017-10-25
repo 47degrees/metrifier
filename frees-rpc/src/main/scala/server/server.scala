@@ -13,54 +13,49 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package metrifier
-package demo
 package rpc
+package server
 
+import cats.~>
 import cats.implicits._
-import freestyle._
 import freestyle.implicits._
 import freestyle.config.implicits._
 import freestyle.async.implicits._
-import freestyle.asyncCatsEffect.implicits._
-import freestyle.rpc.client._
-import monix.eval.Task
-import io.grpc.ManagedChannel
-import metrifier.rpc._
-import metrifier.rpc.client._
-import metrifier.rpc.protocols._
+import freestyle.rpc.server._
+import protocols.PersonService
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
-trait ClientConf {
+trait ServerConf {
 
-  val channelFor: ManagedChannelFor =
-    ConfigForAddress[ChannelConfig.Op]("rpc.client.host", "rpc.client.port")
+  def getConf(grpcConfigs: List[GrpcConfig]): ServerW =
+    BuildServerFromConfig[ServerConfig.Op]("rpc.server.port", grpcConfigs)
       .interpret[Try] match {
       case Success(c) => c
       case Failure(e) =>
         e.printStackTrace()
-        throw new RuntimeException("Unable to load the client configuration", e)
+        throw new RuntimeException("Unable to load the server configuration", e)
     }
-
-  val channelConfigList: List[ManagedChannelConfig] = List(UsePlaintext(true))
-
-  val managedChannelInterpreter =
-    new ManagedChannelInterpreter[Future](channelFor, channelConfigList)
-
-  val channel: ManagedChannel = managedChannelInterpreter.build(channelFor, channelConfigList)
 
 }
 
-trait Implicits extends PersonServiceRuntime with ClientConf {
+trait Implicits extends PersonServiceRuntime with ServerConf {
 
-  implicit val personServiceClient: PersonService.Client[Task] =
-    PersonService.client[Task](channel)
+  import freestyle.rpc.server.handlers._
+  import freestyle.rpc.server.implicits._
 
-  implicit val sampleClientHandler: RPCClientHandler[Task] =
-    new RPCClientHandler[Task]
+  implicit val personServiceHandler: PersonService.Handler[Future] =
+    new PersonServiceHandler[Future]
+
+  val grpcConfigs: List[GrpcConfig] = List(
+    AddService(PersonService.bindService[PersonService.Op, Future])
+  )
+
+  implicit val grpcServerHandler: GrpcServer.Op ~> Future =
+    new GrpcServerHandler[Future] andThen
+      new GrpcKInterpreter[Future](getConf(grpcConfigs).server)
 }
 
 object implicits extends Implicits

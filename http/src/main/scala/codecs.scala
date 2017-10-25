@@ -1,6 +1,7 @@
 package metrifier
+package http
 
-import metrifier.model._
+import metrifier.shared.model._
 import argonaut.CodecJson
 import org.http4s.{EntityDecoder, EntityEncoder}
 import org.http4s.argonaut.{jsonEncoderOf, jsonOf}

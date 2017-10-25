@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 package metrifier
+package demo
 package http
 
-import org.http4s.Method._
-import org.http4s.client.Client
 import org.http4s.client.blaze.PooledHttp1Client
-import org.http4s.{Request, Uri}
-
-import metrifier.codecs._
-import metrifier.model._
+import metrifier.http.client._
+import metrifier.http.codecs._
+import metrifier.http.server.HttpConf
+import metrifier.shared.model._
 
 import scalaz.concurrent.Task
 
@@ -61,47 +60,6 @@ object ClientApp {
 
     println(s"Result = $result")
 
-  }
-
-}
-
-class HttpClient(c: Client, host: String, port: Int) {
-
-  private[this] val baseUrl = s"http://$host:$port"
-  private[this] val baseUri: Uri = Uri
-    .fromString(baseUrl)
-    .fold(e => throw e, qValue => qValue) / "person"
-
-  def listPersons: Task[PersonList] = c.expect[PersonList](baseUri)
-
-  def getPerson(id: String): Task[Person] = c.expect[Person](baseUri / id)
-
-  def getPersonLinks(id: String): Task[PersonLinkList] =
-    c.expect[PersonLinkList](baseUri / id / "links")
-
-  def createPerson(
-      id: String,
-      nameTitle: String,
-      nameFirst: String,
-      nameLast: String,
-      gender: String,
-      locationStreet: String,
-      locationCity: String,
-      locationState: String,
-      locationPostCode: Int,
-      email: String,
-      pictureLarge: Option[String] = None,
-      pictureMedium: Option[String] = None,
-      pictureThumbnail: Option[String] = None): Task[Person] = {
-
-    val picture: Option[Picture] = pictureLarge map (pl =>
-      Picture(pl, pictureMedium.getOrElse(""), pictureThumbnail.getOrElse("")))
-    val name: PersonName = PersonName(title = nameTitle, first = nameFirst, last = nameLast)
-    val location: Location =
-      Location(locationStreet, locationStreet, locationState, locationPostCode)
-    val newPerson: Person = Person(id, name, gender, location, email, picture)
-
-    c.expect[Person](Request(POST, baseUri).withBody(newPerson))
   }
 
 }
