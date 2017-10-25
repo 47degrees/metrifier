@@ -1,6 +1,7 @@
 package metrifier
+package shared
 
-import metrifier.model._
+import metrifier.shared.model._
 
 object database {
 

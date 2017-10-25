@@ -1,6 +1,7 @@
 package metrifier
+package http
+package server
 
-import _root_.argonaut._
 import org.http4s._
 import org.http4s.argonaut._
 import org.http4s.dsl._
@@ -8,10 +9,9 @@ import org.http4s.server.blaze._
 import org.http4s.server.{Server, ServerApp}
 import scalaz.concurrent.Task
 import scalaz.{-\/, \/-}
-import metrifier.model._
-import metrifier.codecs._
-import metrifier.services._
-
+import metrifier.shared.model._
+import metrifier.shared.services._
+import codecs._
 
 object HttpServer extends ServerApp {
 

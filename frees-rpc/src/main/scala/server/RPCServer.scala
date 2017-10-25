@@ -13,19 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package metrifier
+package rpc
+package server
 
 import cats.implicits._
 import freestyle.rpc.server.GrpcServerApp
 import freestyle.rpc.server.implicits._
-import metrifier.runtime.server.implicits._
+import metrifier.rpc.server.implicits._
 import journal.Logger
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
-object ServerApp {
+object RPCServer {
 
   val logger: Logger = Logger[this.type]
 

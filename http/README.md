@@ -7,7 +7,7 @@
 Execute:
 
 ```bash
-sbt ";project http; run"
+sbt "http/runMain metrifier.http.server.HttpServer"
 ```
 
 And you will get:

@@ -15,45 +15,21 @@
  */
 
 package metrifier
+package demo
 package rpc
 
 import freestyle._
-import metrifier.model._
+import metrifier.shared.model._
+import metrifier.rpc.client.RPCClient
+import metrifier.demo.rpc.implicits._
 import monix.eval.Task
-import metrifier.rpc.client.implicits._
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
-@free
-trait SampleClient {
+object RPCDemoApp {
 
-  def listPersons: FS[PersonList]
-
-  def getPerson(id: String): FS[Person]
-
-  def getPersonLinks(id: String): FS[PersonLinkList]
-
-  def createPerson(
-      id: String,
-      nameTitle: String,
-      nameFirst: String,
-      nameLast: String,
-      gender: String,
-      locationStreet: String,
-      locationCity: String,
-      locationState: String,
-      locationPostCode: Int,
-      email: String,
-      pictureLarge: Option[String] = None,
-      pictureMedium: Option[String] = None,
-      pictureThumbnail: Option[String] = None): FS[Person]
-
-}
-
-object ClientProgram {
-
-  def clientProgram[M[_]](implicit APP: SampleClient[M]): FreeS[M, PersonAggregation] = {
+  def clientProgram[M[_]](implicit APP: RPCClient[M]): FreeS[M, PersonAggregation] = {
     for {
       personList <- APP.listPersons
       p1         <- APP.getPerson("1")
@@ -79,19 +55,14 @@ object ClientProgram {
       )
     } yield (p1, p2, p3, p4, p1Links, p3Links, personList.add(pNew))
   }
-}
-
-object ClientApp {
 
   def main(args: Array[String]): Unit = {
 
-    val result: PersonAggregation = Await.result(
-      ClientProgram.clientProgram[SampleClient.Op].interpret[Task].runAsync,
-      Duration.Inf)
+    val result: PersonAggregation =
+      Await.result(clientProgram[RPCClient.Op].interpret[Task].runAsync, Duration.Inf)
 
     println(s"Result = $result")
 
-    System.in.read()
   }
 
 }

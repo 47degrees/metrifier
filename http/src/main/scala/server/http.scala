@@ -1,4 +1,6 @@
 package metrifier
+package http
+package server
 
 object HttpConf {
 
