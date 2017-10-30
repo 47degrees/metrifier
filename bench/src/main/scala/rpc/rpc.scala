@@ -5,6 +5,7 @@ import cats.implicits._
 import freestyle.implicits._
 import freestyle.asyncCatsEffect.implicits._
 import freestyle.rpc.client._
+import freestyle.rpc.client.implicits._
 import monix.eval.Task
 import io.grpc.ManagedChannel
 import metrifier.rpc._

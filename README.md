@@ -43,7 +43,7 @@ We are using the [Java Microbenchmark Harness (JMH)](http://openjdk.java.net/pro
   * `argonaut`, version `6.2`.
 * RPC services stack based on:
   * `freestyle`, version `0.4.1`.
-  * `frees-rpc`, version `0.1.1` (atop of [gRPC](https://grpc.io/), version `1.6.1`).
+  * `frees-rpc`, version `0.1.2` (atop of [gRPC](https://grpc.io/), version `1.6.1`).
 
 ### http
 
