@@ -17,7 +17,7 @@ See [README](README.md#running-benchmarks) for reference.
 ## jmh - http
 
 ```bash
-[info] Running (fork) org.openjdk.jmh.Main -i 10 -wi 10 -f 2 -t 1 metrifier.benchmark.HttpBenchmark
+[info] Running (fork) org.openjdk.jmh.Main -i 20 -wi 20 -f 2 -t 1 metrifier.benchmark.HttpBenchmark
 [info] # JMH version: 1.19
 [info] # VM version: JDK 1.8.0_131, VM 25.131-b11
 [info] # VM invoker: /Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/bin/java
@@ -325,7 +325,7 @@ See [README](README.md#running-benchmarks) for reference.
 ## jmh - frees-rpc
 
 ```bash
-[info] Running (fork) org.openjdk.jmh.Main -i 10 -wi 10 -f 2 -t 1 metrifier.benchmark.RPCBenchmark
+[info] Running (fork) org.openjdk.jmh.Main -i 20 -wi 20 -f 2 -t 1 metrifier.benchmark.RPCBenchmark
 [info] # JMH version: 1.19
 [info] # VM version: JDK 1.8.0_131, VM 25.131-b11
 [info] # VM invoker: /Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/bin/java

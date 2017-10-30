@@ -56,10 +56,10 @@ sbt "http/runMain metrifier.http.server.HttpServer"
 * Run Benchmarks:
 
 ```bash
-sbt "bench/jmh:run -i 10 -wi 10 -f 2 -t 1 metrifier.benchmark.HttpBenchmark"
+sbt "bench/jmh:run -i 20 -wi 20 -f 2 -t 1 metrifier.benchmark.HttpBenchmark"
 ```
 
-Which means "10 iterations", "10 warmup iterations", "2 forks", "1 thread".
+Which means "20 iterations", "20 warmup iterations", "2 forks", "1 thread".
 
 ### frees-rpc
 
@@ -72,10 +72,10 @@ sbt "frees-rpc/runMain metrifier.rpc.server.RPCServer"
 * Run Benchmarks:
 
 ```bash
-sbt "bench/jmh:run -i 10 -wi 10 -f 2 -t 1 metrifier.benchmark.RPCBenchmark"
+sbt "bench/jmh:run -i 20 -wi 20 -f 2 -t 1 metrifier.benchmark.RPCBenchmark"
 ```
 
-Which means "10 iterations", "10 warmup iterations", "2 forks", "1 thread".
+Which means "20 iterations", "20 warmup iterations", "2 forks", "1 thread".
 
 ### Benchmark Results
 
