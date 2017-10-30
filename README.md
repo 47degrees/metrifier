@@ -97,27 +97,27 @@ Expanded version is in the [BENCHMARK_RESULTS.md](BENCHMARK_RESULTS.md) file.
 * HttpBenchmark Raw output:
 
 ```bash
-# Run complete. Total time: 00:08:59
+# Run complete. Total time: 00:08:52
 
 Benchmark                          Mode  Cnt     Score     Error  Units
-HttpBenchmark.createPerson        thrpt   40     9.236 ±   0.070  ops/s
-HttpBenchmark.getPerson           thrpt   40  1717.745 ± 216.141  ops/s
-HttpBenchmark.getPersonLinks      thrpt   40  1213.295 ±  84.572  ops/s
-HttpBenchmark.listPersons         thrpt   40   987.634 ± 133.290  ops/s
-HttpBenchmark.programComposition  thrpt   40     8.606 ±   0.108  ops/s
+HttpBenchmark.createPerson        thrpt   40   861.052 ± 106.109  ops/s
+HttpBenchmark.getPerson           thrpt   40  1569.770 ± 153.491  ops/s
+HttpBenchmark.getPersonLinks      thrpt   40  1072.277 ± 131.565  ops/s
+HttpBenchmark.listPersons         thrpt   40  1196.642 ± 153.626  ops/s
+HttpBenchmark.programComposition  thrpt   40   156.592 ±  14.936  ops/s
 ```
 
 * RPCBenchmark Raw output:
 
 ```bash
-# Run complete. Total time: 00:09:43
+# Run complete. Total time: 00:09:32
 
 Benchmark                         Mode  Cnt     Score     Error  Units
-RPCBenchmark.createPerson        thrpt   40     9.371 ±   0.117  ops/s
-RPCBenchmark.getPerson           thrpt   40  3193.378 ± 101.669  ops/s
-RPCBenchmark.getPersonLinks      thrpt   40  2259.579 ±  36.616  ops/s
-RPCBenchmark.listPersons         thrpt   40  2333.681 ±  66.979  ops/s
-RPCBenchmark.programComposition  thrpt   40     8.771 ±   0.047  ops/s
+RPCBenchmark.createPerson        thrpt   40  2127.367 ± 230.981  ops/s
+RPCBenchmark.getPerson           thrpt   40  2859.026 ± 205.242  ops/s
+RPCBenchmark.getPersonLinks      thrpt   40  1883.806 ± 127.808  ops/s
+RPCBenchmark.listPersons         thrpt   40  1762.097 ± 161.918  ops/s
+RPCBenchmark.programComposition  thrpt   40   272.358 ±  18.218  ops/s
 ```
 
 ##### Summary
@@ -126,40 +126,46 @@ RPCBenchmark.programComposition  thrpt   40     8.771 ±   0.047  ops/s
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
-HttpBenchmark.createPerson | thrpt | 40 | 9.236 | 0.070 | ops/s
-RPCBenchmark.createPerson | thrpt | 40 | 9.371 | 0.117 | ops/s
+HttpBenchmark.createPerson | thrpt | 40 | 861.052 | 106.109 | ops/s
+RPCBenchmark.createPerson | thrpt | 40 | 2127.367 | 230.981 | ops/s
 
 ###### **getPerson**
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
-HttpBenchmark.getPerson | thrpt | 40 | 1717.745 | 216.141 | ops/s
-RPCBenchmark.getPerson | thrpt | 40 | 3193.378 | 101.669 | ops/s
+HttpBenchmark.getPerson | thrpt | 40 | 1569.770 | 153.491 | ops/s
+RPCBenchmark.getPerson | thrpt | 40 | 2859.026 | 205.242 | ops/s
 
 ###### **getPersonLinks**
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
-HttpBenchmark.getPersonLinks | thrpt | 40 | 1213.295 | 84.572 | ops/s
-RPCBenchmark.getPersonLinks | thrpt | 40 | 2259.579 | 36.616 | ops/s
+HttpBenchmark.getPersonLinks | thrpt | 40 | 1072.277 | 131.565 | ops/s
+RPCBenchmark.getPersonLinks | thrpt | 40 | 1883.806 | 127.808 | ops/s
 
 ###### **listPersons**
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
-HttpBenchmark.listPersons | thrpt | 40 | 987.634 | 133.290 | ops/s
-RPCBenchmark.listPersons | thrpt | 40 | 2333.681 | 66.979 | ops/s
+HttpBenchmark.listPersons | thrpt | 40 | 1196.642 | 153.626 | ops/s
+RPCBenchmark.listPersons | thrpt | 40 | 1762.097 | 161.918 | ops/s
 
 ###### **programComposition**
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
-HttpBenchmark.programComposition | thrpt | 40 | 8.606 | 0.108 | ops/s
-RPCBenchmark.programComposition | thrpt | 40 | 8.771 | 0.047 | ops/s
+HttpBenchmark.programComposition | thrpt | 40 | 156.592 |  14.936 | ops/s
+RPCBenchmark.programComposition | thrpt | 40 | 272.358 |  18.218 | ops/s
 
-##### Comparing both in a Radar Chart
+##### Comparing both in Charts
 
-![bench](radar-chart.png)
+You can find the following charts in [this jsfiddle](http://jsfiddle.net/juanpedromoreno/sjw5jgrj/).
+
+* Bar Chart
+![bar-chart-bench](chart-bar.png)
+
+* Radar Chart
+![radar-chart-bench](chart-radar.png)
 
 #### Conclusion
 
