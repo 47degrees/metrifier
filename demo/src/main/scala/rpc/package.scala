@@ -6,10 +6,10 @@ import freestyle.implicits._
 import freestyle.config.implicits._
 import freestyle.asyncCatsEffect.implicits._
 import freestyle.rpc.client._
+import freestyle.rpc.client.implicits._
 import monix.eval.Task
 import io.grpc.ManagedChannel
 import metrifier.rpc._
-import metrifier.rpc.client._
 import metrifier.rpc.protocols._
 
 import scala.concurrent.Future
@@ -41,9 +41,6 @@ package object rpc {
 
     implicit val personServiceClient: PersonService.Client[Task] =
       PersonService.client[Task](channel)
-
-    implicit val rpcClientHandler: RPCClientHandler[Task] =
-      new RPCClientHandler[Task]
   }
 
   object implicits extends Implicits

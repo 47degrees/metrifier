@@ -18,9 +18,5 @@ object services {
     PersonLinkList(search, search.size)
   }
 
-  def createPerson(person: Person): Person = {
-    // Simulating a IO blocking, it just sleep 100 ms
-    Thread.sleep(100)
-    person
-  }
+  def createPerson(person: Person): Person = person
 }
