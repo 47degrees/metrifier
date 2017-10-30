@@ -26,4 +26,7 @@ project/plugins/project/
 /out/
 .idea_modules/
 
+# Benchmark results
+bench/*.txt
+
 .DS_Store

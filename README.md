@@ -56,7 +56,7 @@ sbt "http/runMain metrifier.http.server.HttpServer"
 * Run Benchmarks:
 
 ```bash
-sbt "bench/jmh:run -i 20 -wi 20 -f 2 -t 1 metrifier.benchmark.HttpBenchmark"
+sbt "bench/jmh:run -o http-benchmark-results.txt -i 20 -wi 20 -f 2 -t 1 metrifier.benchmark.HttpBenchmark"
 ```
 
 Which means "20 iterations", "20 warmup iterations", "2 forks", "1 thread".
@@ -72,7 +72,7 @@ sbt "frees-rpc/runMain metrifier.rpc.server.RPCServer"
 * Run Benchmarks:
 
 ```bash
-sbt "bench/jmh:run -i 20 -wi 20 -f 2 -t 1 metrifier.benchmark.RPCBenchmark"
+sbt "bench/jmh:run -o rpc-benchmark-results.txt -i 20 -wi 20 -f 2 -t 1 metrifier.benchmark.RPCBenchmark"
 ```
 
 Which means "20 iterations", "20 warmup iterations", "2 forks", "1 thread".
@@ -97,24 +97,27 @@ Expanded version is in the [BENCHMARK_RESULTS.md](BENCHMARK_RESULTS.md) file.
 * HttpBenchmark Raw output:
 
 ```bash
-[info] # Run complete. Total time: 00:05:23
-[info] Benchmark                          Mode  Cnt     Score     Error  Units
-[info] HttpBenchmark.createPerson        thrpt   20     9.178 ±   0.050  ops/s
-[info] HttpBenchmark.getPerson           thrpt   20  1680.386 ± 577.062  ops/s
-[info] HttpBenchmark.getPersonLinks      thrpt   20  1349.666 ± 174.447  ops/s
-[info] HttpBenchmark.listPersons         thrpt   20  1811.600 ± 400.316  ops/s
-[info] HttpBenchmark.programComposition  thrpt   20     8.492 ±   0.089  ops/s
+# Run complete. Total time: 00:08:59
+
+Benchmark                          Mode  Cnt     Score     Error  Units
+HttpBenchmark.createPerson        thrpt   40     9.236 ±   0.070  ops/s
+HttpBenchmark.getPerson           thrpt   40  1717.745 ± 216.141  ops/s
+HttpBenchmark.getPersonLinks      thrpt   40  1213.295 ±  84.572  ops/s
+HttpBenchmark.listPersons         thrpt   40   987.634 ± 133.290  ops/s
+HttpBenchmark.programComposition  thrpt   40     8.606 ±   0.108  ops/s
 ```
+
 * RPCBenchmark Raw output:
 
 ```bash
-[info] # Run complete. Total time: 00:06:06
-[info] Benchmark                         Mode  Cnt     Score     Error  Units
-[info] RPCBenchmark.createPerson        thrpt   20     9.298 ±   0.044  ops/s
-[info] RPCBenchmark.getPerson           thrpt   20  3544.518 ± 970.798  ops/s
-[info] RPCBenchmark.getPersonLinks      thrpt   20  2708.222 ± 277.988  ops/s
-[info] RPCBenchmark.listPersons         thrpt   20  3042.332 ± 340.310  ops/s
-[info] RPCBenchmark.programComposition  thrpt   20     8.755 ±   0.064  ops/s
+# Run complete. Total time: 00:09:43
+
+Benchmark                         Mode  Cnt     Score     Error  Units
+RPCBenchmark.createPerson        thrpt   40     9.371 ±   0.117  ops/s
+RPCBenchmark.getPerson           thrpt   40  3193.378 ± 101.669  ops/s
+RPCBenchmark.getPersonLinks      thrpt   40  2259.579 ±  36.616  ops/s
+RPCBenchmark.listPersons         thrpt   40  2333.681 ±  66.979  ops/s
+RPCBenchmark.programComposition  thrpt   40     8.771 ±   0.047  ops/s
 ```
 
 ##### Summary
@@ -123,36 +126,36 @@ Expanded version is in the [BENCHMARK_RESULTS.md](BENCHMARK_RESULTS.md) file.
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
-HttpBenchmark.createPerson | thrpt | 20 | 9.178 | 0.050 | ops/s
-RPCBenchmark.createPerson | thrpt | 20 | 9.298 | 0.044 | ops/s
+HttpBenchmark.createPerson | thrpt | 40 | 9.236 | 0.070 | ops/s
+RPCBenchmark.createPerson | thrpt | 40 | 9.371 | 0.117 | ops/s
 
 ###### **getPerson**
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
-HttpBenchmark.getPerson | thrpt | 20 | 1680.386 | 577.062 | ops/s
-RPCBenchmark.getPerson | thrpt | 20 | 3544.518 | 970.798 | ops/s
+HttpBenchmark.getPerson | thrpt | 40 | 1717.745 | 216.141 | ops/s
+RPCBenchmark.getPerson | thrpt | 40 | 3193.378 | 101.669 | ops/s
 
 ###### **getPersonLinks**
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
-HttpBenchmark.getPersonLinks | thrpt | 20 | 1349.666 | 174.447 | ops/s
-RPCBenchmark.getPersonLinks | thrpt | 20 | 2708.222 | 277.988 | ops/s
+HttpBenchmark.getPersonLinks | thrpt | 40 | 1213.295 | 84.572 | ops/s
+RPCBenchmark.getPersonLinks | thrpt | 40 | 2259.579 | 36.616 | ops/s
 
 ###### **listPersons**
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
-HttpBenchmark.listPersons | thrpt | 20 | 1811.600 | 400.316 | ops/s
-RPCBenchmark.listPersons | thrpt | 20 | 3042.332 | 340.310 | ops/s
+HttpBenchmark.listPersons | thrpt | 40 | 987.634 | 133.290 | ops/s
+RPCBenchmark.listPersons | thrpt | 40 | 2333.681 | 66.979 | ops/s
 
 ###### **programComposition**
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
-HttpBenchmark.programComposition | thrpt | 20 | 8.492 | 0.089 | ops/s
-RPCBenchmark.programComposition | thrpt | 20 | 8.755 | 0.064 | ops/s
+HttpBenchmark.programComposition | thrpt | 40 | 8.606 | 0.108 | ops/s
+RPCBenchmark.programComposition | thrpt | 40 | 8.771 | 0.047 | ops/s
 
 ##### Comparing both in a Radar Chart
 
