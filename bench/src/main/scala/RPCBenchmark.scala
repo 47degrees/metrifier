@@ -18,6 +18,18 @@ import scala.concurrent.Await
 class RPCBenchmark {
 
   val client: PersonService.Client[Task] = implicitly[PersonService.Client[Task]]
+  val p5: Person = Person(
+    id = "5",
+    name = PersonName(title = "ms", first = "valentine", last = "lacroix"),
+    gender = "female",
+    location = Location(
+      street = "1494 avenue du fort-caire",
+      city = "orléans",
+      state = "aveyron",
+      postCode = 91831),
+    email = "valentine.lacroix@example.com",
+    picture = None
+  )
 
   @Benchmark
   def listPersons: PersonList = Await.result(client.listPersons("foo").runAsync, Duration.Inf)
@@ -33,19 +45,7 @@ class RPCBenchmark {
   def createPerson: Person =
     Await.result(
       client
-        .createPerson(
-          Person(
-            id = "5",
-            name = PersonName(title = "ms", first = "valentine", last = "lacroix"),
-            gender = "female",
-            location = Location(
-              street = "1494 avenue du fort-caire",
-              city = "orléans",
-              state = "aveyron",
-              postCode = 91831),
-            email = "valentine.lacroix@example.com",
-            picture = None
-          ))
+        .createPerson(p5)
         .runAsync,
       Duration.Inf
     )
@@ -62,19 +62,7 @@ class RPCBenchmark {
         p4         <- client.getPerson("4")
         p1Links    <- client.getPersonLinks(p1.id)
         p3Links    <- client.getPersonLinks(p3.id)
-        pNew <- client.createPerson(
-          Person(
-            id = "5",
-            name = PersonName(title = "ms", first = "valentine", last = "lacroix"),
-            gender = "female",
-            location = Location(
-              street = "1494 avenue du fort-caire",
-              city = "orléans",
-              state = "aveyron",
-              postCode = 91831),
-            email = "valentine.lacroix@example.com",
-            picture = None
-          ))
+        pNew <- client.createPerson(p5)
       } yield (p1, p2, p3, p4, p1Links, p3Links, personList.add(pNew))
     }
 
