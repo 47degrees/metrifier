@@ -181,6 +181,40 @@ You can find the following charts in [this jsfiddle](http://jsfiddle.net/juanped
 
 Using JMH, we have checked out quickly the performance characteristics for both service architectures, and we can say that the RPC approach is noticeably faster.
 
+## Assembling metrifier
+
+To make a JAR file containing only the external dependencies, type:
+
+```bash
+sbt assemblyPackageDependency
+```
+
+Output (assuming we are in the project path):
+
+```bash
+bench/target/scala-2.12/metrifier-bench-assembly-0.0.2-deps.jar
+bench/target/scala-2.12/metrifier-demo-assembly-0.0.2-deps.jar
+bench/target/scala-2.12/metrifier-frees-rpc-assembly-0.0.2-deps.jar
+bench/target/scala-2.12/metrifier-http-assembly-0.0.2-deps.jar
+bench/target/scala-2.12/metrifier-shared-assembly-0.0.2-deps.jar
+```
+
+This is intended to be used with a JAR that only contains your project, so now, you can write:
+
+```bash
+sbt assembly
+```
+
+And we'll get the following artifacts as the result:
+
+```bash
+bench/target/scala-2.12/metrifier-bench-assembly-0.0.2.jar
+bench/target/scala-2.12/metrifier-demo-assembly-0.0.2.jar
+bench/target/scala-2.12/metrifier-frees-rpc-assembly-0.0.2.jar
+bench/target/scala-2.12/metrifier-http-assembly-0.0.2.jar
+bench/target/scala-2.12/metrifier-shared-assembly-0.0.2.jar
+```
+
 ## Running in Google Cloud Platform
 
 See [this guide](deploy/README.md) to get information about how to deploy the different services in [Google Compute Engine](https://cloud.google.com/compute/).
