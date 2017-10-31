@@ -1,0 +1,10 @@
+{% set APPLICATION_PORT = 8080 %}
+
+resources:
+- name: {{ env["name"] }}
+  type: compute.v1.firewall
+  properties:
+    sourceRanges: ["0.0.0.0/0"]
+    allowed:
+    - IPProtocol: TCP
+      ports: [ {{ APPLICATION_PORT }} ]
