@@ -193,10 +193,10 @@ Output (assuming we are in the project path):
 
 ```bash
 bench/target/scala-2.12/metrifier-bench-assembly-0.0.2-deps.jar
-bench/target/scala-2.12/metrifier-demo-assembly-0.0.2-deps.jar
-bench/target/scala-2.12/metrifier-frees-rpc-assembly-0.0.2-deps.jar
-bench/target/scala-2.12/metrifier-http-assembly-0.0.2-deps.jar
-bench/target/scala-2.12/metrifier-shared-assembly-0.0.2-deps.jar
+demo/target/scala-2.12/metrifier-demo-assembly-0.0.2-deps.jar
+frees-rpc/target/scala-2.12/metrifier-frees-rpc-assembly-0.0.2-deps.jar
+http/target/scala-2.12/metrifier-http-assembly-0.0.2-deps.jar
+shared/target/scala-2.12/metrifier-shared-assembly-0.0.2-deps.jar
 ```
 
 This is intended to be used with a JAR that only contains your project, so now, you can write:
@@ -209,10 +209,39 @@ And we'll get the following artifacts as the result:
 
 ```bash
 bench/target/scala-2.12/metrifier-bench-assembly-0.0.2.jar
-bench/target/scala-2.12/metrifier-demo-assembly-0.0.2.jar
-bench/target/scala-2.12/metrifier-frees-rpc-assembly-0.0.2.jar
-bench/target/scala-2.12/metrifier-http-assembly-0.0.2.jar
-bench/target/scala-2.12/metrifier-shared-assembly-0.0.2.jar
+demo/target/scala-2.12/metrifier-demo-assembly-0.0.2.jar
+frees-rpc/target/scala-2.12/metrifier-frees-rpc-assembly-0.0.2.jar
+http/target/scala-2.12/metrifier-http-assembly-0.0.2.jar
+shared/target/scala-2.12/metrifier-shared-assembly-0.0.2.jar
+```
+
+### Uploading jars to Google Cloud Storage
+
+In this case, we've created a bucket named as `metrifier` within our GCP project. Assuming this name, these would be the set of commands to run:
+
+```bash
+export METRIFIER_VERSION=0.0.2
+gsutil cp bench/target/scala-2.12/metrifier-bench-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
+gsutil cp demo/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
+gsutil cp frees-rpc/target/scala-2.12/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
+gsutil cp http/target/scala-2.12/metrifier-http-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
+gsutil cp shared/target/scala-2.12/metrifier-shared-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
+gsutil cp bench/target/scala-2.12/metrifier-bench-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
+gsutil cp demo/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
+gsutil cp frees-rpc/target/scala-2.12/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
+gsutil cp http/target/scala-2.12/metrifier-http-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
+gsutil cp shared/target/scala-2.12/metrifier-shared-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
+```
+
+If the project dependencies have not changed, you could just upload the project JARs:
+
+```bash
+export METRIFIER_VERSION=0.0.2
+gsutil cp bench/target/scala-2.12/metrifier-bench-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
+gsutil cp demo/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
+gsutil cp frees-rpc/target/scala-2.12/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
+gsutil cp http/target/scala-2.12/metrifier-http-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
+gsutil cp shared/target/scala-2.12/metrifier-shared-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 ```
 
 ## Running in Google Cloud Platform
