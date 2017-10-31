@@ -1,0 +1,8 @@
+imports:
+- path: tmpl-vm.jinja
+- path: tmpl-firewall.jinja
+- path: tmpl-compute.jinja
+
+resources:
+- name: compute-engine-setup
+  type: tmpl-compute.jinja

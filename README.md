@@ -170,3 +170,31 @@ You can find the following charts in [this jsfiddle](http://jsfiddle.net/juanped
 #### Conclusion
 
 Using JMH, we have checked out quickly the performance characteristics for both service architectures, and we can say that the RPC approach is noticeably faster.
+
+## Running in Google Cloud Platform
+
+See [this guide](deploy/README.md) to get information about how to deploy the different services in [Google Compute Engine](https://cloud.google.com/compute/).
+
+### Running the HTTP Server
+
+1. SSH into `http-server-vm` instance.
+2. Clone the project:
+```bash
+git clone https://github.com/47deg/metrifier.git && cd metrifier
+```
+3. Run the HTTP Server:
+```bash
+sbt "http/runMain metrifier.http.server.HttpServer"
+```
+
+### Chek out the HTTP Server
+
+1. SSH into `http-jmh-vm` instance.
+2. Clone the project:
+```bash
+git clone https://github.com/47deg/metrifier.git && cd metrifier
+```
+3. Run the following `GET` to fetch all the persons (replace `[INTERNAL_IP]` with the internal IP address asigned to the `http-jmh-vm` instance):
+```bash
+curl "http://[INTERNAL_IP]:8080/person"
+```
