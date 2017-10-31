@@ -3,8 +3,10 @@ package benchmark
 
 import java.util.concurrent.TimeUnit
 
-import metrifier.benchmark.http._
+import metrifier.http.client.HttpClient
+import metrifier.http.HttpConf
 import metrifier.shared.model._
+import org.http4s.client.blaze.PooledHttp1Client
 import org.openjdk.jmh.annotations._
 
 import scalaz.concurrent.Task
@@ -13,6 +15,8 @@ import scalaz.concurrent.Task
 @BenchmarkMode(Array(Mode.Throughput))
 @OutputTimeUnit(TimeUnit.SECONDS)
 class HttpBenchmark {
+
+  val client: HttpClient = new HttpClient(PooledHttp1Client(), HttpConf.host, HttpConf.port)
 
   @Benchmark
   def listPersons: PersonList = client.listPersons.unsafePerformSync

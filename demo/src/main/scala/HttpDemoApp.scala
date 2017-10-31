@@ -1,11 +1,10 @@
 package metrifier
 package demo
-package http
 
 import org.http4s.client.blaze.PooledHttp1Client
 import metrifier.http.client._
 import metrifier.http.codecs._
-import metrifier.http.server.HttpConf
+import metrifier.http.HttpConf
 import metrifier.shared.model._
 
 import scalaz.concurrent.Task
