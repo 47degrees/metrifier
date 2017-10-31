@@ -17,8 +17,13 @@ sbt "http/runMain metrifier.http.server.HttpServer"
 * Run Client:
 
 ```bash
-sbt "demo/runMain metrifier.demo.http.HttpDemoApp"
+sbt "demo/runMain metrifier.demo.HttpDemoApp"
 ```
+
+By default, host and port will be `localhost` and `8080`, respectively. You can override this configuration through either configuration key or environment variable:
+
+* Host: `http.host` VS `HTTP_HOST`.
+* Port: `http.port` VS `HTTP_PORT`.
 
 ### frees-rpc
 
@@ -31,8 +36,13 @@ sbt "frees-rpc/runMain metrifier.rpc.server.RPCServer"
 * Run Client:
 
 ```bash
-sbt "demo/runMain metrifier.demo.rpc.RPCDemoApp"
+sbt "demo/runMain metrifier.demo.RPCDemoApp"
 ```
+
+By default, host and port will be `localhost` and `8080`, respectively. You can override this configuration through either configuration key or environment variable:
+
+* Host: `rpc.host` VS `RPC_HOST`.
+* Port: `rpc.port` VS `RPC_PORT`.
 
 ## Running Benchmarks
 

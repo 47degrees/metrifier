@@ -3,7 +3,7 @@ package benchmark
 
 import org.openjdk.jmh.annotations._
 import metrifier.shared.model._
-import metrifier.benchmark.rpc.implicits._
+import metrifier.rpc.client.implicits._
 import java.util.concurrent.TimeUnit
 
 import metrifier.rpc.protocols.PersonService

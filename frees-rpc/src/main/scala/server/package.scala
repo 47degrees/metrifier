@@ -18,7 +18,7 @@ package object server {
   trait ServerConf {
 
     def getConf(grpcConfigs: List[GrpcConfig]): ServerW =
-      BuildServerFromConfig[ServerConfig.Op]("rpc.server.port", grpcConfigs)
+      BuildServerFromConfig[ServerConfig.Op]("rpc.port", grpcConfigs)
         .interpret[Try] match {
         case Success(c) => c
         case Failure(e) =>

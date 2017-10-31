@@ -13,6 +13,7 @@ object ProjectPlugin extends AutoPlugin {
       lazy val http4sV            = "0.15.12a"
       lazy val argonautV          = "6.2"
       lazy val argonautShapelessV = "1.2.0-M5"
+      lazy val config             = "1.3.1"
     }
 
     lazy val scalaMetaSettings: Seq[Def.Setting[_]] =
@@ -30,7 +31,8 @@ object ProjectPlugin extends AutoPlugin {
       "org.http4s"                 %% "http4s-argonaut"        % V.http4sV,
       "com.github.alexarchambault" %% "argonaut-shapeless_6.2" % V.argonautShapelessV,
       "io.argonaut"                %% "argonaut"               % V.argonautV,
-      "io.argonaut"                %% "argonaut-scalaz"        % V.argonautV
+      "io.argonaut"                %% "argonaut-scalaz"        % V.argonautV,
+      "com.typesafe"               % "config"                  % V.config
     )
 
     lazy val rpcDependencies: Seq[ModuleID] = Seq(

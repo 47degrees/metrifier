@@ -1,9 +1,8 @@
 package metrifier
 package demo
-package rpc
 
 import metrifier.shared.model._
-import metrifier.demo.rpc.implicits._
+import metrifier.rpc.client.implicits._
 import metrifier.rpc.protocols.PersonService
 import monix.eval.Task
 
