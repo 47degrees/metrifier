@@ -66,10 +66,10 @@ sbt "http/runMain metrifier.http.server.HttpServer"
 * Run Benchmarks:
 
 ```bash
-sbt "bench/jmh:run -o http-benchmark-results.txt -i 20 -wi 20 -f 2 -t 1 metrifier.benchmark.HttpBenchmark"
+sbt "bench/jmh:run -o http-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.HttpBenchmark"
 ```
 
-Which means "20 iterations", "20 warmup iterations", "2 forks", "1 thread".
+Which means "20 iterations", "20 warmup iterations", "2 forks", "4 threads".
 
 ### frees-rpc
 
@@ -82,10 +82,10 @@ sbt "frees-rpc/runMain metrifier.rpc.server.RPCServer"
 * Run Benchmarks:
 
 ```bash
-sbt "bench/jmh:run -o rpc-benchmark-results.txt -i 20 -wi 20 -f 2 -t 1 metrifier.benchmark.RPCBenchmark"
+sbt "bench/jmh:run -o rpc-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.RPCBenchmark"
 ```
 
-Which means "20 iterations", "20 warmup iterations", "2 forks", "1 thread".
+Which means "20 iterations", "20 warmup iterations", "2 forks", "4 threads".
 
 ### Benchmark Results
 
@@ -217,16 +217,14 @@ shared/target/scala-2.12/metrifier-shared-assembly-0.0.2.jar
 
 ### Uploading jars to Google Cloud Storage
 
-In this case, we've created a bucket named as `metrifier` within our GCP project. Assuming this name, these would be the set of commands to run:
+In this case, we've created a bucket named as `metrifier` within our GCP project. Assuming this name, these would be the set of commands to run (we're skipping the `bench` artifacts since we are not going to use them):
 
 ```bash
 export METRIFIER_VERSION=0.0.2
-gsutil cp bench/target/scala-2.12/metrifier-bench-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
 gsutil cp demo/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
 gsutil cp frees-rpc/target/scala-2.12/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
 gsutil cp http/target/scala-2.12/metrifier-http-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
 gsutil cp shared/target/scala-2.12/metrifier-shared-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
-gsutil cp bench/target/scala-2.12/metrifier-bench-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp demo/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp frees-rpc/target/scala-2.12/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp http/target/scala-2.12/metrifier-http-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
@@ -237,7 +235,6 @@ If the project dependencies have not changed, you could just upload the project 
 
 ```bash
 export METRIFIER_VERSION=0.0.2
-gsutil cp bench/target/scala-2.12/metrifier-bench-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp demo/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp frees-rpc/target/scala-2.12/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp http/target/scala-2.12/metrifier-http-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
@@ -248,26 +245,68 @@ gsutil cp shared/target/scala-2.12/metrifier-shared-assembly-${METRIFIER_VERSION
 
 See [this guide](deploy/README.md) to get information about how to deploy the different services in [Google Compute Engine](https://cloud.google.com/compute/).
 
-### Running the HTTP Server
+Once everything is up, follow the next sections to run the benchmarks atop GCP.
+
+### HTTP Server
+
+#### Running the HTTP Server
 
 1. SSH into `http-server-vm` instance.
-2. Clone the project:
+2. Run the HTTP Server:
 ```bash
-git clone https://github.com/47deg/metrifier.git && cd metrifier
-```
-3. Run the HTTP Server:
-```bash
-sbt "http/runMain metrifier.http.server.HttpServer"
+export METRIFIER_VERSION=0.0.2
+env \
+    HTTP_HOST=http-server-vm \
+    HTTP_PORT=8080 \
+    java -cp \
+    /metrifier/jars/metrifier-shared-assembly-${METRIFIER_VERSION}-deps.jar:/metrifier/jars/metrifier-shared-assembly-${METRIFIER_VERSION}.jar:/metrifier/jars/metrifier-http-assembly-${METRIFIER_VERSION}-deps.jar:/metrifier/jars/metrifier-http-assembly-${METRIFIER_VERSION}.jar \
+    metrifier.http.server.HttpServer
 ```
 
-### Chek out the HTTP Server
+#### Running HTTP Benchmarks
 
 1. SSH into `http-jmh-vm` instance.
-2. Clone the project:
+2. Run the following `GET` to fetch all the persons (checking connectivity):
 ```bash
-git clone https://github.com/47deg/metrifier.git && cd metrifier
+curl "http://http-server-vm:8080/person"
 ```
-3. Run the following `GET` to fetch all the persons (replace `[INTERNAL_IP]` with the internal IP address asigned to the `http-jmh-vm` instance):
+3. If step was successful, run the benchmarks:
 ```bash
-curl "http://[INTERNAL_IP]:8080/person"
+cd /metrifier/repo
+env \
+    HTTP_HOST=http-server-vm \
+    HTTP_PORT=8080 \
+    sbt "bench/jmh:run -o /metrifier/bench_results/http-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.HttpBenchmark"
 ```
+
+Given the port `8080` was opened to the exterior when deploying the cluster with Google Cloud Manager, you could even run the benchmarks from your local machine, using the external IP address (changing to HTTP_HOST=[HTTP_SERVER_INSTANCE_EXTERNAL_IP]).
+
+### RPC Server
+
+#### Running the RPC Server
+
+1. SSH into `rpc-server-vm` instance.
+2. Run the RPC Server:
+```bash
+export METRIFIER_VERSION=0.0.2
+env \
+    RPC_HOST=rpc-server-vm \
+    RPC_PORT=8080 \
+    java -cp \
+    /metrifier/jars/metrifier-shared-assembly-${METRIFIER_VERSION}-deps.jar:/metrifier/jars/metrifier-shared-assembly-${METRIFIER_VERSION}.jar:/metrifier/jars/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}-deps.jar:/metrifier/jars/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}.jar \
+    metrifier.rpc.server.RPCServer
+```
+
+#### Running RPC Benchmarks
+
+1. SSH into `rpc-jmh-vm` instance.
+2. Run the benchmarks:
+```bash
+cd /metrifier/repo
+env \
+    RPC_HOST=rpc-server-vm \
+    RPC_PORT=8080 \
+    sbt "bench/jmh:run -o /metrifier/bench_results/rpc-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.RPCBenchmark"
+```
+
+As we mentioned for the Http benchmarks, in this case we could also run the benchmarks from our local machine, using the external IP address (changing to RPC_HOST=[RPC_SERVER_INSTANCE_EXTERNAL_IP]).
