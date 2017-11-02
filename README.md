@@ -44,7 +44,7 @@ By default, host and port will be `localhost` and `8080`, respectively. You can 
 * Host: `rpc.host` VS `RPC_HOST`.
 * Port: `rpc.port` VS `RPC_PORT`.
 
-## Running Benchmarks
+## Running Benchmarks Locally
 
 We are using the [Java Microbenchmark Harness (JMH)](http://openjdk.java.net/projects/code-tools/jmh/) tool, which is helping us to get an experimental answer to a basic question about which implementation executes fastest among:
 
@@ -55,7 +55,7 @@ We are using the [Java Microbenchmark Harness (JMH)](http://openjdk.java.net/pro
   * `freestyle`, version `0.4.1`.
   * `frees-rpc`, version `0.1.2` (atop of [gRPC](https://grpc.io/), version `1.6.1`).
 
-### http
+### HTTP Benchmarks
 
 * Run Server:
 
@@ -71,7 +71,7 @@ sbt "bench/jmh:run -o http-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifie
 
 Which means "20 iterations", "20 warmup iterations", "2 forks", "4 threads".
 
-### frees-rpc
+### frees-rpc Benchmarks
 
 * Run Server:
 
@@ -87,101 +87,11 @@ sbt "bench/jmh:run -o rpc-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifier
 
 Which means "20 iterations", "20 warmup iterations", "2 forks", "4 threads".
 
-### Benchmark Results
+## Running Benchmarks in Google Cloud Platform
 
-Expanded version is in the [BENCHMARK_RESULTS.md](BENCHMARK_RESULTS.md) file.
+Before starting detailing how to deploy metrifier to GCP, let's see how to assemble it.
 
-#### Machine Details
-
-* Model Name: MacBook Pro
-* Model Identifier: MacBookPro12,1
-* Intel(R) Core(TM) i5-5257U CPU @ 2.70GHz
-* Number of Processors: 1
-* Total Number of Cores: 2
-* L2 Cache (per Core): 256 KB
-* L3 Cache: 3 MB
-* Memory: 16 GB
-
-#### http vs frees-rpc summary
-
-* HttpBenchmark Raw output:
-
-```bash
-# Run complete. Total time: 00:08:52
-
-Benchmark                          Mode  Cnt     Score     Error  Units
-HttpBenchmark.createPerson        thrpt   40   861.052 ± 106.109  ops/s
-HttpBenchmark.getPerson           thrpt   40  1569.770 ± 153.491  ops/s
-HttpBenchmark.getPersonLinks      thrpt   40  1072.277 ± 131.565  ops/s
-HttpBenchmark.listPersons         thrpt   40  1196.642 ± 153.626  ops/s
-HttpBenchmark.programComposition  thrpt   40   156.592 ±  14.936  ops/s
-```
-
-* RPCBenchmark Raw output:
-
-```bash
-# Run complete. Total time: 00:09:32
-
-Benchmark                         Mode  Cnt     Score     Error  Units
-RPCBenchmark.createPerson        thrpt   40  2127.367 ± 230.981  ops/s
-RPCBenchmark.getPerson           thrpt   40  2859.026 ± 205.242  ops/s
-RPCBenchmark.getPersonLinks      thrpt   40  1883.806 ± 127.808  ops/s
-RPCBenchmark.listPersons         thrpt   40  1762.097 ± 161.918  ops/s
-RPCBenchmark.programComposition  thrpt   40   272.358 ±  18.218  ops/s
-```
-
-##### Summary
-
-###### **createPerson**
-
-Source | Mode | Cnt | Score | Error | Units
---- | --- | --- | --- | --- | ---
-HttpBenchmark.createPerson | thrpt | 40 | 861.052 | 106.109 | ops/s
-RPCBenchmark.createPerson | thrpt | 40 | 2127.367 | 230.981 | ops/s
-
-###### **getPerson**
-
-Source | Mode | Cnt | Score | Error | Units
---- | --- | --- | --- | --- | ---
-HttpBenchmark.getPerson | thrpt | 40 | 1569.770 | 153.491 | ops/s
-RPCBenchmark.getPerson | thrpt | 40 | 2859.026 | 205.242 | ops/s
-
-###### **getPersonLinks**
-
-Source | Mode | Cnt | Score | Error | Units
---- | --- | --- | --- | --- | ---
-HttpBenchmark.getPersonLinks | thrpt | 40 | 1072.277 | 131.565 | ops/s
-RPCBenchmark.getPersonLinks | thrpt | 40 | 1883.806 | 127.808 | ops/s
-
-###### **listPersons**
-
-Source | Mode | Cnt | Score | Error | Units
---- | --- | --- | --- | --- | ---
-HttpBenchmark.listPersons | thrpt | 40 | 1196.642 | 153.626 | ops/s
-RPCBenchmark.listPersons | thrpt | 40 | 1762.097 | 161.918 | ops/s
-
-###### **programComposition**
-
-Source | Mode | Cnt | Score | Error | Units
---- | --- | --- | --- | --- | ---
-HttpBenchmark.programComposition | thrpt | 40 | 156.592 |  14.936 | ops/s
-RPCBenchmark.programComposition | thrpt | 40 | 272.358 |  18.218 | ops/s
-
-##### Comparing both in Charts
-
-You can find the following charts in [this jsfiddle](http://jsfiddle.net/juanpedromoreno/sjw5jgrj/).
-
-* Bar Chart
-![bar-chart-bench](chart-bar.png)
-
-* Radar Chart
-![radar-chart-bench](chart-radar.png)
-
-#### Conclusion
-
-Using JMH, we have checked out quickly the performance characteristics for both service architectures, and we can say that the RPC approach is noticeably faster.
-
-## Assembling metrifier
+### Assembling metrifier
 
 To make a JAR file containing only the external dependencies, type:
 
@@ -241,15 +151,15 @@ gsutil cp http/target/scala-2.12/metrifier-http-assembly-${METRIFIER_VERSION}.ja
 gsutil cp shared/target/scala-2.12/metrifier-shared-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 ```
 
-## Running in Google Cloud Platform
+### Provisioning the Infrastructure
 
-See [this guide](deploy/README.md) to get information about how to deploy the different services in [Google Compute Engine](https://cloud.google.com/compute/).
+See [this guide](deploy/README.md) to get information about how to deploy and to provision the different services in [Google Compute Engine](https://cloud.google.com/compute/).
 
 Once everything is up, follow the next sections to run the benchmarks atop GCP.
 
-### HTTP Server
+### HTTP Benchmarks
 
-#### Running the HTTP Server
+#### Running the Server
 
 1. SSH into `http-server-vm` instance.
 2. Run the HTTP Server:
@@ -263,7 +173,7 @@ env \
     metrifier.http.server.HttpServer
 ```
 
-#### Running HTTP Benchmarks
+#### Running the Benchmarks
 
 1. SSH into `http-jmh-vm` instance.
 2. Run the following `GET` to fetch all the persons (checking connectivity):
@@ -281,9 +191,9 @@ env \
 
 Given the port `8080` was opened to the exterior when deploying the cluster with Google Cloud Manager, you could even run the benchmarks from your local machine, using the external IP address (changing to HTTP_HOST=[HTTP_SERVER_INSTANCE_EXTERNAL_IP]).
 
-### RPC Server
+### frees-rpc Benchmarks
 
-#### Running the RPC Server
+#### Running the Server
 
 1. SSH into `rpc-server-vm` instance.
 2. Run the RPC Server:
@@ -297,7 +207,7 @@ env \
     metrifier.rpc.server.RPCServer
 ```
 
-#### Running RPC Benchmarks
+#### Running the Benchmarks
 
 1. SSH into `rpc-jmh-vm` instance.
 2. Run the benchmarks:
@@ -310,3 +220,200 @@ env \
 ```
 
 As we mentioned for the Http benchmarks, in this case we could also run the benchmarks from our local machine, using the external IP address (changing to RPC_HOST=[RPC_SERVER_INSTANCE_EXTERNAL_IP]).
+
+## Benchmark Results
+
+We've experimented with two different environments, local (development laptop) and the cloud (GCP).
+Expanded version of these results are in: 
+
+* [BENCHMARK_RESULTS_LOCAL.md](BENCHMARK_RESULTS_LOCAL.md) for the local environment.
+* [BENCHMARK_RESULTS_GCP.md](BENCHMARK_RESULTS_GCP.md) file.
+
+### Running Benchmarks Locally
+
+#### Machine Details
+
+* Model Name: MacBook Pro
+* Model Identifier: MacBookPro12,1
+* Intel(R) Core(TM) i5-5257U CPU @ 2.70GHz
+* Number of Processors: 1
+* Total Number of Cores: 2
+* L2 Cache (per Core): 256 KB
+* L3 Cache: 3 MB
+* Memory: 16 GB
+
+#### http vs frees-rpc
+
+* HttpBenchmark Raw output:
+
+```bash
+# Run complete. Total time: 00:08:52
+
+Benchmark                          Mode  Cnt     Score     Error  Units
+HttpBenchmark.createPerson        thrpt   40   861.052 ± 106.109  ops/s
+HttpBenchmark.getPerson           thrpt   40  1569.770 ± 153.491  ops/s
+HttpBenchmark.getPersonLinks      thrpt   40  1072.277 ± 131.565  ops/s
+HttpBenchmark.listPersons         thrpt   40  1196.642 ± 153.626  ops/s
+HttpBenchmark.programComposition  thrpt   40   156.592 ±  14.936  ops/s
+```
+
+* RPCBenchmark Raw output:
+
+```bash
+# Run complete. Total time: 00:09:32
+
+Benchmark                         Mode  Cnt     Score     Error  Units
+RPCBenchmark.createPerson        thrpt   40  2127.367 ± 230.981  ops/s
+RPCBenchmark.getPerson           thrpt   40  2859.026 ± 205.242  ops/s
+RPCBenchmark.getPersonLinks      thrpt   40  1883.806 ± 127.808  ops/s
+RPCBenchmark.listPersons         thrpt   40  1762.097 ± 161.918  ops/s
+RPCBenchmark.programComposition  thrpt   40   272.358 ±  18.218  ops/s
+```
+
+#### Comparing benchmarks one by one
+
+##### **createPerson**
+
+Source | Mode | Cnt | Score | Error | Units
+--- | --- | --- | --- | --- | ---
+HttpBenchmark.createPerson | thrpt | 40 | 861.052 | 106.109 | ops/s
+RPCBenchmark.createPerson | thrpt | 40 | 2127.367 | 230.981 | ops/s
+
+##### **getPerson**
+
+Source | Mode | Cnt | Score | Error | Units
+--- | --- | --- | --- | --- | ---
+HttpBenchmark.getPerson | thrpt | 40 | 1569.770 | 153.491 | ops/s
+RPCBenchmark.getPerson | thrpt | 40 | 2859.026 | 205.242 | ops/s
+
+##### **getPersonLinks**
+
+Source | Mode | Cnt | Score | Error | Units
+--- | --- | --- | --- | --- | ---
+HttpBenchmark.getPersonLinks | thrpt | 40 | 1072.277 | 131.565 | ops/s
+RPCBenchmark.getPersonLinks | thrpt | 40 | 1883.806 | 127.808 | ops/s
+
+##### **listPersons**
+
+Source | Mode | Cnt | Score | Error | Units
+--- | --- | --- | --- | --- | ---
+HttpBenchmark.listPersons | thrpt | 40 | 1196.642 | 153.626 | ops/s
+RPCBenchmark.listPersons | thrpt | 40 | 1762.097 | 161.918 | ops/s
+
+##### **programComposition**
+
+Source | Mode | Cnt | Score | Error | Units
+--- | --- | --- | --- | --- | ---
+HttpBenchmark.programComposition | thrpt | 40 | 156.592 |  14.936 | ops/s
+RPCBenchmark.programComposition | thrpt | 40 | 272.358 |  18.218 | ops/s
+
+### Comparing benchmarks in Charts
+
+You can find the following charts in [this jsfiddle](http://jsfiddle.net/juanpedromoreno/sjw5jgrj/).
+
+* Bar Chart
+![bar-chart-bench](charts/chart-bar-local.png)
+
+* Radar Chart
+![radar-chart-bench](charts/chart-radar-local.png)
+
+### Running Benchmarks on GCP
+
+We are implementing two Google Compute Engine instances, one for the server (`n1-standard-2`), another one for the benchmarks (`n1-standard-1`). See [Google Docs - Machine Types](https://cloud.google.com/compute/docs/machine-types) for deeper information.
+
+#### Server GCE instance Details
+
+* n1-standard-2.
+* 2 virtual CPUs.
+* 7.5 GB of memory.
+
+#### Benchmarks GCE instance Details
+
+* n1-standard-1.
+* 1 virtual CPU.
+* 3.75 GB of memory.
+
+#### http vs frees-rpc
+
+* HttpBenchmark Raw output:
+
+```bash
+# Run complete. Total time: 00:07:13
+
+Benchmark                          Mode  Cnt     Score     Error  Units
+HttpBenchmark.createPerson        thrpt   40  2792.105 Â± 126.448  ops/s
+HttpBenchmark.getPerson           thrpt   40  2955.287 Â± 139.535  ops/s
+HttpBenchmark.getPersonLinks      thrpt   40  2029.031 Â± 124.303  ops/s
+HttpBenchmark.listPersons         thrpt   40  2569.887 Â± 167.753  ops/s
+HttpBenchmark.programComposition  thrpt   40   318.553 Â±  20.476  ops/s
+```
+
+* RPCBenchmark Raw output:
+
+```bash
+# Run complete. Total time: 00:07:07
+
+Benchmark                         Mode  Cnt      Score     Error  Units
+RPCBenchmark.createPerson        thrpt   40  10637.672 Â± 643.970  ops/s
+RPCBenchmark.getPerson           thrpt   40  13579.929 Â± 530.903  ops/s
+RPCBenchmark.getPersonLinks      thrpt   40   5393.624 Â± 295.557  ops/s
+RPCBenchmark.listPersons         thrpt   40   8224.560 Â± 613.983  ops/s
+RPCBenchmark.programComposition  thrpt   40   1111.968 Â±  44.460  ops/s
+```
+
+#### Comparing benchmarks one by one
+
+##### **createPerson**
+
+Source | Mode | Cnt | Score | Error | Units
+--- | --- | --- | --- | --- | ---
+HttpBenchmark.createPerson | thrpt | 40 | 2792.105 | 126.448 | ops/s
+RPCBenchmark.createPerson | thrpt | 40 | 10637.672 | 643.970 | ops/s
+
+##### **getPerson**
+
+Source | Mode | Cnt | Score | Error | Units
+--- | --- | --- | --- | --- | ---
+HttpBenchmark.getPerson | thrpt | 40 | 2955.287 | 139.535 | ops/s
+RPCBenchmark.getPerson | thrpt | 40 | 13579.929 | 530.903 | ops/s
+
+##### **getPersonLinks**
+
+Source | Mode | Cnt | Score | Error | Units
+--- | --- | --- | --- | --- | ---
+HttpBenchmark.getPersonLinks | thrpt | 40 | 2029.031 | 124.303 | ops/s
+RPCBenchmark.getPersonLinks | thrpt | 40 | 5393.624 | 295.557 | ops/s
+
+##### **listPersons**
+
+Source | Mode | Cnt | Score | Error | Units
+--- | --- | --- | --- | --- | ---
+HttpBenchmark.listPersons | thrpt | 40 | 2569.887 | 167.753 | ops/s
+RPCBenchmark.listPersons | thrpt | 40 | 8224.560 | 613.983 | ops/s
+
+##### **programComposition**
+
+Source | Mode | Cnt | Score | Error | Units
+--- | --- | --- | --- | --- | ---
+HttpBenchmark.programComposition | thrpt | 40 | 318.553 |  20.476 | ops/s
+RPCBenchmark.programComposition | thrpt | 40 | 1111.968 |  44.460 | ops/s
+
+### Comparing benchmarks in Charts
+
+You can find the following charts in [this jsfiddle](http://jsfiddle.net/juanpedromoreno/sjw5jgrj/).
+
+* Bar Chart
+![bar-chart-bench](charts/chart-bar-gcp.png)
+
+* Radar Chart
+![radar-chart-bench](charts/chart-radar-gcp.png)
+
+
+### Conclusion
+
+Using JMH, we have checked out quickly the performance characteristics for both service architectures trying out in two different ecosystems:
+
+* Local Environment
+* GCP Environment
+
+As we have seen, the RPC solution in this case is noticeably faster. Moreover, when network traffic enters the scene, the differences between both are bigger.
