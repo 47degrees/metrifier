@@ -1,6 +1,6 @@
 # Benchmark Results
 
-See [README](README.md#running-benchmarks) for reference.
+See [README](../README.md#running-benchmarks) for reference.
 
 ## Machine Details
 

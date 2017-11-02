@@ -2,7 +2,7 @@
 
 In this document we are posting all the Benchmarks results when testing atop GCP. For both `HTTP` and `RPC` benchmarks we are implementing two Google Compute Engine instances, one for the server (`n1-standard-2`), another one for the benchmarks (`n1-standard-1`). See [Google Docs - Machine Types](https://cloud.google.com/compute/docs/machine-types) for deeper information. 
 
-See [README](README.md#running-in-google-cloud-platform) for reference.
+See [README](../README.md#running-benchmarks-on-google-cloud-platform) for reference.
 
 ## Server GCE instance Details
 
@@ -118,7 +118,7 @@ Iteration  20: 3026.725 ops/s
 
 
 Result "metrifier.benchmark.HttpBenchmark.createPerson":
-  2792.105 Â±(99.9%) 126.448 ops/s [Average]
+  2792.105 ±(99.9%) 126.448 ops/s [Average]
   (min, avg, max) = (2314.788, 2792.105, 3339.009), stdev = 224.761
   CI (99.9%): [2665.657, 2918.553] (assumes normal distribution)
 
@@ -222,7 +222,7 @@ Iteration  20: 3191.959 ops/s
 
 
 Result "metrifier.benchmark.HttpBenchmark.getPerson":
-  2955.287 Â±(99.9%) 139.535 ops/s [Average]
+  2955.287 ±(99.9%) 139.535 ops/s [Average]
   (min, avg, max) = (2500.308, 2955.287, 3545.281), stdev = 248.023
   CI (99.9%): [2815.752, 3094.822] (assumes normal distribution)
 
@@ -326,7 +326,7 @@ Iteration  20: 2102.990 ops/s
 
 
 Result "metrifier.benchmark.HttpBenchmark.getPersonLinks":
-  2029.031 Â±(99.9%) 124.303 ops/s [Average]
+  2029.031 ±(99.9%) 124.303 ops/s [Average]
   (min, avg, max) = (1476.175, 2029.031, 2620.736), stdev = 220.948
   CI (99.9%): [1904.728, 2153.334] (assumes normal distribution)
 
@@ -430,7 +430,7 @@ Iteration  20: 3058.505 ops/s
 
 
 Result "metrifier.benchmark.HttpBenchmark.listPersons":
-  2569.887 Â±(99.9%) 167.753 ops/s [Average]
+  2569.887 ±(99.9%) 167.753 ops/s [Average]
   (min, avg, max) = (2038.723, 2569.887, 3182.954), stdev = 298.181
   CI (99.9%): [2402.134, 2737.640] (assumes normal distribution)
 
@@ -534,7 +534,7 @@ Iteration  20: 310.723 ops/s
 
 
 Result "metrifier.benchmark.HttpBenchmark.programComposition":
-  318.553 Â±(99.9%) 20.476 ops/s [Average]
+  318.553 ±(99.9%) 20.476 ops/s [Average]
   (min, avg, max) = (224.140, 318.553, 384.648), stdev = 36.395
   CI (99.9%): [298.077, 339.029] (assumes normal distribution)
 
@@ -542,11 +542,11 @@ Result "metrifier.benchmark.HttpBenchmark.programComposition":
 # Run complete. Total time: 00:07:13
 
 Benchmark                          Mode  Cnt     Score     Error  Units
-HttpBenchmark.createPerson        thrpt   40  2792.105 Â± 126.448  ops/s
-HttpBenchmark.getPerson           thrpt   40  2955.287 Â± 139.535  ops/s
-HttpBenchmark.getPersonLinks      thrpt   40  2029.031 Â± 124.303  ops/s
-HttpBenchmark.listPersons         thrpt   40  2569.887 Â± 167.753  ops/s
-HttpBenchmark.programComposition  thrpt   40   318.553 Â±  20.476  ops/s
+HttpBenchmark.createPerson        thrpt   40  2792.105 ± 126.448  ops/s
+HttpBenchmark.getPerson           thrpt   40  2955.287 ± 139.535  ops/s
+HttpBenchmark.getPersonLinks      thrpt   40  2029.031 ± 124.303  ops/s
+HttpBenchmark.listPersons         thrpt   40  2569.887 ± 167.753  ops/s
+HttpBenchmark.programComposition  thrpt   40   318.553 ±  20.476  ops/s
 ```
 
 ## jmh - frees-rpc
@@ -651,7 +651,7 @@ Iteration  20: 10800.940 ops/s
 
 
 Result "metrifier.benchmark.RPCBenchmark.createPerson":
-  10637.672 Â±(99.9%) 643.970 ops/s [Average]
+  10637.672 ±(99.9%) 643.970 ops/s [Average]
   (min, avg, max) = (8215.955, 10637.672, 12756.838), stdev = 1144.656
   CI (99.9%): [9993.703, 11281.642] (assumes normal distribution)
 
@@ -755,7 +755,7 @@ Iteration  20: 13903.345 ops/s
 
 
 Result "metrifier.benchmark.RPCBenchmark.getPerson":
-  13579.929 Â±(99.9%) 530.903 ops/s [Average]
+  13579.929 ±(99.9%) 530.903 ops/s [Average]
   (min, avg, max) = (10788.639, 13579.929, 15151.985), stdev = 943.680
   CI (99.9%): [13049.026, 14110.832] (assumes normal distribution)
 
@@ -859,7 +859,7 @@ Iteration  20: 4600.172 ops/s
 
 
 Result "metrifier.benchmark.RPCBenchmark.getPersonLinks":
-  5393.624 Â±(99.9%) 295.557 ops/s [Average]
+  5393.624 ±(99.9%) 295.557 ops/s [Average]
   (min, avg, max) = (4163.968, 5393.624, 6156.031), stdev = 525.353
   CI (99.9%): [5098.067, 5689.182] (assumes normal distribution)
 
@@ -963,7 +963,7 @@ Iteration  20: 8657.810 ops/s
 
 
 Result "metrifier.benchmark.RPCBenchmark.listPersons":
-  8224.560 Â±(99.9%) 613.983 ops/s [Average]
+  8224.560 ±(99.9%) 613.983 ops/s [Average]
   (min, avg, max) = (5515.650, 8224.560, 9626.515), stdev = 1091.354
   CI (99.9%): [7610.577, 8838.544] (assumes normal distribution)
 
@@ -1067,7 +1067,7 @@ Iteration  20: 1222.641 ops/s
 
 
 Result "metrifier.benchmark.RPCBenchmark.programComposition":
-  1111.968 Â±(99.9%) 44.460 ops/s [Average]
+  1111.968 ±(99.9%) 44.460 ops/s [Average]
   (min, avg, max) = (904.810, 1111.968, 1236.249), stdev = 79.028
   CI (99.9%): [1067.508, 1156.429] (assumes normal distribution)
 
@@ -1075,11 +1075,11 @@ Result "metrifier.benchmark.RPCBenchmark.programComposition":
 # Run complete. Total time: 00:07:07
 
 Benchmark                         Mode  Cnt      Score     Error  Units
-RPCBenchmark.createPerson        thrpt   40  10637.672 Â± 643.970  ops/s
-RPCBenchmark.getPerson           thrpt   40  13579.929 Â± 530.903  ops/s
-RPCBenchmark.getPersonLinks      thrpt   40   5393.624 Â± 295.557  ops/s
-RPCBenchmark.listPersons         thrpt   40   8224.560 Â± 613.983  ops/s
-RPCBenchmark.programComposition  thrpt   40   1111.968 Â±  44.460  ops/s
+RPCBenchmark.createPerson        thrpt   40  10637.672 ± 643.970  ops/s
+RPCBenchmark.getPerson           thrpt   40  13579.929 ± 530.903  ops/s
+RPCBenchmark.getPersonLinks      thrpt   40   5393.624 ± 295.557  ops/s
+RPCBenchmark.listPersons         thrpt   40   8224.560 ± 613.983  ops/s
+RPCBenchmark.programComposition  thrpt   40   1111.968 ±  44.460  ops/s
 ```
 
 ## Summary
@@ -1090,11 +1090,11 @@ RPCBenchmark.programComposition  thrpt   40   1111.968 Â±  44.460  ops/s
 # Run complete. Total time: 00:07:13
 
 Benchmark                          Mode  Cnt     Score     Error  Units
-HttpBenchmark.createPerson        thrpt   40  2792.105 Â± 126.448  ops/s
-HttpBenchmark.getPerson           thrpt   40  2955.287 Â± 139.535  ops/s
-HttpBenchmark.getPersonLinks      thrpt   40  2029.031 Â± 124.303  ops/s
-HttpBenchmark.listPersons         thrpt   40  2569.887 Â± 167.753  ops/s
-HttpBenchmark.programComposition  thrpt   40   318.553 Â±  20.476  ops/s
+HttpBenchmark.createPerson        thrpt   40  2792.105 ± 126.448  ops/s
+HttpBenchmark.getPerson           thrpt   40  2955.287 ± 139.535  ops/s
+HttpBenchmark.getPersonLinks      thrpt   40  2029.031 ± 124.303  ops/s
+HttpBenchmark.listPersons         thrpt   40  2569.887 ± 167.753  ops/s
+HttpBenchmark.programComposition  thrpt   40   318.553 ±  20.476  ops/s
 ```
 
 
@@ -1104,9 +1104,9 @@ HttpBenchmark.programComposition  thrpt   40   318.553 Â±  20.476  ops/s
 # Run complete. Total time: 00:07:07
 
 Benchmark                         Mode  Cnt      Score     Error  Units
-RPCBenchmark.createPerson        thrpt   40  10637.672 Â± 643.970  ops/s
-RPCBenchmark.getPerson           thrpt   40  13579.929 Â± 530.903  ops/s
-RPCBenchmark.getPersonLinks      thrpt   40   5393.624 Â± 295.557  ops/s
-RPCBenchmark.listPersons         thrpt   40   8224.560 Â± 613.983  ops/s
-RPCBenchmark.programComposition  thrpt   40   1111.968 Â±  44.460  ops/s
+RPCBenchmark.createPerson        thrpt   40  10637.672 ± 643.970  ops/s
+RPCBenchmark.getPerson           thrpt   40  13579.929 ± 530.903  ops/s
+RPCBenchmark.getPersonLinks      thrpt   40   5393.624 ± 295.557  ops/s
+RPCBenchmark.listPersons         thrpt   40   8224.560 ± 613.983  ops/s
+RPCBenchmark.programComposition  thrpt   40   1111.968 ±  44.460  ops/s
 ```
