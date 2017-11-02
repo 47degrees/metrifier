@@ -4,22 +4,22 @@ resources:
 - name: http-server-vm
   type: tmpl-vm.jinja
   properties:
-    machineType: n1-standard-1
+    machineType: n1-standard-2
     zone: us-central1-f
 - name: rpc-server-vm
   type: tmpl-vm.jinja
   properties:
-    machineType: n1-standard-1
+    machineType: n1-standard-2
     zone: us-central1-f
 - name: http-jmh-vm
   type: tmpl-vm.jinja
   properties:
-    machineType: g1-small
+    machineType: n1-standard-1
     zone: us-central1-f
 - name: rpc-jmh-vm
   type: tmpl-vm.jinja
   properties:
-    machineType: g1-small
+    machineType: n1-standard-1
     zone: us-central1-f
 - name: {{ FIREWALL }}
   type: tmpl-firewall.jinja

@@ -1,12 +1,14 @@
 lazy val shared = project
   .in(file("shared"))
   .settings(moduleName := "shared")
+  .settings(name := n(moduleName.value))
 
 lazy val http = project
   .in(file("http"))
   .dependsOn(shared)
   .aggregate(shared)
   .settings(moduleName := "http")
+  .settings(name := n(moduleName.value))
   .settings(libraryDependencies ++= httpDependencies)
 
 lazy val `frees-rpc` = project
@@ -14,6 +16,7 @@ lazy val `frees-rpc` = project
   .dependsOn(shared)
   .aggregate(shared)
   .settings(moduleName := "frees-rpc")
+  .settings(name := n(moduleName.value))
   .settings(libraryDependencies ++= rpcDependencies)
   .settings(scalaMetaSettings: _*)
 
@@ -22,6 +25,7 @@ lazy val demo = project
   .dependsOn(http, `frees-rpc`)
   .aggregate(http, `frees-rpc`)
   .settings(moduleName := "demo")
+  .settings(name := n(moduleName.value))
   .settings(scalaMetaSettings: _*)
 
 lazy val bench = project
@@ -29,5 +33,6 @@ lazy val bench = project
   .dependsOn(http, `frees-rpc`)
   .aggregate(http, `frees-rpc`)
   .settings(moduleName := "bench")
+  .settings(name := n(moduleName.value))
   .settings(scalaMetaSettings: _*)
   .enablePlugins(JmhPlugin)
