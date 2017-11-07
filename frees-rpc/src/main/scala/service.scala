@@ -10,17 +10,33 @@ import metrifier.shared.model._
 @option(name = "java_outer_classname", value = "Metrifier", quote = true)
 object protocols {
 
+  case class EmptyAvro(b: String = "")
+
   @free
   @service
-  trait PersonService {
+  trait PersonServicePB {
 
-    @rpc def listPersons(b: String): FS[PersonList]
+    @rpc(Protobuf) def listPersons(empty: Empty): FS[PersonList]
 
-    @rpc def getPerson(id: String): FS[Person]
+    @rpc(Protobuf) def getPerson(id: PersonId): FS[Person]
 
-    @rpc def getPersonLinks(id: String): FS[PersonLinkList]
+    @rpc(Protobuf) def getPersonLinks(id: PersonId): FS[PersonLinkList]
 
-    @rpc def createPerson(person: Person): FS[Person]
+    @rpc(Protobuf) def createPerson(person: Person): FS[Person]
+
+  }
+
+  @free
+  @service
+  trait PersonServiceAvro {
+
+    @rpc(Avro) def listPersons(empty: EmptyAvro): FS[PersonList]
+
+    @rpc(Avro) def getPerson(id: PersonId): FS[Person]
+
+    @rpc(Avro) def getPersonLinks(id: PersonId): FS[PersonLinkList]
+
+    @rpc(Avro) def createPerson(person: Person): FS[Person]
 
   }
 

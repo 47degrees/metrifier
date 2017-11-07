@@ -14,6 +14,8 @@ object model {
 
   case class PersonLinkList(links: List[PersonLink], count: Int)
 
+  case class PersonId(id: String)
+
   case class Person(
       id: String,
       name: PersonName,

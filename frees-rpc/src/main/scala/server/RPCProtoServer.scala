@@ -5,13 +5,13 @@ package server
 import cats.implicits._
 import freestyle.rpc.server.GrpcServerApp
 import freestyle.rpc.server.implicits._
-import metrifier.rpc.server.implicits._
+import metrifier.rpc.server.proto.implicits._
 import journal.Logger
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
-object RPCServer {
+object RPCProtoServer {
 
   val logger: Logger = Logger[this.type]
 

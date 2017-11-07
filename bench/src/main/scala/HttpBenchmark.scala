@@ -22,10 +22,10 @@ class HttpBenchmark {
   def listPersons: PersonList = client.listPersons.unsafePerformSync
 
   @Benchmark
-  def getPerson: Person = client.getPerson("1").unsafePerformSync
+  def getPerson: Person = client.getPerson(PersonId("1")).unsafePerformSync
 
   @Benchmark
-  def getPersonLinks: PersonLinkList = client.getPersonLinks("1").unsafePerformSync
+  def getPersonLinks: PersonLinkList = client.getPersonLinks(PersonId("1")).unsafePerformSync
 
   @Benchmark
   def createPerson: Person = client.createPerson(
@@ -49,12 +49,12 @@ class HttpBenchmark {
 
     val aggregation: Task[PersonAggregation] = for {
       personList <- client.listPersons
-      p1         <- client.getPerson("1")
-      p2         <- client.getPerson("2")
-      p3         <- client.getPerson("3")
-      p4         <- client.getPerson("4")
-      p1Links    <- client.getPersonLinks(p1.id)
-      p3Links    <- client.getPersonLinks(p3.id)
+      p1         <- client.getPerson(PersonId("1"))
+      p2         <- client.getPerson(PersonId("2"))
+      p3         <- client.getPerson(PersonId("3"))
+      p4         <- client.getPerson(PersonId("4"))
+      p1Links    <- client.getPersonLinks(PersonId(p1.id))
+      p3Links    <- client.getPersonLinks(PersonId(p3.id))
       pNew <- client.createPerson(
         id = "5",
         nameTitle = "ms",

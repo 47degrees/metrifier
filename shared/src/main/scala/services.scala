@@ -10,11 +10,11 @@ object services {
     PersonList(search, search.size)
   }
 
-  def getPerson(id: String): Person =
-    database.persons.find(_.id == id).getOrElse(throw DatabaseException(s"User $id not found"))
+  def getPerson(pId: PersonId): Person =
+    database.persons.find(_.id == pId.id).getOrElse(throw DatabaseException(s"User $pId not found"))
 
-  def getPersonLinks(id: String): PersonLinkList = {
-    val search = database.personLinks.filter(link => link.p1.id == id || link.p2.id == id)
+  def getPersonLinks(pId: PersonId): PersonLinkList = {
+    val search = database.personLinks.filter(link => link.p1.id == pId.id || link.p2.id == pId.id)
     PersonLinkList(search, search.size)
   }
 
