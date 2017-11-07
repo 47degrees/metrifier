@@ -6,6 +6,7 @@ import metrifier.http.client._
 import metrifier.http.codecs._
 import metrifier.http.HttpConf
 import metrifier.shared.model._
+import Utils._
 
 import scalaz.concurrent.Task
 
@@ -17,26 +18,26 @@ object HttpDemoApp {
 
     val aggregation: Task[PersonAggregation] = for {
       personList <- client.listPersons
-      p1         <- client.getPerson("1")
-      p2         <- client.getPerson("2")
-      p3         <- client.getPerson("3")
-      p4         <- client.getPerson("4")
-      p1Links    <- client.getPersonLinks(p1.id)
-      p3Links    <- client.getPersonLinks(p3.id)
+      p1         <- client.getPerson(PersonId("1"))
+      p2         <- client.getPerson(PersonId("2"))
+      p3         <- client.getPerson(PersonId("3"))
+      p4         <- client.getPerson(PersonId("4"))
+      p1Links    <- client.getPersonLinks(PersonId(p1.id))
+      p3Links    <- client.getPersonLinks(PersonId(p3.id))
       pNew <- client.createPerson(
-        id = "5",
-        nameTitle = "ms",
-        nameFirst = "valentine",
-        nameLast = "lacroix",
-        gender = "female",
-        locationStreet = "1494 avenue du fort-caire",
-        locationCity = "orléans",
-        locationState = "aveyron",
-        locationPostCode = 91831,
-        email = "valentine.lacroix@example.com",
-        pictureLarge = None,
-        pictureMedium = None,
-        pictureThumbnail = None
+        id = person.id,
+        nameTitle = person.name.title,
+        nameFirst = person.name.first,
+        nameLast = person.name.last,
+        gender = person.gender,
+        locationStreet = person.location.street,
+        locationCity = person.location.city,
+        locationState = person.location.state,
+        locationPostCode = person.location.postCode,
+        email = person.email,
+        pictureLarge = person.picture map (_.large),
+        pictureMedium = person.picture map (_.medium),
+        pictureThumbnail = person.picture map (_.thumbnail)
       )
     } yield (p1, p2, p3, p4, p1Links, p3Links, personList.add(pNew))
 

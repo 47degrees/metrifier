@@ -6,7 +6,8 @@ import metrifier.shared.model._
 import metrifier.rpc.client.implicits._
 import java.util.concurrent.TimeUnit
 
-import metrifier.rpc.protocols.PersonService
+import freestyle.rpc.protocol.Empty
+import metrifier.rpc.protocols.PersonServicePB
 import monix.eval.Task
 
 import scala.concurrent.duration.Duration
@@ -17,7 +18,7 @@ import scala.concurrent.Await
 @OutputTimeUnit(TimeUnit.SECONDS)
 class RPCBenchmark {
 
-  val client: PersonService.Client[Task] = implicitly[PersonService.Client[Task]]
+  val client: PersonServicePB.Client[Task] = implicitly[PersonServicePB.Client[Task]]
   val p5: Person = Person(
     id = "5",
     name = PersonName(title = "ms", first = "valentine", last = "lacroix"),
@@ -32,14 +33,14 @@ class RPCBenchmark {
   )
 
   @Benchmark
-  def listPersons: PersonList = Await.result(client.listPersons("foo").runAsync, Duration.Inf)
+  def listPersons: PersonList = Await.result(client.listPersons(Empty()).runAsync, Duration.Inf)
 
   @Benchmark
-  def getPerson: Person = Await.result(client.getPerson("1").runAsync, Duration.Inf)
+  def getPerson: Person = Await.result(client.getPerson(PersonId("1")).runAsync, Duration.Inf)
 
   @Benchmark
   def getPersonLinks: PersonLinkList =
-    Await.result(client.getPersonLinks("1").runAsync, Duration.Inf)
+    Await.result(client.getPersonLinks(PersonId("1")).runAsync, Duration.Inf)
 
   @Benchmark
   def createPerson: Person =
@@ -55,13 +56,13 @@ class RPCBenchmark {
 
     def clientProgram: Task[PersonAggregation] = {
       for {
-        personList <- client.listPersons("foo")
-        p1         <- client.getPerson("1")
-        p2         <- client.getPerson("2")
-        p3         <- client.getPerson("3")
-        p4         <- client.getPerson("4")
-        p1Links    <- client.getPersonLinks(p1.id)
-        p3Links    <- client.getPersonLinks(p3.id)
+        personList <- client.listPersons(Empty())
+        p1         <- client.getPerson(PersonId("1"))
+        p2         <- client.getPerson(PersonId("2"))
+        p3         <- client.getPerson(PersonId("3"))
+        p4         <- client.getPerson(PersonId("4"))
+        p1Links    <- client.getPersonLinks(PersonId(p1.id))
+        p3Links    <- client.getPersonLinks(PersonId(p3.id))
         pNew <- client.createPerson(p5)
       } yield (p1, p2, p3, p4, p1Links, p3Links, personList.add(pNew))
     }

@@ -19,10 +19,10 @@ class HttpClient(c: Client, host: String, port: Int) {
 
   def listPersons: Task[PersonList] = c.expect[PersonList](baseUri)
 
-  def getPerson(id: String): Task[Person] = c.expect[Person](baseUri / id)
+  def getPerson(pId: PersonId): Task[Person] = c.expect[Person](baseUri / pId.id)
 
-  def getPersonLinks(id: String): Task[PersonLinkList] =
-    c.expect[PersonLinkList](baseUri / id / "links")
+  def getPersonLinks(pId: PersonId): Task[PersonLinkList] =
+    c.expect[PersonLinkList](baseUri / pId.id / "links")
 
   def createPerson(
       id: String,

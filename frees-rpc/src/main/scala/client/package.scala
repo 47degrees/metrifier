@@ -39,8 +39,11 @@ package object client {
 
   trait Implicits extends PersonServiceRuntime with ClientConf {
 
-    implicit val personServiceClient: PersonService.Client[Task] =
-      PersonService.client[Task](channel)
+    implicit val personServicePBClient: PersonServicePB.Client[Task] =
+      PersonServicePB.client[Task](channel)
+
+    implicit val personServiceAvroClient: PersonServiceAvro.Client[Task] =
+      PersonServiceAvro.client[Task](channel)
   }
 
   object implicits extends Implicits

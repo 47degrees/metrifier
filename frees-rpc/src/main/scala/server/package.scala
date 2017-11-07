@@ -5,10 +5,11 @@ import cats.~>
 import cats.implicits._
 import freestyle.implicits._
 import freestyle.config.implicits._
+import freestyle.rpc.protocol.Empty
 import freestyle.rpc.server._
-import metrifier.shared.model.{Person, PersonLinkList, PersonList}
+import metrifier.shared.model.{Person, PersonId, PersonLinkList, PersonList}
 import metrifier.shared.services
-import protocols.PersonService
+import protocols._
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
@@ -28,37 +29,77 @@ package object server {
 
   }
 
-  trait Implicits extends PersonServiceRuntime with ServerConf {
+  trait HandlerImpl {
 
-    import freestyle.rpc.server.handlers._
-    import freestyle.rpc.server.implicits._
+    def listPersons(b: Empty): Future[PersonList] =
+      Future.successful(services.listPersons)
 
-    implicit val personServiceHandler: PersonService.Handler[Future] =
-      new PersonService.Handler[Future] {
+    def getPerson(id: PersonId): Future[Person] =
+      Future.successful(services.getPerson(id))
 
-        override def listPersons(b: String): Future[PersonList] =
-          Future.successful(services.listPersons)
+    def getPersonLinks(id: PersonId): Future[PersonLinkList] =
+      Future.successful(services.getPersonLinks(id))
 
-        override def getPerson(id: String): Future[Person] =
-          Future.successful(services.getPerson(id))
-
-        override def getPersonLinks(id: String): Future[PersonLinkList] =
-          Future.successful(services.getPersonLinks(id))
-
-        override def createPerson(person: Person): Future[Person] =
-          Future.successful(services.createPerson(person))
-
-      }
-
-    val grpcConfigs: List[GrpcConfig] = List(
-      AddService(PersonService.bindService[PersonService.Op, Future])
-    )
-
-    implicit val grpcServerHandler: GrpcServer.Op ~> Future =
-      new GrpcServerHandler[Future] andThen
-        new GrpcKInterpreter[Future](getConf(grpcConfigs).server)
+    def createPerson(person: Person): Future[Person] =
+      Future.successful(services.createPerson(person))
   }
 
-  object implicits extends Implicits
+  class RPCProtoHandler extends PersonServicePB.Handler[Future] with HandlerImpl
+
+  class RPCAvroHandler extends PersonServiceAvro.Handler[Future] with HandlerImpl {
+
+    override protected[this] def listPersons(empty: EmptyAvro): Future[PersonList] =
+      Future.successful(services.listPersons)
+
+  }
+
+  trait CommonImplicits extends PersonServiceRuntime with ServerConf
+
+  object proto {
+
+    trait ProtoImplicits extends CommonImplicits {
+
+      import freestyle.rpc.server.handlers._
+      import freestyle.rpc.server.implicits._
+
+      implicit val personServicePBHandler: PersonServicePB.Handler[Future] = new RPCProtoHandler
+
+      implicit val grpcServerHandler: GrpcServer.Op ~> Future =
+        new GrpcServerHandler[Future] andThen
+          new GrpcKInterpreter[Future](
+            getConf(
+              List(
+                AddService(PersonServicePB.bindService[PersonServicePB.Op, Future])
+              )
+            ).server
+          )
+    }
+
+    object implicits extends ProtoImplicits
+  }
+
+  object avro {
+
+    trait AvroImplicits extends CommonImplicits {
+
+      import freestyle.rpc.server.handlers._
+      import freestyle.rpc.server.implicits._
+
+      implicit val personServiceAvroHandler: PersonServiceAvro.Handler[Future] = new RPCAvroHandler
+
+      implicit val grpcServerHandler: GrpcServer.Op ~> Future =
+        new GrpcServerHandler[Future] andThen
+          new GrpcKInterpreter[Future](
+            getConf(
+              List(
+                AddService(PersonServiceAvro.bindService[PersonServiceAvro.Op, Future])
+              )
+            ).server
+          )
+
+    }
+
+    object implicits extends AvroImplicits
+  }
 
 }

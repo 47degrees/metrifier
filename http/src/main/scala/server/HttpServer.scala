@@ -23,8 +23,8 @@ object HttpServer extends ServerApp {
 
   val httpServices: HttpService = HttpService {
     case GET -> Root / "person" => Ok(Task.now(listPersons))
-    case GET -> Root / "person" / id => Ok(Task.now(getPerson(id)))
-    case GET -> Root / "person" / id / "links" => Ok(Task.now(getPersonLinks(id)))
+    case GET -> Root / "person" / id => Ok(Task.now(getPerson(PersonId(id))))
+    case GET -> Root / "person" / id / "links" => Ok(Task.now(getPersonLinks(PersonId(id))))
     case req @ POST -> Root / "person" => req.attemptAs[Person].run flatMap {
         case -\/(failed) => BadRequest(failed.toString)
         case \/-(p) => Ok(Task.now(createPerson(p)))

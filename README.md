@@ -73,22 +73,40 @@ By default, host and port will be `localhost` and `8080`, respectively. You can 
 
 ### frees-rpc
 
-* Run Server:
+In this case, we will try out with two different of binary serializations: `Protobuf` and `Avro`.
 
-```bash
-sbt "frees-rpc/runMain metrifier.rpc.server.RPCServer"
-```
-
-* Run Client:
-
-```bash
-sbt "demo/runMain metrifier.demo.RPCDemoApp"
-```
-
-By default, host and port will be `localhost` and `8080`, respectively. You can override this configuration through either configuration key or environment variable:
+By default, for both cases, the host and the port will be `localhost` and `8080`, respectively. You can override this configuration through either configuration key or environment variable:
 
 * Host: `rpc.host` VS `RPC_HOST`.
 * Port: `rpc.port` VS `RPC_PORT`.
+
+#### frees-rpc Protobuf
+
+* Run **Protobuf** based Server:
+
+```bash
+sbt "frees-rpc/runMain metrifier.rpc.server.RPCProtoServer"
+```
+
+* Run **Protobuf** based Client:
+
+```bash
+sbt "demo/runMain metrifier.demo.RPCProtoDemoApp"
+```
+
+#### frees-rpc Avro
+
+* Run **Avro** based Server:
+
+```bash
+sbt "frees-rpc/runMain metrifier.rpc.server.RPCAvroServer"
+```
+
+* Run **Avro** based Client:
+
+```bash
+sbt "demo/runMain metrifier.demo.RPCAvroDemoApp"
+```
 
 ## Running Benchmarks Locally
 
@@ -99,7 +117,7 @@ We are using the [Java Microbenchmark Harness (JMH)](http://openjdk.java.net/pro
   * `argonaut`, version `6.2`.
 * RPC services stack based on:
   * `freestyle`, version `0.4.1`.
-  * `frees-rpc`, version `0.1.2` (atop of [gRPC](https://grpc.io/), version `1.6.1`).
+  * `frees-rpc`, version `0.2.1` (atop of [gRPC](https://grpc.io/), version `1.7.0`).
 
 ### HTTP Benchmarks
 
