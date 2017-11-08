@@ -11,9 +11,12 @@ Comparing `HTTP` against `frees-rpc` services.
 - [Running Demo](#running-demo)
   - [http](#http)
   - [frees-rpc](#frees-rpc)
+    - [frees-rpc Protobuf](#frees-rpc-protobuf)
+    - [frees-rpc Avro](#frees-rpc-avro)
 - [Running Benchmarks Locally](#running-benchmarks-locally)
   - [HTTP Benchmarks](#http-benchmarks)
-  - [frees-rpc Benchmarks](#frees-rpc-benchmarks)
+  - [frees-rpc Protobuf Benchmarks](#frees-rpc-protobuf-benchmarks)
+  - [frees-rpc Avro Benchmarks](#frees-rpc-avro-benchmarks)
 - [Running Benchmarks on Google Cloud Platform](#running-benchmarks-on-google-cloud-platform)
   - [Assembling metrifier](#assembling-metrifier)
   - [Uploading jars to Google Cloud Storage](#uploading-jars-to-google-cloud-storage)
@@ -21,9 +24,12 @@ Comparing `HTTP` against `frees-rpc` services.
   - [HTTP Benchmarks](#http-benchmarks-1)
     - [Running the Server](#running-the-server)
     - [Running the Benchmarks](#running-the-benchmarks)
-  - [frees-rpc Benchmarks](#frees-rpc-benchmarks-1)
+  - [frees-rpc Proto Benchmarks](#frees-rpc-proto-benchmarks)
     - [Running the Server](#running-the-server-1)
     - [Running the Benchmarks](#running-the-benchmarks-1)
+  - [frees-rpc Avro Benchmarks](#frees-rpc-avro-benchmarks-1)
+    - [Running the Server](#running-the-server-2)
+    - [Running the Benchmarks](#running-the-benchmarks-2)
 - [Benchmark Results](#benchmark-results)
   - [Running Benchmarks Locally](#running-benchmarks-locally-1)
     - [Machine Details](#machine-details)
@@ -135,18 +141,34 @@ sbt "bench/jmh:run -o http-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifie
 
 Which means "20 iterations", "20 warmup iterations", "2 forks", "4 threads".
 
-### frees-rpc Benchmarks
+### frees-rpc Protobuf Benchmarks
 
-* Run Server:
+* Run Protobuf based Server:
 
 ```bash
-sbt "frees-rpc/runMain metrifier.rpc.server.RPCServer"
+sbt "frees-rpc/runMain metrifier.rpc.server.RPCProtoServer"
 ```
 
-* Run Benchmarks:
+* Run Protobuf based Benchmarks:
 
 ```bash
-sbt "bench/jmh:run -o rpc-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.RPCBenchmark"
+sbt "bench/jmh:run -o rpc-proto-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.RPCProtoBenchmark"
+```
+
+Which means "20 iterations", "20 warmup iterations", "2 forks", "4 threads".
+
+### frees-rpc Avro Benchmarks
+
+* Run Avro based Server:
+
+```bash
+sbt "frees-rpc/runMain metrifier.rpc.server.RPCAvroServer"
+```
+
+* Run Avro based Benchmarks:
+
+```bash
+sbt "bench/jmh:run -o rpc-avro-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.RPCAvroBenchmark"
 ```
 
 Which means "20 iterations", "20 warmup iterations", "2 forks", "4 threads".
@@ -194,7 +216,7 @@ shared/target/scala-2.12/metrifier-shared-assembly-[project-version].jar
 In this case, we've created a bucket named as `metrifier` within our GCP project. Assuming this name, these would be the set of commands to run (we're skipping the `bench` artifacts since we are not going to use them):
 
 ```bash
-export METRIFIER_VERSION=0.0.2
+export METRIFIER_VERSION=0.0.3
 gsutil cp demo/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
 gsutil cp frees-rpc/target/scala-2.12/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
 gsutil cp http/target/scala-2.12/metrifier-http-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
@@ -208,7 +230,7 @@ gsutil cp shared/target/scala-2.12/metrifier-shared-assembly-${METRIFIER_VERSION
 If the project dependencies have not changed, you could just upload the project JARs:
 
 ```bash
-export METRIFIER_VERSION=0.0.2
+export METRIFIER_VERSION=0.0.3
 gsutil cp demo/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp frees-rpc/target/scala-2.12/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp http/target/scala-2.12/metrifier-http-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
@@ -228,7 +250,7 @@ Once everything is up, follow the next sections to run the benchmarks atop GCP.
 1. SSH into `http-server-vm` instance.
 2. Run the HTTP Server:
 ```bash
-export METRIFIER_VERSION=0.0.2
+export METRIFIER_VERSION=0.0.3
 env \
     HTTP_HOST=http-server-vm \
     HTTP_PORT=8080 \
@@ -255,35 +277,65 @@ env \
 
 Given the port `8080` was opened to the exterior when deploying the cluster with Google Cloud Manager, you could even run the benchmarks from your local machine, using the external IP address (changing to HTTP_HOST=[HTTP_SERVER_INSTANCE_EXTERNAL_IP]).
 
-### frees-rpc Benchmarks
+### frees-rpc Proto Benchmarks
 
 #### Running the Server
 
-1. SSH into `rpc-server-vm` instance.
-2. Run the RPC Server:
+1. SSH into `rpc-proto-server-vm` instance.
+2. Run the RPC Protobuf based Server:
 ```bash
-export METRIFIER_VERSION=0.0.2
+export METRIFIER_VERSION=0.0.3
 env \
-    RPC_HOST=rpc-server-vm \
+    RPC_HOST=rpc-proto-server-vm \
     RPC_PORT=8080 \
     java -cp \
     /metrifier/jars/metrifier-shared-assembly-${METRIFIER_VERSION}-deps.jar:/metrifier/jars/metrifier-shared-assembly-${METRIFIER_VERSION}.jar:/metrifier/jars/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}-deps.jar:/metrifier/jars/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}.jar \
-    metrifier.rpc.server.RPCServer
+    metrifier.rpc.server.RPCProtoServer
 ```
 
 #### Running the Benchmarks
 
-1. SSH into `rpc-jmh-vm` instance.
+1. SSH into `rpc-proto-jmh-vm` instance.
 2. Run the benchmarks:
 ```bash
 cd /metrifier/repo
 env \
-    RPC_HOST=rpc-server-vm \
+    RPC_HOST=rpc-proto-server-vm \
     RPC_PORT=8080 \
-    sbt "bench/jmh:run -o /metrifier/bench_results/rpc-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.RPCBenchmark"
+    sbt "bench/jmh:run -o /metrifier/bench_results/rpc-proto-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.RPCProtoBenchmark"
 ```
 
 As we mentioned for the Http benchmarks, in this case we could also run the benchmarks from our local machine, using the external IP address (changing to RPC_HOST=[RPC_SERVER_INSTANCE_EXTERNAL_IP]).
+
+### frees-rpc Avro Benchmarks
+
+#### Running the Server
+
+1. SSH into `rpc-avro-server-vm` instance.
+2. Run the RPC Avro based Server:
+```bash
+export METRIFIER_VERSION=0.0.3
+env \
+    RPC_HOST=rpc-avro-server-vm \
+    RPC_PORT=8080 \
+    java -cp \
+    /metrifier/jars/metrifier-shared-assembly-${METRIFIER_VERSION}-deps.jar:/metrifier/jars/metrifier-shared-assembly-${METRIFIER_VERSION}.jar:/metrifier/jars/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}-deps.jar:/metrifier/jars/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}.jar \
+    metrifier.rpc.server.RPCAvroServer
+```
+
+#### Running the Benchmarks
+
+1. SSH into `rpc-avro-jmh-vm` instance.
+2. Run the benchmarks:
+```bash
+cd /metrifier/repo
+env \
+    RPC_HOST=rpc-avro-server-vm \
+    RPC_PORT=8080 \
+    sbt "bench/jmh:run -o /metrifier/bench_results/rpc-avro-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.RPCAvroBenchmark"
+```
+
+As above, we could also run the benchmarks from our local machine, using the external IP address (changing to RPC_HOST=[RPC_SERVER_INSTANCE_EXTERNAL_IP]).
 
 ## Benchmark Results
 
