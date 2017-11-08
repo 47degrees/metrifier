@@ -11,9 +11,12 @@ Comparing `HTTP` against `frees-rpc` services.
 - [Running Demo](#running-demo)
   - [http](#http)
   - [frees-rpc](#frees-rpc)
+    - [frees-rpc Protobuf](#frees-rpc-protobuf)
+    - [frees-rpc Avro](#frees-rpc-avro)
 - [Running Benchmarks Locally](#running-benchmarks-locally)
   - [HTTP Benchmarks](#http-benchmarks)
-  - [frees-rpc Benchmarks](#frees-rpc-benchmarks)
+  - [frees-rpc Protobuf Benchmarks](#frees-rpc-protobuf-benchmarks)
+  - [frees-rpc Avro Benchmarks](#frees-rpc-avro-benchmarks)
 - [Running Benchmarks on Google Cloud Platform](#running-benchmarks-on-google-cloud-platform)
   - [Assembling metrifier](#assembling-metrifier)
   - [Uploading jars to Google Cloud Storage](#uploading-jars-to-google-cloud-storage)
@@ -21,9 +24,12 @@ Comparing `HTTP` against `frees-rpc` services.
   - [HTTP Benchmarks](#http-benchmarks-1)
     - [Running the Server](#running-the-server)
     - [Running the Benchmarks](#running-the-benchmarks)
-  - [frees-rpc Benchmarks](#frees-rpc-benchmarks-1)
+  - [frees-rpc Proto Benchmarks](#frees-rpc-proto-benchmarks)
     - [Running the Server](#running-the-server-1)
     - [Running the Benchmarks](#running-the-benchmarks-1)
+  - [frees-rpc Avro Benchmarks](#frees-rpc-avro-benchmarks-1)
+    - [Running the Server](#running-the-server-2)
+    - [Running the Benchmarks](#running-the-benchmarks-2)
 - [Benchmark Results](#benchmark-results)
   - [Running Benchmarks Locally](#running-benchmarks-locally-1)
     - [Machine Details](#machine-details)
@@ -210,7 +216,7 @@ shared/target/scala-2.12/metrifier-shared-assembly-[project-version].jar
 In this case, we've created a bucket named as `metrifier` within our GCP project. Assuming this name, these would be the set of commands to run (we're skipping the `bench` artifacts since we are not going to use them):
 
 ```bash
-export METRIFIER_VERSION=0.0.2
+export METRIFIER_VERSION=0.0.3
 gsutil cp demo/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
 gsutil cp frees-rpc/target/scala-2.12/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
 gsutil cp http/target/scala-2.12/metrifier-http-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
@@ -224,7 +230,7 @@ gsutil cp shared/target/scala-2.12/metrifier-shared-assembly-${METRIFIER_VERSION
 If the project dependencies have not changed, you could just upload the project JARs:
 
 ```bash
-export METRIFIER_VERSION=0.0.2
+export METRIFIER_VERSION=0.0.3
 gsutil cp demo/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp frees-rpc/target/scala-2.12/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp http/target/scala-2.12/metrifier-http-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
@@ -244,7 +250,7 @@ Once everything is up, follow the next sections to run the benchmarks atop GCP.
 1. SSH into `http-server-vm` instance.
 2. Run the HTTP Server:
 ```bash
-export METRIFIER_VERSION=0.0.2
+export METRIFIER_VERSION=0.0.3
 env \
     HTTP_HOST=http-server-vm \
     HTTP_PORT=8080 \
@@ -278,7 +284,7 @@ Given the port `8080` was opened to the exterior when deploying the cluster with
 1. SSH into `rpc-server-vm` instance.
 2. Run the RPC Protobuf based Server:
 ```bash
-export METRIFIER_VERSION=0.0.2
+export METRIFIER_VERSION=0.0.3
 env \
     RPC_HOST=rpc-server-vm \
     RPC_PORT=8080 \
@@ -308,7 +314,7 @@ As we mentioned for the Http benchmarks, in this case we could also run the benc
 1. SSH into `rpc-server-vm` instance.
 2. Run the RPC Avro based Server:
 ```bash
-export METRIFIER_VERSION=0.0.2
+export METRIFIER_VERSION=0.0.3
 env \
     RPC_HOST=rpc-server-vm \
     RPC_PORT=8080 \
