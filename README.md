@@ -143,13 +143,13 @@ Which means "20 iterations", "20 warmup iterations", "2 forks", "4 threads".
 
 ### frees-rpc Protobuf Benchmarks
 
-* Run Server:
+* Run Protobuf based Server:
 
 ```bash
 sbt "frees-rpc/runMain metrifier.rpc.server.RPCProtoServer"
 ```
 
-* Run Benchmarks:
+* Run Protobuf based Benchmarks:
 
 ```bash
 sbt "bench/jmh:run -o rpc-proto-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.RPCProtoBenchmark"
@@ -159,13 +159,13 @@ Which means "20 iterations", "20 warmup iterations", "2 forks", "4 threads".
 
 ### frees-rpc Avro Benchmarks
 
-* Run Server:
+* Run Avro based Server:
 
 ```bash
 sbt "frees-rpc/runMain metrifier.rpc.server.RPCAvroServer"
 ```
 
-* Run Benchmarks:
+* Run Avro based Benchmarks:
 
 ```bash
 sbt "bench/jmh:run -o rpc-avro-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.RPCAvroBenchmark"
@@ -281,12 +281,12 @@ Given the port `8080` was opened to the exterior when deploying the cluster with
 
 #### Running the Server
 
-1. SSH into `rpc-server-vm` instance.
+1. SSH into `rpc-proto-server-vm` instance.
 2. Run the RPC Protobuf based Server:
 ```bash
 export METRIFIER_VERSION=0.0.3
 env \
-    RPC_HOST=rpc-server-vm \
+    RPC_HOST=rpc-proto-server-vm \
     RPC_PORT=8080 \
     java -cp \
     /metrifier/jars/metrifier-shared-assembly-${METRIFIER_VERSION}-deps.jar:/metrifier/jars/metrifier-shared-assembly-${METRIFIER_VERSION}.jar:/metrifier/jars/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}-deps.jar:/metrifier/jars/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}.jar \
@@ -295,12 +295,12 @@ env \
 
 #### Running the Benchmarks
 
-1. SSH into `rpc-jmh-vm` instance.
+1. SSH into `rpc-proto-jmh-vm` instance.
 2. Run the benchmarks:
 ```bash
 cd /metrifier/repo
 env \
-    RPC_HOST=rpc-server-vm \
+    RPC_HOST=rpc-proto-server-vm \
     RPC_PORT=8080 \
     sbt "bench/jmh:run -o /metrifier/bench_results/rpc-proto-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.RPCProtoBenchmark"
 ```
@@ -311,12 +311,12 @@ As we mentioned for the Http benchmarks, in this case we could also run the benc
 
 #### Running the Server
 
-1. SSH into `rpc-server-vm` instance.
+1. SSH into `rpc-avro-server-vm` instance.
 2. Run the RPC Avro based Server:
 ```bash
 export METRIFIER_VERSION=0.0.3
 env \
-    RPC_HOST=rpc-server-vm \
+    RPC_HOST=rpc-avro-server-vm \
     RPC_PORT=8080 \
     java -cp \
     /metrifier/jars/metrifier-shared-assembly-${METRIFIER_VERSION}-deps.jar:/metrifier/jars/metrifier-shared-assembly-${METRIFIER_VERSION}.jar:/metrifier/jars/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}-deps.jar:/metrifier/jars/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}.jar \
@@ -325,12 +325,12 @@ env \
 
 #### Running the Benchmarks
 
-1. SSH into `rpc-jmh-vm` instance.
+1. SSH into `rpc-avro-jmh-vm` instance.
 2. Run the benchmarks:
 ```bash
 cd /metrifier/repo
 env \
-    RPC_HOST=rpc-server-vm \
+    RPC_HOST=rpc-avro-server-vm \
     RPC_PORT=8080 \
     sbt "bench/jmh:run -o /metrifier/bench_results/rpc-avro-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.RPCAvroBenchmark"
 ```

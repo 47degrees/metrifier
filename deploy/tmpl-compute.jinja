@@ -6,7 +6,12 @@ resources:
   properties:
     machineType: n1-standard-2
     zone: us-central1-f
-- name: rpc-server-vm
+- name: rpc-proto-server-vm
+  type: tmpl-vm.jinja
+  properties:
+    machineType: n1-standard-2
+    zone: us-central1-f
+- name: rpc-avro-server-vm
   type: tmpl-vm.jinja
   properties:
     machineType: n1-standard-2
@@ -16,7 +21,12 @@ resources:
   properties:
     machineType: n1-standard-1
     zone: us-central1-f
-- name: rpc-jmh-vm
+- name: rpc-proto-jmh-vm
+  type: tmpl-vm.jinja
+  properties:
+    machineType: n1-standard-1
+    zone: us-central1-f
+- name: rpc-avro-jmh-vm
   type: tmpl-vm.jinja
   properties:
     machineType: n1-standard-1
