@@ -268,11 +268,12 @@ curl "http://http-server-vm:8080/person"
 ```
 3. If step was successful, run the benchmarks:
 ```bash
+export METRIFIER_VERSION=0.0.3
 cd /metrifier/repo
 env \
     HTTP_HOST=http-server-vm \
     HTTP_PORT=8080 \
-    sbt "bench/jmh:run -o /metrifier/bench_results/http-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.HttpBenchmark"
+    sbt "bench/jmh:run -o /metrifier/bench_results/http-benchmark-results-${METRIFIER_VERSION}.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.HttpBenchmark"
 ```
 
 Given the port `8080` was opened to the exterior when deploying the cluster with Google Cloud Manager, you could even run the benchmarks from your local machine, using the external IP address (changing to HTTP_HOST=[HTTP_SERVER_INSTANCE_EXTERNAL_IP]).
@@ -298,11 +299,12 @@ env \
 1. SSH into `rpc-proto-jmh-vm` instance.
 2. Run the benchmarks:
 ```bash
+export METRIFIER_VERSION=0.0.3
 cd /metrifier/repo
 env \
     RPC_HOST=rpc-proto-server-vm \
     RPC_PORT=8080 \
-    sbt "bench/jmh:run -o /metrifier/bench_results/rpc-proto-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.RPCProtoBenchmark"
+    sbt "bench/jmh:run -o /metrifier/bench_results/rpc-proto-benchmark-results-${METRIFIER_VERSION}.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.RPCProtoBenchmark"
 ```
 
 As we mentioned for the Http benchmarks, in this case we could also run the benchmarks from our local machine, using the external IP address (changing to RPC_HOST=[RPC_SERVER_INSTANCE_EXTERNAL_IP]).
@@ -328,11 +330,12 @@ env \
 1. SSH into `rpc-avro-jmh-vm` instance.
 2. Run the benchmarks:
 ```bash
+export METRIFIER_VERSION=0.0.3
 cd /metrifier/repo
 env \
     RPC_HOST=rpc-avro-server-vm \
     RPC_PORT=8080 \
-    sbt "bench/jmh:run -o /metrifier/bench_results/rpc-avro-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.RPCAvroBenchmark"
+    sbt "bench/jmh:run -o /metrifier/bench_results/rpc-avro-benchmark-results-${METRIFIER_VERSION}.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.RPCAvroBenchmark"
 ```
 
 As above, we could also run the benchmarks from our local machine, using the external IP address (changing to RPC_HOST=[RPC_SERVER_INSTANCE_EXTERNAL_IP]).
@@ -435,11 +438,11 @@ You can find the following charts in [this jsfiddle](http://jsfiddle.net/juanped
 
 ### Running Benchmarks on GCP
 
-We are implementing two Google Compute Engine instances, one for the server (`n1-standard-2`), another one for the benchmarks (`n1-standard-1`). See [Google Docs - Machine Types](https://cloud.google.com/compute/docs/machine-types) for deeper information.
+We are implementing two Google Compute Engine instances, one for the server (`n1-standard-1`), another one for the benchmarks (`n1-standard-1`). See [Google Docs - Machine Types](https://cloud.google.com/compute/docs/machine-types) for deeper information.
 
 #### Server GCE instance Details
 
-* n1-standard-2.
+* n1-standard-1.
 * 2 virtual CPUs.
 * 7.5 GB of memory.
 

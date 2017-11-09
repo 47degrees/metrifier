@@ -1,12 +1,12 @@
 # Benchmark Results
 
-In this document we are posting all the Benchmarks results when testing atop GCP. For both `HTTP` and `RPC` benchmarks we are implementing two Google Compute Engine instances, one for the server (`n1-standard-2`), another one for the benchmarks (`n1-standard-1`). See [Google Docs - Machine Types](https://cloud.google.com/compute/docs/machine-types) for deeper information. 
+In this document we are posting all the Benchmarks results when testing atop GCP. For both `HTTP` and `RPC` benchmarks we are implementing two Google Compute Engine instances, one for the server (`n1-standard-1`), another one for the benchmarks (`n1-standard-1`). See [Google Docs - Machine Types](https://cloud.google.com/compute/docs/machine-types) for deeper information.
 
 See [README](../README.md#running-benchmarks-on-google-cloud-platform) for reference.
 
 ## Server GCE instance Details
 
-* n1-standard-2.
+* n1-standard-1.
 * 2 virtual CPUs.
 * 7.5 GB of memory.
 
