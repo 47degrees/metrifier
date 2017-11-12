@@ -2,7 +2,6 @@ package metrifier
 package rpc
 
 import cats.implicits._
-import freestyle.implicits._
 import freestyle.config.implicits._
 import freestyle.asyncCatsEffect.implicits._
 import freestyle.rpc.client._

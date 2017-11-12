@@ -3,7 +3,12 @@ package benchmark
 
 import metrifier.shared.model._
 
+import scala.concurrent.duration._
+import scala.concurrent.{Await, Future}
+
 object Utils {
+
+  val defaultTimeOut: FiniteDuration = 5.seconds
 
   val person: Person = Person(
     id = "5",
@@ -18,4 +23,9 @@ object Utils {
     picture = None
   )
 
+  implicit class FutureOps[A](f: Future[A]) {
+
+    def runF: A = Await.result(f, defaultTimeOut)
+
+  }
 }
