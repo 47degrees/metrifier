@@ -438,11 +438,11 @@ You can find the following charts in [this jsfiddle](http://jsfiddle.net/juanped
 
 ### Running Benchmarks on GCP
 
-We are implementing two Google Compute Engine instances, one for the server (`n1-standard-1`), another one for the benchmarks (`n1-standard-1`). See [Google Docs - Machine Types](https://cloud.google.com/compute/docs/machine-types) for deeper information.
+We are implementing two Google Compute Engine instances, one for the server (`n1-standard-2`), another one for the benchmarks (`n1-standard-1`). See [Google Docs - Machine Types](https://cloud.google.com/compute/docs/machine-types) for deeper information.
 
 #### Server GCE instance Details
 
-* n1-standard-1.
+* n1-standard-2.
 * 2 virtual CPUs.
 * 7.5 GB of memory.
 
