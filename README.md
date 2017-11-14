@@ -450,7 +450,7 @@ RPCAvroBenchmark.programComposition | thrpt | 40 | 898.127 | 31.652 | ops/s
 
 #### Comparing benchmarks in Charts
 
-You can find the following charts in [this jsfiddle](http://jsfiddle.net/juanpedromoreno/sjw5jgrj/).
+You can find the following charts in [this jsfiddle](http://jsfiddle.net/qz7k61wo/).
 
 * Bar Chart
 ![bar-chart-bench](charts/chart-bar-local.png)
@@ -559,7 +559,7 @@ RPCAvroBenchmark.programComposition | thrpt | 40 | 949.810 |  83.805| ops/s
 
 #### Comparing benchmarks in Charts
 
-You can find the following charts in [this jsfiddle](http://jsfiddle.net/juanpedromoreno/sjw5jgrj/).
+You can find the following charts in [this jsfiddle](http://jsfiddle.net/qz7k61wo/).
 
 * Bar Chart
 ![bar-chart-bench](charts/chart-bar-gcp.png)
