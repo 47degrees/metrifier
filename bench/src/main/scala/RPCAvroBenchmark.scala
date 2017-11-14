@@ -10,9 +10,6 @@ import Utils._
 import monix.eval.Task
 import org.openjdk.jmh.annotations._
 
-import scala.concurrent.Await
-import scala.concurrent.duration.Duration
-
 @State(Scope.Thread)
 @BenchmarkMode(Array(Mode.Throughput))
 @OutputTimeUnit(TimeUnit.SECONDS)
@@ -21,23 +18,21 @@ class RPCAvroBenchmark {
   val client: PersonServiceAvro.Client[Task] = implicitly[PersonServiceAvro.Client[Task]]
 
   @Benchmark
-  def listPersons: PersonList = Await.result(client.listPersons(EmptyAvro()).runAsync, Duration.Inf)
+  def listPersons: PersonList = client.listPersons(EmptyAvro()).runAsync.runF
 
   @Benchmark
-  def getPerson: Person = Await.result(client.getPerson(PersonId("1")).runAsync, Duration.Inf)
+  def getPerson: Person = client.getPerson(PersonId("1")).runAsync.runF
 
   @Benchmark
   def getPersonLinks: PersonLinkList =
-    Await.result(client.getPersonLinks(PersonId("1")).runAsync, Duration.Inf)
+    client.getPersonLinks(PersonId("1")).runAsync.runF
 
   @Benchmark
   def createPerson: Person =
-    Await.result(
-      client
-        .createPerson(person)
-        .runAsync,
-      Duration.Inf
-    )
+    client
+      .createPerson(person)
+      .runAsync
+      .runF
 
   @Benchmark
   def programComposition: PersonAggregation = {
@@ -51,11 +46,11 @@ class RPCAvroBenchmark {
         p4         <- client.getPerson(PersonId("4"))
         p1Links    <- client.getPersonLinks(PersonId(p1.id))
         p3Links    <- client.getPersonLinks(PersonId(p3.id))
-        pNew <- client.createPerson(person)
+        pNew       <- client.createPerson(person)
       } yield (p1, p2, p3, p4, p1Links, p3Links, personList.add(pNew))
     }
 
-    Await.result(clientProgram.runAsync, Duration.Inf)
+    clientProgram.runAsync.runF
   }
 
 }
