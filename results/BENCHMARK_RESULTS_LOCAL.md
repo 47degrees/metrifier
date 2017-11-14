@@ -2,6 +2,22 @@
 
 See [README](../README.md#running-benchmarks-locally) for reference.
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Machine Details](#machine-details)
+- [JMH Results](#jmh-results)
+  - [HTTP](#http)
+  - [frees-rpc - Protobuf Serialization](#frees-rpc---protobuf-serialization)
+  - [frees-rpc - Avro Serialization](#frees-rpc---avro-serialization)
+- [Summary](#summary)
+  - [HTTP](#http-1)
+  - [frees-rpc - Protobuf Serialization](#frees-rpc---protobuf-serialization-1)
+  - [frees-rpc - Avro Serialization](#frees-rpc---avro-serialization-1)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Machine Details
 
 * Model Name: MacBook Pro
@@ -14,7 +30,9 @@ See [README](../README.md#running-benchmarks-locally) for reference.
 * Memory: 16 GB
 * MacOS Sierra version 10.12
 
-## jmh - http
+## JMH Results
+
+### HTTP
 
 ```bash
 # JMH version: 1.19
@@ -547,542 +565,21 @@ HttpBenchmark.listPersons         thrpt   40  4364.214 ± 366.537  ops/s
 HttpBenchmark.programComposition  thrpt   40   593.829 ±  31.651  ops/s
 ```
 
-## jmh - frees-rpc
+### frees-rpc - Protobuf Serialization
 
 ```bash
-# JMH version: 1.19
-# VM version: JDK 1.8.0_131, VM 25.131-b11
-# VM invoker: /Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/bin/java
-# VM options: <none>
-# Warmup: 20 iterations, 1 s each
-# Measurement: 20 iterations, 1 s each
-# Timeout: 10 min per iteration
-# Threads: 4 threads, will synchronize iterations
-# Benchmark mode: Throughput, ops/time
-# Benchmark: metrifier.benchmark.RPCBenchmark.createPerson
 
-# Run progress: 0.00% complete, ETA 00:06:40
-# Fork: 1 of 2
-# Warmup Iteration   1: 157.066 ops/s
-# Warmup Iteration   2: 242.756 ops/s
-# Warmup Iteration   3: 373.319 ops/s
-# Warmup Iteration   4: 548.012 ops/s
-# Warmup Iteration   5: 893.154 ops/s
-# Warmup Iteration   6: 1328.570 ops/s
-# Warmup Iteration   7: 1330.560 ops/s
-# Warmup Iteration   8: 1459.951 ops/s
-# Warmup Iteration   9: 1492.534 ops/s
-# Warmup Iteration  10: 1502.394 ops/s
-# Warmup Iteration  11: 1655.905 ops/s
-# Warmup Iteration  12: 1418.274 ops/s
-# Warmup Iteration  13: 1891.718 ops/s
-# Warmup Iteration  14: 1781.052 ops/s
-# Warmup Iteration  15: 2148.786 ops/s
-# Warmup Iteration  16: 2724.880 ops/s
-# Warmup Iteration  17: 3399.112 ops/s
-# Warmup Iteration  18: 2806.721 ops/s
-# Warmup Iteration  19: 3727.940 ops/s
-# Warmup Iteration  20: 3281.388 ops/s
-Iteration   1: 3445.698 ops/s
-Iteration   2: 3512.169 ops/s
-Iteration   3: 3811.564 ops/s
-Iteration   4: 3590.378 ops/s
-Iteration   5: 3067.794 ops/s
-Iteration   6: 3576.040 ops/s
-Iteration   7: 3845.207 ops/s
-Iteration   8: 3899.030 ops/s
-Iteration   9: 4625.253 ops/s
-Iteration  10: 4696.382 ops/s
-Iteration  11: 5300.864 ops/s
-Iteration  12: 4964.442 ops/s
-Iteration  13: 5131.275 ops/s
-Iteration  14: 5073.353 ops/s
-Iteration  15: 4836.422 ops/s
-Iteration  16: 5084.338 ops/s
-Iteration  17: 5100.276 ops/s
-Iteration  18: 5233.008 ops/s
-Iteration  19: 5368.398 ops/s
-Iteration  20: 5403.285 ops/s
+```
 
-# Run progress: 10.00% complete, ETA 00:08:42
-# Fork: 2 of 2
-# Warmup Iteration   1: 202.196 ops/s
-# Warmup Iteration   2: 512.883 ops/s
-# Warmup Iteration   3: 1015.288 ops/s
-# Warmup Iteration   4: 1794.972 ops/s
-# Warmup Iteration   5: 2012.998 ops/s
-# Warmup Iteration   6: 1981.850 ops/s
-# Warmup Iteration   7: 2165.815 ops/s
-# Warmup Iteration   8: 2544.153 ops/s
-# Warmup Iteration   9: 2601.386 ops/s
-# Warmup Iteration  10: 3511.311 ops/s
-# Warmup Iteration  11: 3865.192 ops/s
-# Warmup Iteration  12: 4574.300 ops/s
-# Warmup Iteration  13: 5270.566 ops/s
-# Warmup Iteration  14: 5224.914 ops/s
-# Warmup Iteration  15: 5182.588 ops/s
-# Warmup Iteration  16: 5338.489 ops/s
-# Warmup Iteration  17: 5190.619 ops/s
-# Warmup Iteration  18: 5204.010 ops/s
-# Warmup Iteration  19: 5588.836 ops/s
-# Warmup Iteration  20: 4877.981 ops/s
-Iteration   1: 5795.790 ops/s
-Iteration   2: 5684.320 ops/s
-Iteration   3: 5149.851 ops/s
-Iteration   4: 4254.135 ops/s
-Iteration   5: 3977.161 ops/s
-Iteration   6: 4377.886 ops/s
-Iteration   7: 4422.347 ops/s
-Iteration   8: 4936.292 ops/s
-Iteration   9: 3966.825 ops/s
-Iteration  10: 5225.849 ops/s
-Iteration  11: 5646.727 ops/s
-Iteration  12: 4486.417 ops/s
-Iteration  13: 5158.852 ops/s
-Iteration  14: 4787.394 ops/s
-Iteration  15: 5522.476 ops/s
-Iteration  16: 5667.954 ops/s
-Iteration  17: 4418.222 ops/s
-Iteration  18: 3916.934 ops/s
-Iteration  19: 4341.509 ops/s
-Iteration  20: 4676.408 ops/s
+### frees-rpc - Avro Serialization
 
+```bash
 
-Result "metrifier.benchmark.RPCBenchmark.createPerson":
-  4649.463 ±(99.9%) 405.442 ops/s [Average]
-  (min, avg, max) = (3067.794, 4649.463, 5795.790), stdev = 720.673
-  CI (99.9%): [4244.021, 5054.905] (assumes normal distribution)
-
-
-# JMH version: 1.19
-# VM version: JDK 1.8.0_131, VM 25.131-b11
-# VM invoker: /Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/bin/java
-# VM options: <none>
-# Warmup: 20 iterations, 1 s each
-# Measurement: 20 iterations, 1 s each
-# Timeout: 10 min per iteration
-# Threads: 4 threads, will synchronize iterations
-# Benchmark mode: Throughput, ops/time
-# Benchmark: metrifier.benchmark.RPCBenchmark.getPerson
-
-# Run progress: 20.00% complete, ETA 00:07:40
-# Fork: 1 of 2
-# Warmup Iteration   1: 0.744 ops/s
-# Warmup Iteration   2: 1037.059 ops/s
-# Warmup Iteration   3: 2338.610 ops/s
-# Warmup Iteration   4: 3186.179 ops/s
-# Warmup Iteration   5: 2966.684 ops/s
-# Warmup Iteration   6: 2293.153 ops/s
-# Warmup Iteration   7: 2855.161 ops/s
-# Warmup Iteration   8: 4804.723 ops/s
-# Warmup Iteration   9: 5129.499 ops/s
-# Warmup Iteration  10: 7618.872 ops/s
-# Warmup Iteration  11: 7584.680 ops/s
-# Warmup Iteration  12: 6625.455 ops/s
-# Warmup Iteration  13: 7427.855 ops/s
-# Warmup Iteration  14: 8113.231 ops/s
-# Warmup Iteration  15: 8011.461 ops/s
-# Warmup Iteration  16: 9299.240 ops/s
-# Warmup Iteration  17: 6980.068 ops/s
-# Warmup Iteration  18: 6012.936 ops/s
-# Warmup Iteration  19: 6840.903 ops/s
-# Warmup Iteration  20: 6931.441 ops/s
-Iteration   1: 5894.531 ops/s
-Iteration   2: 4827.653 ops/s
-Iteration   3: 6833.657 ops/s
-Iteration   4: 6738.814 ops/s
-Iteration   5: 5998.624 ops/s
-Iteration   6: 7722.289 ops/s
-Iteration   7: 6473.800 ops/s
-Iteration   8: 6765.808 ops/s
-Iteration   9: 3512.221 ops/s
-Iteration  10: 5212.421 ops/s
-Iteration  11: 5430.737 ops/s
-Iteration  12: 5306.438 ops/s
-Iteration  13: 5703.413 ops/s
-Iteration  14: 8176.595 ops/s
-Iteration  15: 6065.518 ops/s
-Iteration  16: 7609.240 ops/s
-Iteration  17: 7696.202 ops/s
-Iteration  18: 8355.612 ops/s
-Iteration  19: 7585.753 ops/s
-Iteration  20: 5905.436 ops/s
-
-# Run progress: 30.00% complete, ETA 00:06:41
-# Fork: 2 of 2
-# Warmup Iteration   1: 0.742 ops/s
-# Warmup Iteration   2: 595.728 ops/s
-# Warmup Iteration   3: 1483.615 ops/s
-# Warmup Iteration   4: 2304.060 ops/s
-# Warmup Iteration   5: 3041.931 ops/s
-# Warmup Iteration   6: 3032.440 ops/s
-# Warmup Iteration   7: 3332.734 ops/s
-# Warmup Iteration   8: 3747.930 ops/s
-# Warmup Iteration   9: 4171.307 ops/s
-# Warmup Iteration  10: 5026.343 ops/s
-# Warmup Iteration  11: 7257.939 ops/s
-# Warmup Iteration  12: 8515.342 ops/s
-# Warmup Iteration  13: 8304.458 ops/s
-# Warmup Iteration  14: 5569.853 ops/s
-# Warmup Iteration  15: 7821.195 ops/s
-# Warmup Iteration  16: 4660.351 ops/s
-# Warmup Iteration  17: 7142.976 ops/s
-# Warmup Iteration  18: 7794.529 ops/s
-# Warmup Iteration  19: 7657.688 ops/s
-# Warmup Iteration  20: 7533.951 ops/s
-Iteration   1: 4937.529 ops/s
-Iteration   2: 7304.748 ops/s
-Iteration   3: 6028.069 ops/s
-Iteration   4: 6807.012 ops/s
-Iteration   5: 8263.639 ops/s
-Iteration   6: 6450.050 ops/s
-Iteration   7: 5518.217 ops/s
-Iteration   8: 7839.042 ops/s
-Iteration   9: 6478.652 ops/s
-Iteration  10: 6684.317 ops/s
-Iteration  11: 7140.346 ops/s
-Iteration  12: 7602.709 ops/s
-Iteration  13: 6862.209 ops/s
-Iteration  14: 7706.167 ops/s
-Iteration  15: 7841.799 ops/s
-Iteration  16: 7491.260 ops/s
-Iteration  17: 4604.550 ops/s
-Iteration  18: 7046.868 ops/s
-Iteration  19: 8113.594 ops/s
-Iteration  20: 8659.517 ops/s
-
-
-Result "metrifier.benchmark.RPCBenchmark.getPerson":
-  6679.876 ±(99.9%) 666.530 ops/s [Average]
-  (min, avg, max) = (3512.221, 6679.876, 8659.517), stdev = 1184.757
-  CI (99.9%): [6013.346, 7346.407] (assumes normal distribution)
-
-
-# JMH version: 1.19
-# VM version: JDK 1.8.0_131, VM 25.131-b11
-# VM invoker: /Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/bin/java
-# VM options: <none>
-# Warmup: 20 iterations, 1 s each
-# Measurement: 20 iterations, 1 s each
-# Timeout: 10 min per iteration
-# Threads: 4 threads, will synchronize iterations
-# Benchmark mode: Throughput, ops/time
-# Benchmark: metrifier.benchmark.RPCBenchmark.getPersonLinks
-
-# Run progress: 40.00% complete, ETA 00:05:43
-# Fork: 1 of 2
-# Warmup Iteration   1: 0.735 ops/s
-# Warmup Iteration   2: 781.683 ops/s
-# Warmup Iteration   3: 1734.668 ops/s
-# Warmup Iteration   4: 1790.601 ops/s
-# Warmup Iteration   5: 2232.331 ops/s
-# Warmup Iteration   6: 2311.347 ops/s
-# Warmup Iteration   7: 2517.694 ops/s
-# Warmup Iteration   8: 2716.934 ops/s
-# Warmup Iteration   9: 3180.389 ops/s
-# Warmup Iteration  10: 3551.217 ops/s
-# Warmup Iteration  11: 3890.137 ops/s
-# Warmup Iteration  12: 4348.189 ops/s
-# Warmup Iteration  13: 3377.420 ops/s
-# Warmup Iteration  14: 3052.139 ops/s
-# Warmup Iteration  15: 3121.816 ops/s
-# Warmup Iteration  16: 3652.275 ops/s
-# Warmup Iteration  17: 3180.721 ops/s
-# Warmup Iteration  18: 3537.619 ops/s
-# Warmup Iteration  19: 4590.329 ops/s
-# Warmup Iteration  20: 4865.576 ops/s
-Iteration   1: 4325.985 ops/s
-Iteration   2: 4704.208 ops/s
-Iteration   3: 4737.322 ops/s
-Iteration   4: 5720.017 ops/s
-Iteration   5: 6060.263 ops/s
-Iteration   6: 5641.901 ops/s
-Iteration   7: 5620.830 ops/s
-Iteration   8: 6127.312 ops/s
-Iteration   9: 5460.776 ops/s
-Iteration  10: 5461.705 ops/s
-Iteration  11: 5934.379 ops/s
-Iteration  12: 5758.028 ops/s
-Iteration  13: 5137.556 ops/s
-Iteration  14: 5576.338 ops/s
-Iteration  15: 5807.119 ops/s
-Iteration  16: 5549.264 ops/s
-Iteration  17: 6230.859 ops/s
-Iteration  18: 6188.339 ops/s
-Iteration  19: 5770.742 ops/s
-Iteration  20: 5370.193 ops/s
-
-# Run progress: 50.00% complete, ETA 00:04:45
-# Fork: 2 of 2
-# Warmup Iteration   1: 0.738 ops/s
-# Warmup Iteration   2: 771.137 ops/s
-# Warmup Iteration   3: 1027.309 ops/s
-# Warmup Iteration   4: 1650.985 ops/s
-# Warmup Iteration   5: 2625.094 ops/s
-# Warmup Iteration   6: 3163.762 ops/s
-# Warmup Iteration   7: 3249.263 ops/s
-# Warmup Iteration   8: 4136.407 ops/s
-# Warmup Iteration   9: 4606.960 ops/s
-# Warmup Iteration  10: 5606.004 ops/s
-# Warmup Iteration  11: 5879.752 ops/s
-# Warmup Iteration  12: 5733.598 ops/s
-# Warmup Iteration  13: 5226.595 ops/s
-# Warmup Iteration  14: 5359.031 ops/s
-# Warmup Iteration  15: 3960.076 ops/s
-# Warmup Iteration  16: 5145.275 ops/s
-# Warmup Iteration  17: 5147.601 ops/s
-# Warmup Iteration  18: 4236.682 ops/s
-# Warmup Iteration  19: 4439.259 ops/s
-# Warmup Iteration  20: 5409.966 ops/s
-Iteration   1: 5565.134 ops/s
-Iteration   2: 5005.861 ops/s
-Iteration   3: 4350.143 ops/s
-Iteration   4: 4348.571 ops/s
-Iteration   5: 5934.361 ops/s
-Iteration   6: 6244.914 ops/s
-Iteration   7: 6157.885 ops/s
-Iteration   8: 5985.960 ops/s
-Iteration   9: 5811.025 ops/s
-Iteration  10: 4863.568 ops/s
-Iteration  11: 6312.004 ops/s
-Iteration  12: 6142.135 ops/s
-Iteration  13: 6093.130 ops/s
-Iteration  14: 5608.308 ops/s
-Iteration  15: 6125.469 ops/s
-Iteration  16: 6230.784 ops/s
-Iteration  17: 6338.456 ops/s
-Iteration  18: 6265.988 ops/s
-Iteration  19: 4923.445 ops/s
-Iteration  20: 4585.227 ops/s
-
-
-Result "metrifier.benchmark.RPCBenchmark.getPersonLinks":
-  5601.888 ±(99.9%) 339.340 ops/s [Average]
-  (min, avg, max) = (4325.985, 5601.888, 6338.456), stdev = 603.177
-  CI (99.9%): [5262.548, 5941.228] (assumes normal distribution)
-
-
-# JMH version: 1.19
-# VM version: JDK 1.8.0_131, VM 25.131-b11
-# VM invoker: /Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/bin/java
-# VM options: <none>
-# Warmup: 20 iterations, 1 s each
-# Measurement: 20 iterations, 1 s each
-# Timeout: 10 min per iteration
-# Threads: 4 threads, will synchronize iterations
-# Benchmark mode: Throughput, ops/time
-# Benchmark: metrifier.benchmark.RPCBenchmark.listPersons
-
-# Run progress: 60.00% complete, ETA 00:03:48
-# Fork: 1 of 2
-# Warmup Iteration   1: 309.306 ops/s
-# Warmup Iteration   2: 965.695 ops/s
-# Warmup Iteration   3: 1978.847 ops/s
-# Warmup Iteration   4: 2755.621 ops/s
-# Warmup Iteration   5: 2557.041 ops/s
-# Warmup Iteration   6: 2645.518 ops/s
-# Warmup Iteration   7: 2971.610 ops/s
-# Warmup Iteration   8: 3582.824 ops/s
-# Warmup Iteration   9: 4345.152 ops/s
-# Warmup Iteration  10: 5573.142 ops/s
-# Warmup Iteration  11: 6086.457 ops/s
-# Warmup Iteration  12: 6160.204 ops/s
-# Warmup Iteration  13: 6223.944 ops/s
-# Warmup Iteration  14: 5450.820 ops/s
-# Warmup Iteration  15: 5459.890 ops/s
-# Warmup Iteration  16: 6045.589 ops/s
-# Warmup Iteration  17: 5518.277 ops/s
-# Warmup Iteration  18: 5850.975 ops/s
-# Warmup Iteration  19: 5524.896 ops/s
-# Warmup Iteration  20: 6270.449 ops/s
-Iteration   1: 6295.349 ops/s
-Iteration   2: 4110.985 ops/s
-Iteration   3: 5092.334 ops/s
-Iteration   4: 4756.947 ops/s
-Iteration   5: 4418.934 ops/s
-Iteration   6: 2981.461 ops/s
-Iteration   7: 5975.441 ops/s
-Iteration   8: 4545.660 ops/s
-Iteration   9: 5492.892 ops/s
-Iteration  10: 6170.010 ops/s
-Iteration  11: 5489.728 ops/s
-Iteration  12: 6018.454 ops/s
-Iteration  13: 6442.334 ops/s
-Iteration  14: 5683.518 ops/s
-Iteration  15: 5191.085 ops/s
-Iteration  16: 4599.236 ops/s
-Iteration  17: 5955.455 ops/s
-Iteration  18: 4569.663 ops/s
-Iteration  19: 5407.093 ops/s
-Iteration  20: 6029.619 ops/s
-
-# Run progress: 70.00% complete, ETA 00:02:51
-# Fork: 2 of 2
-# Warmup Iteration   1: 0.739 ops/s
-# Warmup Iteration   2: 1017.033 ops/s
-# Warmup Iteration   3: 2087.615 ops/s
-# Warmup Iteration   4: 2908.688 ops/s
-# Warmup Iteration   5: 3114.922 ops/s
-# Warmup Iteration   6: 3319.305 ops/s
-# Warmup Iteration   7: 3979.624 ops/s
-# Warmup Iteration   8: 4446.812 ops/s
-# Warmup Iteration   9: 4164.370 ops/s
-# Warmup Iteration  10: 5440.808 ops/s
-# Warmup Iteration  11: 6239.877 ops/s
-# Warmup Iteration  12: 6392.205 ops/s
-# Warmup Iteration  13: 6457.819 ops/s
-# Warmup Iteration  14: 6654.660 ops/s
-# Warmup Iteration  15: 6342.917 ops/s
-# Warmup Iteration  16: 6551.336 ops/s
-# Warmup Iteration  17: 6404.337 ops/s
-# Warmup Iteration  18: 6431.979 ops/s
-# Warmup Iteration  19: 6576.284 ops/s
-# Warmup Iteration  20: 5809.248 ops/s
-Iteration   1: 6532.815 ops/s
-Iteration   2: 6314.420 ops/s
-Iteration   3: 5891.717 ops/s
-Iteration   4: 6383.807 ops/s
-Iteration   5: 5915.833 ops/s
-Iteration   6: 6734.234 ops/s
-Iteration   7: 6057.926 ops/s
-Iteration   8: 6691.827 ops/s
-Iteration   9: 6555.896 ops/s
-Iteration  10: 6310.441 ops/s
-Iteration  11: 6499.161 ops/s
-Iteration  12: 6231.056 ops/s
-Iteration  13: 5028.230 ops/s
-Iteration  14: 5128.111 ops/s
-Iteration  15: 6100.783 ops/s
-Iteration  16: 5863.433 ops/s
-Iteration  17: 6140.694 ops/s
-Iteration  18: 6303.404 ops/s
-Iteration  19: 6737.799 ops/s
-Iteration  20: 6556.753 ops/s
-
-
-Result "metrifier.benchmark.RPCBenchmark.listPersons":
-  5730.113 ±(99.9%) 473.916 ops/s [Average]
-  (min, avg, max) = (2981.461, 5730.113, 6737.799), stdev = 842.385
-  CI (99.9%): [5256.198, 6204.029] (assumes normal distribution)
-
-
-# JMH version: 1.19
-# VM version: JDK 1.8.0_131, VM 25.131-b11
-# VM invoker: /Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/bin/java
-# VM options: <none>
-# Warmup: 20 iterations, 1 s each
-# Measurement: 20 iterations, 1 s each
-# Timeout: 10 min per iteration
-# Threads: 4 threads, will synchronize iterations
-# Benchmark mode: Throughput, ops/time
-# Benchmark: metrifier.benchmark.RPCBenchmark.programComposition
-
-# Run progress: 80.00% complete, ETA 00:01:54
-# Fork: 1 of 2
-# Warmup Iteration   1: 62.272 ops/s
-# Warmup Iteration   2: 141.915 ops/s
-# Warmup Iteration   3: 226.745 ops/s
-# Warmup Iteration   4: 387.543 ops/s
-# Warmup Iteration   5: 393.669 ops/s
-# Warmup Iteration   6: 421.901 ops/s
-# Warmup Iteration   7: 494.261 ops/s
-# Warmup Iteration   8: 461.939 ops/s
-# Warmup Iteration   9: 559.633 ops/s
-# Warmup Iteration  10: 735.018 ops/s
-# Warmup Iteration  11: 768.112 ops/s
-# Warmup Iteration  12: 738.405 ops/s
-# Warmup Iteration  13: 623.232 ops/s
-# Warmup Iteration  14: 733.950 ops/s
-# Warmup Iteration  15: 544.803 ops/s
-# Warmup Iteration  16: 778.607 ops/s
-# Warmup Iteration  17: 683.015 ops/s
-# Warmup Iteration  18: 757.335 ops/s
-# Warmup Iteration  19: 585.365 ops/s
-# Warmup Iteration  20: 493.468 ops/s
-Iteration   1: 651.361 ops/s
-Iteration   2: 692.800 ops/s
-Iteration   3: 677.598 ops/s
-Iteration   4: 806.966 ops/s
-Iteration   5: 854.282 ops/s
-Iteration   6: 806.881 ops/s
-Iteration   7: 749.940 ops/s
-Iteration   8: 684.362 ops/s
-Iteration   9: 671.530 ops/s
-Iteration  10: 796.378 ops/s
-Iteration  11: 388.758 ops/s
-Iteration  12: 722.298 ops/s
-Iteration  13: 841.860 ops/s
-Iteration  14: 816.032 ops/s
-Iteration  15: 753.413 ops/s
-Iteration  16: 829.782 ops/s
-Iteration  17: 738.661 ops/s
-Iteration  18: 727.012 ops/s
-Iteration  19: 867.021 ops/s
-Iteration  20: 878.184 ops/s
-
-# Run progress: 90.00% complete, ETA 00:00:57
-# Fork: 2 of 2
-# Warmup Iteration   1: 61.586 ops/s
-# Warmup Iteration   2: 111.359 ops/s
-# Warmup Iteration   3: 223.614 ops/s
-# Warmup Iteration   4: 274.978 ops/s
-# Warmup Iteration   5: 292.766 ops/s
-# Warmup Iteration   6: 329.878 ops/s
-# Warmup Iteration   7: 329.757 ops/s
-# Warmup Iteration   8: 356.977 ops/s
-# Warmup Iteration   9: 381.388 ops/s
-# Warmup Iteration  10: 383.102 ops/s
-# Warmup Iteration  11: 354.048 ops/s
-# Warmup Iteration  12: 555.159 ops/s
-# Warmup Iteration  13: 473.715 ops/s
-# Warmup Iteration  14: 433.081 ops/s
-# Warmup Iteration  15: 365.960 ops/s
-# Warmup Iteration  16: 402.010 ops/s
-# Warmup Iteration  17: 313.301 ops/s
-# Warmup Iteration  18: 501.835 ops/s
-# Warmup Iteration  19: 520.743 ops/s
-# Warmup Iteration  20: 517.526 ops/s
-Iteration   1: 556.712 ops/s
-Iteration   2: 554.078 ops/s
-Iteration   3: 546.968 ops/s
-Iteration   4: 540.331 ops/s
-Iteration   5: 610.320 ops/s
-Iteration   6: 816.763 ops/s
-Iteration   7: 895.258 ops/s
-Iteration   8: 864.662 ops/s
-Iteration   9: 822.553 ops/s
-Iteration  10: 908.558 ops/s
-Iteration  11: 795.973 ops/s
-Iteration  12: 882.793 ops/s
-Iteration  13: 961.580 ops/s
-Iteration  14: 922.941 ops/s
-Iteration  15: 922.164 ops/s
-Iteration  16: 996.012 ops/s
-Iteration  17: 931.374 ops/s
-Iteration  18: 904.276 ops/s
-Iteration  19: 951.750 ops/s
-Iteration  20: 940.422 ops/s
-
-
-Result "metrifier.benchmark.RPCBenchmark.programComposition":
-  782.015 ±(99.9%) 78.340 ops/s [Average]
-  (min, avg, max) = (388.758, 782.015, 996.012), stdev = 139.250
-  CI (99.9%): [703.675, 860.356] (assumes normal distribution)
-
-
-# Run complete. Total time: 00:09:31
-
-Benchmark                         Mode  Cnt     Score     Error  Units
-RPCBenchmark.createPerson        thrpt   40  4649.463 ± 405.442  ops/s
-RPCBenchmark.getPerson           thrpt   40  6679.876 ± 666.530  ops/s
-RPCBenchmark.getPersonLinks      thrpt   40  5601.888 ± 339.340  ops/s
-RPCBenchmark.listPersons         thrpt   40  5730.113 ± 473.916  ops/s
-RPCBenchmark.programComposition  thrpt   40   782.015 ±  78.340  ops/s
 ```
 
 ## Summary
 
-### http
+### HTTP
 
 ```bash
 # Run complete. Total time: 00:08:46
@@ -1095,16 +592,14 @@ HttpBenchmark.listPersons         thrpt   40  4364.214 ± 366.537  ops/s
 HttpBenchmark.programComposition  thrpt   40   593.829 ±  31.651  ops/s
 ```
 
-
-### frees-rpc
+### frees-rpc - Protobuf Serialization
 
 ```bash
-# Run complete. Total time: 00:09:31
 
-Benchmark                         Mode  Cnt     Score     Error  Units
-RPCBenchmark.createPerson        thrpt   40  4649.463 ± 405.442  ops/s
-RPCBenchmark.getPerson           thrpt   40  6679.876 ± 666.530  ops/s
-RPCBenchmark.getPersonLinks      thrpt   40  5601.888 ± 339.340  ops/s
-RPCBenchmark.listPersons         thrpt   40  5730.113 ± 473.916  ops/s
-RPCBenchmark.programComposition  thrpt   40   782.015 ±  78.340  ops/s
+```
+
+### frees-rpc - Avro Serialization
+
+```bash
+
 ```
