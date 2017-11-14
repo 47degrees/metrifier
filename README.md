@@ -44,7 +44,7 @@ Comparing `HTTP` against `frees-rpc` services.
   - [Running Benchmarks on GCP](#running-benchmarks-on-gcp)
     - [Server GCE instance Details](#server-gce-instance-details)
     - [Benchmarks GCE instance Details](#benchmarks-gce-instance-details)
-    - [http vs frees-rpc](#http-vs-frees-rpc-1)
+    - [HTTP vs frees-rpc Protobuf vs frees-rpc Avro](#http-vs-frees-rpc-protobuf-vs-frees-rpc-avro)
     - [Comparing benchmarks one by one](#comparing-benchmarks-one-by-one-1)
       - [createPerson](#createperson-1)
       - [getPerson](#getperson-1)
@@ -122,8 +122,8 @@ We are using the [Java Microbenchmark Harness (JMH)](http://openjdk.java.net/pro
   * `http4s`, version `0.15.12a`.
   * `argonaut`, version `6.2`.
 * RPC services stack based on:
-  * `freestyle`, version `0.4.1`.
-  * `frees-rpc`, version `0.2.1` (atop of [gRPC](https://grpc.io/), version `1.7.0`).
+  * `freestyle`, version `0.4.2`.
+  * `frees-rpc`, version `0.3.0` (atop of [gRPC](https://grpc.io/), version `1.7.0`).
 
 ### HTTP Benchmarks
 
@@ -452,7 +452,7 @@ We are implementing two Google Compute Engine instances, one for the server (`n1
 * 1 virtual CPU.
 * 3.75 GB of memory.
 
-#### http vs frees-rpc
+#### HTTP vs frees-rpc Protobuf vs frees-rpc Avro
 
 * HttpBenchmark Raw output:
 
@@ -467,17 +467,30 @@ HttpBenchmark.listPersons         thrpt   40  2569.887 ± 167.753  ops/s
 HttpBenchmark.programComposition  thrpt   40   318.553 ±  20.476  ops/s
 ```
 
-* RPCBenchmark Raw output:
+* RPCProtoBenchmark Raw output:
 
 ```bash
-# Run complete. Total time: 00:07:07
+# Run complete. Total time: 00:07:14
 
-Benchmark                         Mode  Cnt      Score     Error  Units
-RPCBenchmark.createPerson        thrpt   40  10637.672 ± 643.970  ops/s
-RPCBenchmark.getPerson           thrpt   40  13579.929 ± 530.903  ops/s
-RPCBenchmark.getPersonLinks      thrpt   40   5393.624 ± 295.557  ops/s
-RPCBenchmark.listPersons         thrpt   40   8224.560 ± 613.983  ops/s
-RPCBenchmark.programComposition  thrpt   40   1111.968 ±  44.460  ops/s
+Benchmark                              Mode  Cnt      Score     Error  Units
+RPCProtoBenchmark.createPerson        thrpt   40   9146.401 ± 453.402  ops/s
+RPCProtoBenchmark.getPerson           thrpt   40  10290.595 ± 560.968  ops/s
+RPCProtoBenchmark.getPersonLinks      thrpt   40   4887.600 ± 439.472  ops/s
+RPCProtoBenchmark.listPersons         thrpt   40   6178.998 ± 433.640  ops/s
+RPCProtoBenchmark.programComposition  thrpt   40    946.742 ±  36.521  ops/s
+```
+
+* RPCAvroBenchmark Raw output:
+
+```bash
+# Run complete. Total time: 00:07:11
+
+Benchmark                             Mode  Cnt      Score     Error  Units
+RPCAvroBenchmark.createPerson        thrpt   40   9843.557 ± 700.599  ops/s
+RPCAvroBenchmark.getPerson           thrpt   40  11405.711 ± 568.813  ops/s
+RPCAvroBenchmark.getPersonLinks      thrpt   40   5146.870 ± 579.186  ops/s
+RPCAvroBenchmark.listPersons         thrpt   40   6861.396 ± 581.859  ops/s
+RPCAvroBenchmark.programComposition  thrpt   40    949.810 ±  83.805  ops/s
 ```
 
 #### Comparing benchmarks one by one
@@ -487,21 +500,24 @@ RPCBenchmark.programComposition  thrpt   40   1111.968 ±  44.460  ops/s
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
 HttpBenchmark.createPerson | thrpt | 40 | 2792.105 | 126.448 | ops/s
-RPCBenchmark.createPerson | thrpt | 40 | 10637.672 | 643.970 | ops/s
+RPCProtoBenchmark.createPerson | thrpt | 40 | 9146.401 | 453.402 | ops/s
+RPCAvroBenchmark.createPerson   | thrpt | 40 | 9843.557 | 700.599| ops/s
 
 ##### getPerson
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
 HttpBenchmark.getPerson | thrpt | 40 | 2955.287 | 139.535 | ops/s
-RPCBenchmark.getPerson | thrpt | 40 | 13579.929 | 530.903 | ops/s
+RPCProtoBenchmark.getPerson | thrpt | 40 | 10290.595 | 560.968| ops/s
+RPCAvroBenchmark.getPerson | thrpt | 40 | 11405.711 | 568.813| ops/s
 
 ##### getPersonLinks
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
 HttpBenchmark.getPersonLinks | thrpt | 40 | 2029.031 | 124.303 | ops/s
-RPCBenchmark.getPersonLinks | thrpt | 40 | 5393.624 | 295.557 | ops/s
+RPCProtoBenchmark.getPersonLinks | thrpt | 40 | 4887.600 | 439.472| ops/s
+RPCAvroBenchmark.getPersonLinks | thrpt | 40 | 5146.870 | 579.186| ops/s
 
 ##### listPersons
 
@@ -509,13 +525,15 @@ Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
 HttpBenchmark.listPersons | thrpt | 40 | 2569.887 | 167.753 | ops/s
 RPCBenchmark.listPersons | thrpt | 40 | 8224.560 | 613.983 | ops/s
+RPCAvroBenchmark.listPersons | thrpt | 40 | 6861.396 | 581.859| ops/s
 
 ##### programComposition
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
 HttpBenchmark.programComposition | thrpt | 40 | 318.553 |  20.476 | ops/s
-RPCBenchmark.programComposition | thrpt | 40 | 1111.968 |  44.460 | ops/s
+RPCProtoBenchmark.programComposition | thrpt | 40 | 946.742 |  36.521| ops/s
+RPCAvroBenchmark.programComposition | thrpt | 40 | 949.810 |  83.805| ops/s
 
 #### Comparing benchmarks in Charts
 
