@@ -570,9 +570,17 @@ You can find the following charts in [this jsfiddle](http://jsfiddle.net/juanped
 
 ### Conclusion
 
-Using JMH, we have checked out quickly the performance characteristics for both service architectures trying out in two different ecosystems:
+Using JMH, we have checked out quickly the performance characteristics for both service architectures trying out on two different ecosystems:
 
 * Local Environment
 * GCP Environment
 
-As we have seen, the RPC solution in this case is noticeably faster. Moreover, when network traffic enters the scene, the differences between both are bigger.
+As we have seen, the RPC solution is noticeably faster, using both metered kind of serialization methods: `Avro` and `Protocol Buffers`. Moreover, when network traffic enters the scene, the differences between `HTTP` and `RPC` are bigger.
+
+However, digging into numbers related to RPC, the results turn out different when comparing `Avro` and `Protobuf` locally and atop GCP.
+
+**TBD**
+- Avro faster than Protobuf running on GCP
+- Protobuf faster than Avro running locally
+
+Why? It might be because Avro compress the data more than Protobuf and the latency across the network is lesser. However, is the serialization time slower? Running the benchmarks locally the shown results are inverse, Protobuf is faster than Avro.
