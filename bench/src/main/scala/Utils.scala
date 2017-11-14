@@ -8,7 +8,7 @@ import scala.concurrent.{Await, Future}
 
 object Utils {
 
-  val defaultTimeOut: FiniteDuration = 5.seconds
+  val defaultTimeOut: FiniteDuration = 30.seconds
 
   val person: Person = Person(
     id = "5",
