@@ -119,11 +119,11 @@ sbt "demo/runMain metrifier.demo.RPCAvroDemoApp"
 We are using the [Java Microbenchmark Harness (JMH)](http://openjdk.java.net/projects/code-tools/jmh/) tool, which is helping us to get an experimental answer to a basic question about which implementation executes fastest among:
 
 * HTTP stack based on:
-  * `http4s`, version `0.15.12a`.
+  * `http4s`, version `0.15.16a`.
   * `argonaut`, version `6.2`.
 * RPC services stack based on:
-  * `freestyle`, version `0.4.2`.
-  * `frees-rpc`, version `0.3.0` (atop of [gRPC](https://grpc.io/), version `1.7.0`).
+  * `freestyle`, version `0.8.0`.
+  * `frees-rpc`, version `0.13.5` (atop of [gRPC](https://grpc.io/), version `1.11.0`).
 
 ### HTTP Benchmarks
 
@@ -216,7 +216,7 @@ shared/target/scala-2.12/metrifier-shared-assembly-[project-version].jar
 In this case, we've created a bucket named as `metrifier` within our GCP project. Assuming this name, these would be the set of commands to run (we're skipping the `bench` artifacts since we are not going to use them):
 
 ```bash
-export METRIFIER_VERSION=0.0.3
+export METRIFIER_VERSION=0.0.4
 gsutil cp demo/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
 gsutil cp frees-rpc/target/scala-2.12/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
 gsutil cp http/target/scala-2.12/metrifier-http-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
@@ -230,7 +230,7 @@ gsutil cp shared/target/scala-2.12/metrifier-shared-assembly-${METRIFIER_VERSION
 If the project dependencies have not changed, you could just upload the project JARs:
 
 ```bash
-export METRIFIER_VERSION=0.0.3
+export METRIFIER_VERSION=0.0.4
 gsutil cp demo/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp frees-rpc/target/scala-2.12/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp http/target/scala-2.12/metrifier-http-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
@@ -250,7 +250,7 @@ Once everything is up, follow the next sections to run the benchmarks atop GCP.
 1. SSH into `http-server-vm` instance.
 2. Run the HTTP Server:
 ```bash
-export METRIFIER_VERSION=0.0.3
+export METRIFIER_VERSION=0.0.4
 env \
     HTTP_HOST=http-server-vm \
     HTTP_PORT=8080 \
@@ -268,7 +268,7 @@ curl "http://http-server-vm:8080/person"
 ```
 3. If step was successful, run the benchmarks:
 ```bash
-export METRIFIER_VERSION=0.0.3
+export METRIFIER_VERSION=0.0.4
 cd /metrifier/repo
 env \
     HTTP_HOST=http-server-vm \
@@ -285,7 +285,7 @@ Given the port `8080` was opened to the exterior when deploying the cluster with
 1. SSH into `rpc-proto-server-vm` instance.
 2. Run the RPC Protobuf based Server:
 ```bash
-export METRIFIER_VERSION=0.0.3
+export METRIFIER_VERSION=0.0.4
 env \
     RPC_HOST=rpc-proto-server-vm \
     RPC_PORT=8080 \
@@ -299,7 +299,7 @@ env \
 1. SSH into `rpc-proto-jmh-vm` instance.
 2. Run the benchmarks:
 ```bash
-export METRIFIER_VERSION=0.0.3
+export METRIFIER_VERSION=0.0.4
 cd /metrifier/repo
 env \
     RPC_HOST=rpc-proto-server-vm \
@@ -316,7 +316,7 @@ As we mentioned for the Http benchmarks, in this case we could also run the benc
 1. SSH into `rpc-avro-server-vm` instance.
 2. Run the RPC Avro based Server:
 ```bash
-export METRIFIER_VERSION=0.0.3
+export METRIFIER_VERSION=0.0.4
 env \
     RPC_HOST=rpc-avro-server-vm \
     RPC_PORT=8080 \
@@ -330,7 +330,7 @@ env \
 1. SSH into `rpc-avro-jmh-vm` instance.
 2. Run the benchmarks:
 ```bash
-export METRIFIER_VERSION=0.0.3
+export METRIFIER_VERSION=0.0.4
 cd /metrifier/repo
 env \
     RPC_HOST=rpc-avro-server-vm \

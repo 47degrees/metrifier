@@ -2,14 +2,12 @@ package metrifier
 package benchmark
 
 import java.util.concurrent.TimeUnit
-
-import metrifier.http.client.HttpClient
+import metrifier.benchmark.Utils._
 import metrifier.http.HttpConf
+import metrifier.http.client.HttpClient
 import metrifier.shared.model._
-import Utils._
 import org.http4s.client.blaze.PooledHttp1Client
 import org.openjdk.jmh.annotations._
-
 import scalaz.concurrent.Task
 
 @State(Scope.Thread)

@@ -1,13 +1,13 @@
 package metrifier
 package benchmark
 
+import cats.effect.IO
+import freestyle.rpc.protocol.Empty
 import java.util.concurrent.TimeUnit
-
+import metrifier.benchmark.Utils._
 import metrifier.rpc.client.implicits._
-import metrifier.rpc.protocols.{EmptyAvro, PersonServiceAvro}
+import metrifier.rpc.protocols._
 import metrifier.shared.model._
-import Utils._
-import monix.eval.Task
 import org.openjdk.jmh.annotations._
 
 @State(Scope.Thread)
@@ -15,31 +15,28 @@ import org.openjdk.jmh.annotations._
 @OutputTimeUnit(TimeUnit.SECONDS)
 class RPCAvroBenchmark {
 
-  val client: PersonServiceAvro.Client[Task] = implicitly[PersonServiceAvro.Client[Task]]
+  val client: PersonServiceAvro.Client[IO] = implicitly[PersonServiceAvro.Client[IO]]
 
   @Benchmark
-  def listPersons: PersonList = client.listPersons(EmptyAvro()).runAsync.runF
+  def listPersons: PersonList = client.listPersons(Empty).unsafeRunTimed(defaultTimeOut).get
 
   @Benchmark
-  def getPerson: Person = client.getPerson(PersonId("1")).runAsync.runF
+  def getPerson: Person = client.getPerson(PersonId("1")).unsafeRunTimed(defaultTimeOut).get
 
   @Benchmark
   def getPersonLinks: PersonLinkList =
-    client.getPersonLinks(PersonId("1")).runAsync.runF
+    client.getPersonLinks(PersonId("1")).unsafeRunTimed(defaultTimeOut).get
 
   @Benchmark
   def createPerson: Person =
-    client
-      .createPerson(person)
-      .runAsync
-      .runF
+    client.createPerson(person).unsafeRunTimed(defaultTimeOut).get
 
   @Benchmark
   def programComposition: PersonAggregation = {
 
-    def clientProgram: Task[PersonAggregation] = {
+    def clientProgram: IO[PersonAggregation] = {
       for {
-        personList <- client.listPersons(EmptyAvro())
+        personList <- client.listPersons(Empty)
         p1         <- client.getPerson(PersonId("1"))
         p2         <- client.getPerson(PersonId("2"))
         p3         <- client.getPerson(PersonId("3"))
@@ -50,7 +47,7 @@ class RPCAvroBenchmark {
       } yield (p1, p2, p3, p4, p1Links, p3Links, personList.add(pNew))
     }
 
-    clientProgram.runAsync.runF
+    clientProgram.unsafeRunTimed(defaultTimeOut).get
   }
 
 }

@@ -2,9 +2,7 @@ package metrifier
 package benchmark
 
 import metrifier.shared.model._
-
 import scala.concurrent.duration._
-import scala.concurrent.{Await, Future}
 
 object Utils {
 
@@ -22,10 +20,4 @@ object Utils {
     email = "valentine.lacroix@example.com",
     picture = None
   )
-
-  implicit class FutureOps[A](f: Future[A]) {
-
-    def runF: A = Await.result(f, defaultTimeOut)
-
-  }
 }
