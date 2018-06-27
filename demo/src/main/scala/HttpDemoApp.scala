@@ -1,20 +1,20 @@
 package metrifier
 package demo
 
+import cats.effect.IO
 import metrifier.demo.Utils._
 import metrifier.http.HttpConf
 import metrifier.http.client._
 import metrifier.shared.model._
-import org.http4s.client.blaze.PooledHttp1Client
-import scalaz.concurrent.Task
+import org.http4s.client.blaze.Http1Client
 
 object HttpDemoApp {
 
   def main(args: Array[String]): Unit = {
 
-    val client = new HttpClient(PooledHttp1Client(), HttpConf.host, HttpConf.port)
+    val client = new HttpClient(Http1Client[IO]().unsafeRunSync(), HttpConf.host, HttpConf.port)
 
-    val aggregation: Task[PersonAggregation] = for {
+    val aggregation: IO[PersonAggregation] = for {
       personList <- client.listPersons
       p1         <- client.getPerson(PersonId("1"))
       p2         <- client.getPerson(PersonId("2"))
@@ -39,7 +39,7 @@ object HttpDemoApp {
       )
     } yield (p1, p2, p3, p4, p1Links, p3Links, personList.add(pNew))
 
-    val result: PersonAggregation = aggregation.unsafePerformSync
+    val result: PersonAggregation = aggregation.unsafeRunSync()
 
     println(s"Result = $result")
 

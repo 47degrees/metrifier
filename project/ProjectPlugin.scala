@@ -13,14 +13,15 @@ object ProjectPlugin extends AutoPlugin {
 
     lazy val V = new {
       lazy val freesRPC = "0.13.5"
-      lazy val http4s   = "0.15.16a"
+      lazy val http4s   = "0.18.12"
       lazy val config   = "1.3.3"
       lazy val logback  = "1.2.3"
+      lazy val circe    = "0.9.3"
     }
 
     lazy val commonSettings: Seq[Def.Setting[_]] = Seq(
       libraryDependencies += "ch.qos.logback" % "logback-classic" % V.logback,
-      scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked")
+      scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-Ypartial-unification")
     )
 
     lazy val scalaMetaSettings: Seq[Def.Setting[_]] = Seq(
@@ -31,11 +32,13 @@ object ProjectPlugin extends AutoPlugin {
     )
 
     lazy val httpDependencies: Seq[ModuleID] = Seq(
-      "org.http4s"  %% "http4s-dsl"          % V.http4s,
-      "org.http4s"  %% "http4s-blaze-server" % V.http4s,
-      "org.http4s"  %% "http4s-blaze-client" % V.http4s,
-      "org.http4s"  %% "http4s-argonaut"     % V.http4s,
-      "com.typesafe" % "config"              % V.config
+      "org.http4s"   %% "http4s-dsl"          % V.http4s,
+      "org.http4s"   %% "http4s-blaze-server" % V.http4s,
+      "org.http4s"   %% "http4s-blaze-client" % V.http4s,
+      "org.http4s"   %% "http4s-argonaut"     % V.http4s,
+      "org.http4s"   %% "http4s-circe"        % V.http4s,
+      "io.circe"     %% "circe-generic"       % V.circe,
+      "com.typesafe" % "config"               % V.config
     )
 
     lazy val rpcDependencies: Seq[ModuleID] = Seq(
