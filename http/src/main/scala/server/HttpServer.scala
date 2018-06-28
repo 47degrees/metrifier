@@ -2,32 +2,38 @@ package metrifier
 package http
 package server
 
-import org.http4s._
-import org.http4s.argonaut._
-import org.http4s.dsl._
-import org.http4s.server.blaze._
-import org.http4s.server.{Server, ServerApp}
-import scalaz.concurrent.Task
-import scalaz.{-\/, \/-}
+import cats.effect._
+import fs2.StreamApp
+import fs2.Stream
+import metrifier.http.codecs._
 import metrifier.shared.model._
 import metrifier.shared.services._
-import codecs._
+import org.http4s._
+import org.http4s.dsl.impl.Root
+import org.http4s.dsl.io._
+import org.http4s.server.blaze._
 
-object HttpServer extends ServerApp {
+import scala.concurrent.ExecutionContext.Implicits.global
 
-  override def server(args: List[String]): Task[Server] = for {
-      b <- BlazeBuilder.bindHttp(HttpConf.port, HttpConf.host).mountService(httpServices, "/").start
-      _ <- Task.delay(println(s"PersonService has started at ${HttpConf.host}:${HttpConf.port}"))
-    } yield b
+object HttpServer extends StreamApp[IO] {
+
+  override def stream(args: List[String], requestShutdown: IO[Unit]): fs2.Stream[IO, StreamApp.ExitCode] = for {
+    b <- BlazeBuilder[IO].bindHttp(HttpConf.port, HttpConf.host)
+      .mountService(httpServices, "/")
+      .serve
+    _ <- Stream.eval(IO(println(s"PersonService has started at ${HttpConf.host}:${HttpConf.port}")))
+  } yield b
 
 
-  val httpServices: HttpService = HttpService {
-    case GET -> Root / "person" => Ok(Task.now(listPersons))
-    case GET -> Root / "person" / id => Ok(Task.now(getPerson(PersonId(id))))
-    case GET -> Root / "person" / id / "links" => Ok(Task.now(getPersonLinks(PersonId(id))))
-    case req @ POST -> Root / "person" => req.attemptAs[Person].run flatMap {
-        case -\/(failed) => BadRequest(failed.toString)
-        case \/-(p) => Ok(Task.now(createPerson(p)))
+  val httpServices = HttpService[IO] {
+
+    case GET -> Root / "person" => Ok(listPersons)
+    case GET -> Root / "person" / id => Ok(getPerson(PersonId(id)))
+    case GET -> Root / "person" / id / "links" => Ok(getPersonLinks(PersonId(id)))
+    case req@POST -> Root / "person" =>
+      req.attemptAs[Person].value flatMap {
+        case Left(failed) => BadRequest(failed.toString)
+        case Right(p) => Ok(createPerson(p))
       }
   }
 

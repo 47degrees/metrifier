@@ -119,8 +119,8 @@ sbt "demo/runMain metrifier.demo.RPCAvroDemoApp"
 We are using the [Java Microbenchmark Harness (JMH)](http://openjdk.java.net/projects/code-tools/jmh/) tool, which is helping us to get an experimental answer to a basic question about which implementation executes fastest among:
 
 * HTTP stack based on:
-  * `http4s`, version `0.15.16a`.
-  * `argonaut`, version `6.2`.
+  * `http4s`, version `0.18.12`.
+  * `circe`, version `0.9.3`.
 * RPC services stack based on:
   * `freestyle`, version `0.8.0`.
   * `frees-rpc`, version `0.13.5` (atop of [gRPC](https://grpc.io/), version `1.11.0`).
