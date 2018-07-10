@@ -4,6 +4,7 @@ package rpc
 import cats.effect.IO
 import freestyle.rpc.ChannelFor
 import freestyle.rpc.client.config.ConfigForAddress
+import metrifier.rpc.protocols._
 
 package object client {
 
@@ -15,8 +16,6 @@ package object client {
   }
 
   trait Implicits extends PersonServiceRuntime with ClientConf {
-
-    import metrifier.rpc.protocols._
 
     implicit val personServicePBClient: PersonServicePB.Client[IO] =
       PersonServicePB.client[IO](channel)

@@ -3,11 +3,7 @@ package rpc
 
 import cats.Applicative
 import cats.effect._
-import cats.Functor
 import cats.syntax.applicative._
-import freestyle.rpc.server.implicits._
-import freestyle.rpc.client.implicits._
-import freestyle.rpc.client.config._
 import freestyle.rpc._
 import freestyle.rpc.client.config._
 import freestyle.rpc.protocol.Empty
@@ -53,7 +49,7 @@ package object server {
 
       implicit private val personServicePBHandler: RPCProtoHandler[IO] = new RPCProtoHandler[IO]
 
-      val grpcConfigsProto: List[GrpcConfig] = List(AddService(PersonServicePB.bindService[IO]))
+      implicit val grpcConfigsProto: List[GrpcConfig] = List(AddService(PersonServicePB.bindService[IO]))
 
     }
 

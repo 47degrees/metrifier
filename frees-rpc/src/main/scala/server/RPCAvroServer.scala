@@ -5,7 +5,6 @@ package server
 import cats.effect.IO
 import freestyle.rpc.server.GrpcServer
 import metrifier.rpc.server.avro.implicits._
-import metrifier.rpc.server.proto.implicits.getConf
 import org.log4s.Logger
 
 object RPCAvroServer {

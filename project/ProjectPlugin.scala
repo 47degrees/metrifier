@@ -20,8 +20,7 @@ object ProjectPlugin extends AutoPlugin {
     }
 
     lazy val commonSettings: Seq[Def.Setting[_]] = Seq(
-      libraryDependencies ++= Seq("ch.qos.logback" % "logback-classic" % V.logback,
-        "beyondthelines" %% "pbdirect" % "0.1.0"),
+      libraryDependencies += "ch.qos.logback" % "logback-classic" % V.logback,
       scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-Ypartial-unification")
     )
 

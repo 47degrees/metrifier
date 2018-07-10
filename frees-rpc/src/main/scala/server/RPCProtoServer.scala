@@ -5,10 +5,9 @@ package server
 import cats.effect.IO
 import freestyle.rpc.server.GrpcServer
 import org.log4s.Logger
+import metrifier.rpc.server.proto.implicits._
 
 object RPCProtoServer {
-
-  import proto.implicits._
 
   val logger: Logger = org.log4s.getLogger
 
