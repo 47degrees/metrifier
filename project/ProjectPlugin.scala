@@ -12,7 +12,7 @@ object ProjectPlugin extends AutoPlugin {
   object autoImport {
 
     lazy val V = new {
-      lazy val freesRPC = "0.13.5"
+      lazy val freesRPC = "0.14.0"
       lazy val http4s   = "0.18.12"
       lazy val config   = "1.3.3"
       lazy val logback  = "1.2.3"
@@ -20,7 +20,8 @@ object ProjectPlugin extends AutoPlugin {
     }
 
     lazy val commonSettings: Seq[Def.Setting[_]] = Seq(
-      libraryDependencies += "ch.qos.logback" % "logback-classic" % V.logback,
+      libraryDependencies ++= Seq("ch.qos.logback" % "logback-classic" % V.logback,
+        "beyondthelines" %% "pbdirect" % "0.1.0"),
       scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-Ypartial-unification")
     )
 

@@ -2,7 +2,6 @@ package metrifier
 package rpc
 
 import cats.effect.IO
-import freestyle.free.config.implicits._
 import freestyle.rpc.ChannelFor
 import freestyle.rpc.client.config.ConfigForAddress
 

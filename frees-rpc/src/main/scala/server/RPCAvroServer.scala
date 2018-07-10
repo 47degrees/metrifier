@@ -3,8 +3,9 @@ package rpc
 package server
 
 import cats.effect.IO
-import freestyle.rpc.server.implicits._
+import freestyle.rpc.server.GrpcServer
 import metrifier.rpc.server.avro.implicits._
+import metrifier.rpc.server.proto.implicits.getConf
 import org.log4s.Logger
 
 object RPCAvroServer {
@@ -15,7 +16,10 @@ object RPCAvroServer {
 
     logger.info(s"Server is starting ...")
 
-    server[IO].unsafeRunSync()
+    val avroServer =
+      GrpcServer.default[IO](getConf.port, grpcConfigsAvro).flatMap(GrpcServer.server[IO])
+
+    avroServer.unsafeRunSync()
   }
 
 }
