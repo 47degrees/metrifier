@@ -4,8 +4,7 @@ package rpc
 import cats.Applicative
 import cats.effect._
 import cats.syntax.applicative._
-import freestyle.free.config.implicits._
-import freestyle.rpc.ChannelForAddress
+import freestyle.rpc._
 import freestyle.rpc.client.config._
 import freestyle.rpc.protocol.Empty
 import freestyle.rpc.server._
@@ -13,12 +12,13 @@ import metrifier.rpc.protocols._
 import metrifier.shared.model._
 import metrifier.shared.services
 
+
 package object server {
 
   trait ServerConf {
 
-    protected val getConf: ChannelForAddress =
-      ConfigForAddress[IO]("", "rpc.port").unsafeRunSync()
+    implicit val getConf: ChannelForAddress =
+      ConfigForAddress[IO]("rpc.host", "rpc.port").unsafeRunSync()
 
   }
 
@@ -49,8 +49,8 @@ package object server {
 
       implicit private val personServicePBHandler: RPCProtoHandler[IO] = new RPCProtoHandler[IO]
 
-      implicit val pbServer: ServerW =
-        ServerW.default(getConf.port, List(AddService(PersonServicePB.bindService[IO])))
+      implicit val grpcConfigsProto: List[GrpcConfig] = List(AddService(PersonServicePB.bindService[IO]))
+
     }
 
     object implicits extends ProtoImplicits
@@ -62,9 +62,7 @@ package object server {
 
       implicit private val personServiceAvroHandler: RPCAvroHandler[IO] = new RPCAvroHandler[IO]
 
-      implicit val avroServer: ServerW =
-        ServerW.default(getConf.port, List(AddService(PersonServiceAvro.bindService[IO])))
-
+      implicit val grpcConfigsAvro: List[GrpcConfig] = List(AddService(PersonServiceAvro.bindService[IO]))
     }
 
     object implicits extends AvroImplicits

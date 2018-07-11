@@ -123,7 +123,7 @@ We are using the [Java Microbenchmark Harness (JMH)](http://openjdk.java.net/pro
   * `circe`, version `0.9.3`.
 * RPC services stack based on:
   * `freestyle`, version `0.8.0`.
-  * `frees-rpc`, version `0.13.5` (atop of [gRPC](https://grpc.io/), version `1.11.0`).
+  * `frees-rpc`, version `0.14.0` (atop of [gRPC](https://grpc.io/), version `1.11.0`).
 
 ### HTTP Benchmarks
 

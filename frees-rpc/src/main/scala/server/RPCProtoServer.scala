@@ -3,9 +3,9 @@ package rpc
 package server
 
 import cats.effect.IO
-import freestyle.rpc.server.implicits._
-import metrifier.rpc.server.proto.implicits._
+import freestyle.rpc.server.GrpcServer
 import org.log4s.Logger
+import metrifier.rpc.server.proto.implicits._
 
 object RPCProtoServer {
 
@@ -15,7 +15,9 @@ object RPCProtoServer {
 
     logger.info(s"Server is starting ...")
 
-    server[IO].unsafeRunSync()
+    val pbServer = GrpcServer.default[IO](getConf.port, grpcConfigsProto).flatMap(GrpcServer.server[IO])
+
+    pbServer.unsafeRunSync()
   }
 
 }
