@@ -2,7 +2,7 @@ package metrifier
 package http
 package client
 
-import cats.effect.Sync
+import cats.effect._
 import io.circe.generic.auto._
 import io.circe.syntax._
 import metrifier.http.codecs._
@@ -12,7 +12,7 @@ import org.http4s.client.Client
 import org.http4s._
 
 
-class HttpClient[F[_]:Sync](c: Client[F], host: String, port: Int) {
+class HttpClient[F[_]: Effect](c: Client[F], host: String, port: Int) {
 
   private[this] val baseUrl = s"http://$host:$port"
   private[this] val baseUri: Uri = Uri
@@ -55,5 +55,7 @@ class HttpClient[F[_]:Sync](c: Client[F], host: String, port: Int) {
     c.expect(req)
 
   }
+
+  def shutdown(): Unit = c.shutdownNow()
 
 }

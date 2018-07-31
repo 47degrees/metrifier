@@ -63,4 +63,7 @@ class HttpBenchmark {
       pictureMedium = person.picture map (_.medium),
       pictureThumbnail = person.picture map (_.thumbnail)
     )
+
+  @TearDown
+  def stopClient(): Unit = client.shutdown()
 }
