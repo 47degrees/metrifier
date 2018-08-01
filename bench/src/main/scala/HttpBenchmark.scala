@@ -16,7 +16,7 @@ import org.openjdk.jmh.annotations._
 @OutputTimeUnit(TimeUnit.SECONDS)
 class HttpBenchmark {
 
-  def client = new HttpClient(Http1Client[IO]().unsafeRunSync(), HttpConf.host, HttpConf.port)
+  val client = new HttpClient(Http1Client[IO]().unsafeRunSync(), HttpConf.host, HttpConf.port)
 
   @Benchmark
   def listPersons: PersonList = client.listPersons.unsafeRunSync()
@@ -63,4 +63,7 @@ class HttpBenchmark {
       pictureMedium = person.picture map (_.medium),
       pictureThumbnail = person.picture map (_.thumbnail)
     )
+
+  @TearDown
+  def stopClient(): Unit = client.shutdown()
 }

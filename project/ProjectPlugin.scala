@@ -12,8 +12,8 @@ object ProjectPlugin extends AutoPlugin {
   object autoImport {
 
     lazy val V = new {
-      lazy val freesRPC = "0.14.0"
-      lazy val http4s   = "0.18.12"
+      lazy val freesRPC = "0.14.1"
+      lazy val http4s   = "0.18.15"
       lazy val config   = "1.3.3"
       lazy val logback  = "1.2.3"
       lazy val circe    = "0.9.3"
@@ -21,13 +21,12 @@ object ProjectPlugin extends AutoPlugin {
 
     lazy val commonSettings: Seq[Def.Setting[_]] = Seq(
       libraryDependencies += "ch.qos.logback" % "logback-classic" % V.logback,
-      scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-Ypartial-unification")
+      scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-language:higherKinds", "-Ypartial-unification")
     )
 
     lazy val scalaMetaSettings: Seq[Def.Setting[_]] = Seq(
       addCompilerPlugin("org.scalameta" % "paradise" % "3.0.0-M11" cross CrossVersion.full),
-      libraryDependencies += "org.scalameta" %% "scalameta" % "1.8.0",
-      scalacOptions ++= Seq("-Xplugin-require:macroparadise", "-language:higherKinds"),
+      scalacOptions ++= Seq("-Xplugin-require:macroparadise"),
       scalacOptions in (Compile, console) ~= (_ filterNot (_ contains "paradise")) // macroparadise plugin doesn't work in repl yet.
     )
 

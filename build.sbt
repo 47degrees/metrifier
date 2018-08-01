@@ -10,7 +10,6 @@ lazy val http = project
   .settings(moduleName := "http")
   .settings(name := n(moduleName.value))
   .settings(commonSettings: _*)
-  .settings(scalaMetaSettings: _*)
   .settings(libraryDependencies ++= httpDependencies)
 
 lazy val `frees-rpc` = project
