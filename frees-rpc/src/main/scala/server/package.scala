@@ -1,57 +1,45 @@
 package metrifier
 package rpc
 
-import cats.~>
-import cats.implicits._
-import freestyle.implicits._
-import freestyle.config.implicits._
+import cats.Applicative
+import cats.effect._
+import cats.syntax.applicative._
+import freestyle.rpc._
+import freestyle.rpc.client.config._
 import freestyle.rpc.protocol.Empty
 import freestyle.rpc.server._
-import metrifier.shared.model.{Person, PersonId, PersonLinkList, PersonList}
+import metrifier.rpc.protocols._
+import metrifier.shared.model._
 import metrifier.shared.services
-import protocols._
 
-import scala.concurrent.Future
-import scala.util.{Failure, Success, Try}
 
 package object server {
 
   trait ServerConf {
 
-    def getConf(grpcConfigs: List[GrpcConfig]): ServerW =
-      BuildServerFromConfig[ServerConfig.Op]("rpc.port", grpcConfigs)
-        .interpret[Try] match {
-        case Success(c) => c
-        case Failure(e) =>
-          e.printStackTrace()
-          throw new RuntimeException("Unable to load the server configuration", e)
-      }
+    implicit val getConf: ChannelForAddress =
+      ConfigForAddress[IO]("rpc.host", "rpc.port").unsafeRunSync()
 
   }
 
-  trait HandlerImpl {
+  abstract class HandlerImpl[F[_]: Applicative] {
 
-    def listPersons(b: Empty): Future[PersonList] =
-      Future.successful(services.listPersons)
+    def listPersons(b: Empty.type): F[PersonList] =
+      services.listPersons.pure
 
-    def getPerson(id: PersonId): Future[Person] =
-      Future.successful(services.getPerson(id))
+    def getPerson(id: PersonId): F[Person] =
+      services.getPerson(id).pure
 
-    def getPersonLinks(id: PersonId): Future[PersonLinkList] =
-      Future.successful(services.getPersonLinks(id))
+    def getPersonLinks(id: PersonId): F[PersonLinkList] =
+      services.getPersonLinks(id).pure
 
-    def createPerson(person: Person): Future[Person] =
-      Future.successful(services.createPerson(person))
+    def createPerson(person: Person): F[Person] =
+      services.createPerson(person).pure
   }
 
-  class RPCProtoHandler extends PersonServicePB.Handler[Future] with HandlerImpl
+  class RPCProtoHandler[F[_]: Applicative] extends HandlerImpl[F] with PersonServicePB[F]
 
-  class RPCAvroHandler extends PersonServiceAvro.Handler[Future] with HandlerImpl {
-
-    override protected[this] def listPersons(empty: EmptyAvro): Future[PersonList] =
-      Future.successful(services.listPersons)
-
-  }
+  class RPCAvroHandler[F[_]: Applicative] extends HandlerImpl[F] with PersonServiceAvro[F]
 
   trait CommonImplicits extends PersonServiceRuntime with ServerConf
 
@@ -59,20 +47,10 @@ package object server {
 
     trait ProtoImplicits extends CommonImplicits {
 
-      import freestyle.rpc.server.handlers._
-      import freestyle.rpc.server.implicits._
+      implicit private val personServicePBHandler: RPCProtoHandler[IO] = new RPCProtoHandler[IO]
 
-      implicit val personServicePBHandler: PersonServicePB.Handler[Future] = new RPCProtoHandler
+      implicit val grpcConfigsProto: List[GrpcConfig] = List(AddService(PersonServicePB.bindService[IO]))
 
-      implicit val grpcServerHandler: GrpcServer.Op ~> Future =
-        new GrpcServerHandler[Future] andThen
-          new GrpcKInterpreter[Future](
-            getConf(
-              List(
-                AddService(PersonServicePB.bindService[PersonServicePB.Op, Future])
-              )
-            ).server
-          )
     }
 
     object implicits extends ProtoImplicits
@@ -82,21 +60,9 @@ package object server {
 
     trait AvroImplicits extends CommonImplicits {
 
-      import freestyle.rpc.server.handlers._
-      import freestyle.rpc.server.implicits._
+      implicit private val personServiceAvroHandler: RPCAvroHandler[IO] = new RPCAvroHandler[IO]
 
-      implicit val personServiceAvroHandler: PersonServiceAvro.Handler[Future] = new RPCAvroHandler
-
-      implicit val grpcServerHandler: GrpcServer.Op ~> Future =
-        new GrpcServerHandler[Future] andThen
-          new GrpcKInterpreter[Future](
-            getConf(
-              List(
-                AddService(PersonServiceAvro.bindService[PersonServiceAvro.Op, Future])
-              )
-            ).server
-          )
-
+      implicit val grpcConfigsAvro: List[GrpcConfig] = List(AddService(PersonServiceAvro.bindService[IO]))
     }
 
     object implicits extends AvroImplicits

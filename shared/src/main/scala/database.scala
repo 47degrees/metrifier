@@ -41,7 +41,11 @@ object database {
     name = PersonName(title = "ms", first = "eva", last = "snyder"),
     gender = "female",
     location =
-      Location(street = "8534 grove road", city = "mallow", state = "clare", postCode = 18863),
+      Location(
+        street = "8534 grove road",
+        city = "mallow",
+        state = "clare",
+        postCode = 18863),
     email = "eva.snyder@example.com",
     picture = Some(
       Picture(

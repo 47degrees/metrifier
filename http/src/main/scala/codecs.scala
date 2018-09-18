@@ -1,38 +1,32 @@
 package metrifier
 package http
 
+import cats.effect.Sync
+import io.circe.generic.auto._
 import metrifier.shared.model._
-import argonaut.CodecJson
-import org.http4s.{EntityDecoder, EntityEncoder}
-import org.http4s.argonaut.{jsonEncoderOf, jsonOf}
+import org.http4s._
+import org.http4s.circe._
+import org.http4s.dsl.io._
 
 object codecs {
 
-  //Argonaut Codecs
-  implicit val arPersonNameCodec: CodecJson[PersonName] = CodecJson.derive[PersonName]
-  implicit val arLocationCodec: CodecJson[Location] = CodecJson.derive[Location]
-  implicit val arPictureCodec: CodecJson[Picture] = CodecJson.derive[Picture]
-  implicit val arPersonCodec: CodecJson[Person] = CodecJson.derive[Person]
-  implicit val arPersonLinkCodec: CodecJson[PersonLink] = CodecJson.derive[PersonLink]
-  implicit val arPersonListCodec: CodecJson[PersonList] = CodecJson.derive[PersonList]
-  implicit val arPersonLinkListCodec: CodecJson[PersonLinkList] = CodecJson.derive[PersonLinkList]
-
   //Encoders
-  implicit val personNameEncoder: EntityEncoder[PersonName] = jsonEncoderOf[PersonName]
-  implicit val locationEncoder: EntityEncoder[Location] = jsonEncoderOf[Location]
-  implicit val pictureEncoder: EntityEncoder[Picture] = jsonEncoderOf[Picture]
-  implicit val personEncoder: EntityEncoder[Person] = jsonEncoderOf[Person]
-  implicit val personLinkEncoder: EntityEncoder[PersonLink] = jsonEncoderOf[PersonLink]
-  implicit val personLinkListEncoder: EntityEncoder[List[PersonLink]] = jsonEncoderOf[List[PersonLink]]
-  implicit val personListLinkListEncoder: EntityEncoder[PersonLinkList] = jsonEncoderOf[PersonLinkList]
-  implicit val personListEncoder: EntityEncoder[PersonList] = jsonEncoderOf[PersonList]
+  implicit def personNameEncoder[F[_]:Sync]: EntityEncoder[F,PersonName] = jsonEncoderOf[F, PersonName]
+  implicit def locationEncoder[F[_]:Sync]: EntityEncoder[F, Location] = jsonEncoderOf[F, Location]
+  implicit def pictureEncoder[F[_]:Sync]: EntityEncoder[F, Picture] = jsonEncoderOf[F, Picture]
+  implicit def personEncoder[F[_]:Sync]: EntityEncoder[F, Person] = jsonEncoderOf[F, Person]
+  implicit def personLinkEncoder[F[_]:Sync]: EntityEncoder[F, PersonLink] = jsonEncoderOf[F, PersonLink]
+  implicit def personLinkListEncoder[F[_]:Sync]: EntityEncoder[F, List[PersonLink]] = jsonEncoderOf[F, List[PersonLink]]
+  implicit def personListLinkListEncoder[F[_]:Sync]: EntityEncoder[F, PersonLinkList] = jsonEncoderOf[F, PersonLinkList]
+  implicit def personListEncoder[F[_]:Sync]: EntityEncoder[F, PersonList] = jsonEncoderOf[F, PersonList]
+
 
   //Decoders
-  implicit val personNameDecoder: EntityDecoder[PersonName] = jsonOf[PersonName]
-  implicit val locationDecoder: EntityDecoder[Location] = jsonOf[Location]
-  implicit val pictureDecoder: EntityDecoder[Picture] = jsonOf[Picture]
-  implicit val personDecoder: EntityDecoder[Person] = jsonOf[Person]
-  implicit val personLinkDecoder: EntityDecoder[PersonLink] = jsonOf[PersonLink]
-  implicit val personLinkListDecoder: EntityDecoder[PersonLinkList] = jsonOf[PersonLinkList]
-  implicit val personListDecoder: EntityDecoder[PersonList] = jsonOf[PersonList]
+  implicit def personNameDecoder[F[_]:Sync]: EntityDecoder[F, PersonName] = jsonOf[F,PersonName]
+  implicit def locationDecoder[F[_]:Sync]: EntityDecoder[F, Location] = jsonOf[F,Location]
+  implicit def pictureDecoder[F[_]:Sync]: EntityDecoder[F, Picture] = jsonOf[F,Picture]
+  implicit def personDecoder[F[_]:Sync]: EntityDecoder[F, Person] = jsonOf[F,Person]
+  implicit def personLinkDecoder[F[_]:Sync]: EntityDecoder[F, PersonLink] = jsonOf[F,PersonLink]
+  implicit def personLinkListDecoder[F[_]:Sync]: EntityDecoder[F, PersonLinkList] = jsonOf[F,PersonLinkList]
+  implicit def personListDecoder[F[_]:Sync]: EntityDecoder[F, PersonList] = jsonOf[F,PersonList]
 }

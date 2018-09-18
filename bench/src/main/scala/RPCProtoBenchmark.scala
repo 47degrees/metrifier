@@ -1,46 +1,42 @@
 package metrifier
 package benchmark
 
-import org.openjdk.jmh.annotations._
-import metrifier.shared.model._
-import metrifier.rpc.client.implicits._
-import java.util.concurrent.TimeUnit
-
+import cats.effect.IO
 import freestyle.rpc.protocol.Empty
+import java.util.concurrent.TimeUnit
+import metrifier.benchmark.Utils._
+import metrifier.rpc.client.implicits._
 import metrifier.rpc.protocols.PersonServicePB
-import Utils._
-import monix.eval.Task
+import metrifier.shared.model._
+import org.openjdk.jmh.annotations._
 
 @State(Scope.Thread)
 @BenchmarkMode(Array(Mode.Throughput))
 @OutputTimeUnit(TimeUnit.SECONDS)
 class RPCProtoBenchmark {
 
-  val client: PersonServicePB.Client[Task] = implicitly[PersonServicePB.Client[Task]]
+  val client: PersonServicePB.Client[IO] = implicitly[PersonServicePB.Client[IO]]
 
   @Benchmark
-  def listPersons: PersonList = client.listPersons(Empty()).runAsync.runF
+  def listPersons: PersonList = client.listPersons(Empty).unsafeRunTimed(defaultTimeOut).get
 
   @Benchmark
-  def getPerson: Person = client.getPerson(PersonId("1")).runAsync.runF
+  def getPerson: Person = client.getPerson(PersonId("1")).unsafeRunTimed(defaultTimeOut).get
 
   @Benchmark
   def getPersonLinks: PersonLinkList =
-    client.getPersonLinks(PersonId("1")).runAsync.runF
+    client.getPersonLinks(PersonId("1")).unsafeRunTimed(defaultTimeOut).get
 
   @Benchmark
   def createPerson: Person =
-    client
-      .createPerson(person)
-      .runAsync
-      .runF
+    client.createPerson(person).unsafeRunTimed(defaultTimeOut).get
 
   @Benchmark
   def programComposition: PersonAggregation = {
 
-    def clientProgram: Task[PersonAggregation] = {
+    def clientProgram: IO[PersonAggregation] = {
       for {
-        personList <- client.listPersons(Empty())
+        personList <- client.listPersons(Empty)
         p1         <- client.getPerson(PersonId("1"))
         p2         <- client.getPerson(PersonId("2"))
         p3         <- client.getPerson(PersonId("3"))
@@ -51,7 +47,7 @@ class RPCProtoBenchmark {
       } yield (p1, p2, p3, p4, p1Links, p3Links, personList.add(pNew))
     }
 
-    clientProgram.runAsync.runF
+    clientProgram.unsafeRunTimed(defaultTimeOut).get
   }
 
 }

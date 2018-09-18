@@ -1,42 +1,36 @@
 package metrifier
 package rpc
 
-import freestyle._
 import freestyle.rpc.protocol._
 import metrifier.shared.model._
 
-@option(name = "java_package", value = "metriefier", quote = true)
-@option(name = "java_multiple_files", value = "true", quote = false)
-@option(name = "java_outer_classname", value = "Metrifier", quote = true)
 object protocols {
 
-  case class EmptyAvro(b: String = "")
+  //TODO: replace lists with streaming
 
-  @free
-  @service
-  trait PersonServicePB {
+  @service(Protobuf)
+  trait PersonServicePB[F[_]] {
 
-    @rpc(Protobuf) def listPersons(empty: Empty): FS[PersonList]
+    def listPersons(empty: Empty.type): F[PersonList]
 
-    @rpc(Protobuf) def getPerson(id: PersonId): FS[Person]
+    def getPerson(id: PersonId): F[Person]
 
-    @rpc(Protobuf) def getPersonLinks(id: PersonId): FS[PersonLinkList]
+    def getPersonLinks(id: PersonId): F[PersonLinkList]
 
-    @rpc(Protobuf) def createPerson(person: Person): FS[Person]
+    def createPerson(person: Person): F[Person]
 
   }
 
-  @free
-  @service
-  trait PersonServiceAvro {
+  @service(Avro)
+  trait PersonServiceAvro[F[_]] {
 
-    @rpc(Avro) def listPersons(empty: EmptyAvro): FS[PersonList]
+    def listPersons(empty: Empty.type): F[PersonList]
 
-    @rpc(Avro) def getPerson(id: PersonId): FS[Person]
+    def getPerson(id: PersonId): F[Person]
 
-    @rpc(Avro) def getPersonLinks(id: PersonId): FS[PersonLinkList]
+    def getPersonLinks(id: PersonId): F[PersonLinkList]
 
-    @rpc(Avro) def createPerson(person: Person): FS[Person]
+    def createPerson(person: Person): F[Person]
 
   }
 

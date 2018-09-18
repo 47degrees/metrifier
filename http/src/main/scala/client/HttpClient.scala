@@ -2,26 +2,28 @@ package metrifier
 package http
 package client
 
-import org.http4s.Method._
-import org.http4s.client.Client
-import org.http4s.{Request, Uri}
-import codecs._
+import cats.effect._
+import io.circe.generic.auto._
+import io.circe.syntax._
+import metrifier.http.codecs._
 import metrifier.shared.model._
+import org.http4s.circe._
+import org.http4s.client.Client
+import org.http4s._
 
-import scalaz.concurrent.Task
 
-class HttpClient(c: Client, host: String, port: Int) {
+class HttpClient[F[_]: Effect](c: Client[F], host: String, port: Int) {
 
   private[this] val baseUrl = s"http://$host:$port"
   private[this] val baseUri: Uri = Uri
     .fromString(baseUrl)
     .fold(e => throw e, qValue => qValue) / "person"
 
-  def listPersons: Task[PersonList] = c.expect[PersonList](baseUri)
+  def listPersons: F[PersonList] = c.expect[PersonList](baseUri)
 
-  def getPerson(pId: PersonId): Task[Person] = c.expect[Person](baseUri / pId.id)
+  def getPerson(pId: PersonId): F[Person] = c.expect[Person](baseUri / pId.id)
 
-  def getPersonLinks(pId: PersonId): Task[PersonLinkList] =
+  def getPersonLinks(pId: PersonId): F[PersonLinkList] =
     c.expect[PersonLinkList](baseUri / pId.id / "links")
 
   def createPerson(
@@ -37,7 +39,7 @@ class HttpClient(c: Client, host: String, port: Int) {
       email: String,
       pictureLarge: Option[String] = None,
       pictureMedium: Option[String] = None,
-      pictureThumbnail: Option[String] = None): Task[Person] = {
+      pictureThumbnail: Option[String] = None): F[Person] = {
 
     val picture: Option[Picture] = pictureLarge map (pl =>
       Picture(pl, pictureMedium.getOrElse(""), pictureThumbnail.getOrElse("")))
@@ -46,7 +48,14 @@ class HttpClient(c: Client, host: String, port: Int) {
       Location(locationStreet, locationStreet, locationState, locationPostCode)
     val newPerson: Person = Person(id, name, gender, location, email, picture)
 
-    c.expect[Person](Request(POST, baseUri).withBody(newPerson))
+    val request: Request[F] = Request[F](Method.POST,baseUri)
+
+    val req = request.withBody(newPerson.asJson)
+
+    c.expect(req)
+
   }
+
+  def shutdown(): Unit = c.shutdownNow()
 
 }

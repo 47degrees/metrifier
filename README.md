@@ -119,11 +119,10 @@ sbt "demo/runMain metrifier.demo.RPCAvroDemoApp"
 We are using the [Java Microbenchmark Harness (JMH)](http://openjdk.java.net/projects/code-tools/jmh/) tool, which is helping us to get an experimental answer to a basic question about which implementation executes fastest among:
 
 * HTTP stack based on:
-  * `http4s`, version `0.15.12a`.
-  * `argonaut`, version `6.2`.
+  * `http4s`, version `0.18.15`.
+  * `circe`, version `0.9.3`.
 * RPC services stack based on:
-  * `freestyle`, version `0.4.2`.
-  * `frees-rpc`, version `0.3.0` (atop of [gRPC](https://grpc.io/), version `1.7.0`).
+  * `frees-rpc`, version `0.14.1` (atop of [gRPC](https://grpc.io/), version `1.11.0`).
 
 ### HTTP Benchmarks
 
@@ -136,10 +135,10 @@ sbt "http/runMain metrifier.http.server.HttpServer"
 * Run Benchmarks:
 
 ```bash
-sbt "bench/jmh:run -o http-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.HttpBenchmark"
+sbt "bench/jmh:run -o http-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 -r 1 -w 1 metrifier.benchmark.HttpBenchmark"
 ```
 
-Which means "20 iterations", "20 warmup iterations", "2 forks", "4 threads".
+Which means "20 iterations", "20 warmup iterations", "2 forks", "4 threads". `r` and `w` are specifying the minimum time (seconds) to spend at each measurement warmup iteration/iteration.
 
 ### frees-rpc Protobuf Benchmarks
 
@@ -152,10 +151,10 @@ sbt "frees-rpc/runMain metrifier.rpc.server.RPCProtoServer"
 * Run Protobuf based Benchmarks:
 
 ```bash
-sbt "bench/jmh:run -o rpc-proto-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.RPCProtoBenchmark"
+sbt "bench/jmh:run -o rpc-proto-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 -r 1 -w 1 metrifier.benchmark.RPCProtoBenchmark"
 ```
 
-Which means "20 iterations", "20 warmup iterations", "2 forks", "4 threads".
+Which means "20 iterations", "20 warmup iterations", "2 forks", "4 threads". `r` and `w` are specifying the minimum time (seconds) to spend at each measurement warmup iteration/iteration.
 
 ### frees-rpc Avro Benchmarks
 
@@ -168,10 +167,10 @@ sbt "frees-rpc/runMain metrifier.rpc.server.RPCAvroServer"
 * Run Avro based Benchmarks:
 
 ```bash
-sbt "bench/jmh:run -o rpc-avro-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.RPCAvroBenchmark"
+sbt "bench/jmh:run -o rpc-avro-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 -r 1 -w 1 metrifier.benchmark.RPCAvroBenchmark"
 ```
 
-Which means "20 iterations", "20 warmup iterations", "2 forks", "4 threads".
+Which means "20 iterations", "20 warmup iterations", "2 forks", "4 threads". `r` and `w` are specifying the minimum time (seconds) to spend at each measurement warmup iteration/iteration.
 
 ## Running Benchmarks on Google Cloud Platform
 
@@ -216,7 +215,7 @@ shared/target/scala-2.12/metrifier-shared-assembly-[project-version].jar
 In this case, we've created a bucket named as `metrifier` within our GCP project. Assuming this name, these would be the set of commands to run (we're skipping the `bench` artifacts since we are not going to use them):
 
 ```bash
-export METRIFIER_VERSION=0.0.3
+export METRIFIER_VERSION=0.1.0
 gsutil cp demo/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
 gsutil cp frees-rpc/target/scala-2.12/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
 gsutil cp http/target/scala-2.12/metrifier-http-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
@@ -230,7 +229,7 @@ gsutil cp shared/target/scala-2.12/metrifier-shared-assembly-${METRIFIER_VERSION
 If the project dependencies have not changed, you could just upload the project JARs:
 
 ```bash
-export METRIFIER_VERSION=0.0.3
+export METRIFIER_VERSION=0.1.0
 gsutil cp demo/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp frees-rpc/target/scala-2.12/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp http/target/scala-2.12/metrifier-http-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
@@ -250,7 +249,7 @@ Once everything is up, follow the next sections to run the benchmarks atop GCP.
 1. SSH into `http-server-vm` instance.
 2. Run the HTTP Server:
 ```bash
-export METRIFIER_VERSION=0.0.3
+export METRIFIER_VERSION=0.1.0
 env \
     HTTP_HOST=http-server-vm \
     HTTP_PORT=8080 \
@@ -268,12 +267,12 @@ curl "http://http-server-vm:8080/person"
 ```
 3. If step was successful, run the benchmarks:
 ```bash
-export METRIFIER_VERSION=0.0.3
+export METRIFIER_VERSION=0.1.0
 cd /metrifier/repo
 env \
     HTTP_HOST=http-server-vm \
     HTTP_PORT=8080 \
-    sbt "bench/jmh:run -o /metrifier/bench_results/http-benchmark-results-${METRIFIER_VERSION}.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.HttpBenchmark"
+    sbt "bench/jmh:run -o /metrifier/bench_results/http-benchmark-results-${METRIFIER_VERSION}.txt -i 20 -wi 20 -f 2 -t 4 -r 1 -w 1 metrifier.benchmark.HttpBenchmark"
 ```
 
 Given the port `8080` was opened to the exterior when deploying the cluster with Google Cloud Manager, you could even run the benchmarks from your local machine, using the external IP address (changing to HTTP_HOST=[HTTP_SERVER_INSTANCE_EXTERNAL_IP]).
@@ -285,7 +284,7 @@ Given the port `8080` was opened to the exterior when deploying the cluster with
 1. SSH into `rpc-proto-server-vm` instance.
 2. Run the RPC Protobuf based Server:
 ```bash
-export METRIFIER_VERSION=0.0.3
+export METRIFIER_VERSION=0.1.0
 env \
     RPC_HOST=rpc-proto-server-vm \
     RPC_PORT=8080 \
@@ -299,12 +298,12 @@ env \
 1. SSH into `rpc-proto-jmh-vm` instance.
 2. Run the benchmarks:
 ```bash
-export METRIFIER_VERSION=0.0.3
+export METRIFIER_VERSION=0.1.0
 cd /metrifier/repo
 env \
     RPC_HOST=rpc-proto-server-vm \
     RPC_PORT=8080 \
-    sbt "bench/jmh:run -o /metrifier/bench_results/rpc-proto-benchmark-results-${METRIFIER_VERSION}.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.RPCProtoBenchmark"
+    sbt "bench/jmh:run -o /metrifier/bench_results/rpc-proto-benchmark-results-${METRIFIER_VERSION}.txt -i 20 -wi 20 -f 2 -t 4 -r 1 -w 1 metrifier.benchmark.RPCProtoBenchmark"
 ```
 
 As we mentioned for the Http benchmarks, in this case we could also run the benchmarks from our local machine, using the external IP address (changing to RPC_HOST=[RPC_SERVER_INSTANCE_EXTERNAL_IP]).
@@ -316,7 +315,7 @@ As we mentioned for the Http benchmarks, in this case we could also run the benc
 1. SSH into `rpc-avro-server-vm` instance.
 2. Run the RPC Avro based Server:
 ```bash
-export METRIFIER_VERSION=0.0.3
+export METRIFIER_VERSION=0.1.0
 env \
     RPC_HOST=rpc-avro-server-vm \
     RPC_PORT=8080 \
@@ -330,12 +329,12 @@ env \
 1. SSH into `rpc-avro-jmh-vm` instance.
 2. Run the benchmarks:
 ```bash
-export METRIFIER_VERSION=0.0.3
+export METRIFIER_VERSION=0.1.0
 cd /metrifier/repo
 env \
     RPC_HOST=rpc-avro-server-vm \
     RPC_PORT=8080 \
-    sbt "bench/jmh:run -o /metrifier/bench_results/rpc-avro-benchmark-results-${METRIFIER_VERSION}.txt -i 20 -wi 20 -f 2 -t 4 metrifier.benchmark.RPCAvroBenchmark"
+    sbt "bench/jmh:run -o /metrifier/bench_results/rpc-avro-benchmark-results-${METRIFIER_VERSION}.txt -i 20 -wi 20 -f 2 -t 4 -r 1 -w 1 metrifier.benchmark.RPCAvroBenchmark"
 ```
 
 As above, we could also run the benchmarks from our local machine, using the external IP address (changing to RPC_HOST=[RPC_SERVER_INSTANCE_EXTERNAL_IP]).
@@ -343,7 +342,7 @@ As above, we could also run the benchmarks from our local machine, using the ext
 ## Benchmark Results
 
 We've experimented with two different environments, local (development laptop) and the cloud (GCP).
-Expanded version of these results are in: 
+Expanded version of these results are in:
 
 * [BENCHMARK_RESULTS_LOCAL.md](results/BENCHMARK_RESULTS_LOCAL.md) file for the local environment.
 * [BENCHMARK_RESULTS_GCP.md](results/BENCHMARK_RESULTS_GCP.md) file for the GCP version.
@@ -366,40 +365,40 @@ Expanded version of these results are in:
 * HttpBenchmark Raw output:
 
 ```bash
-# Run complete. Total time: 00:08:43
+# Run complete. Total time: 00:07:08
 
 Benchmark                          Mode  Cnt     Score     Error  Units
-HttpBenchmark.createPerson        thrpt   40  5159.462 ±  55.083  ops/s
-HttpBenchmark.getPerson           thrpt   40  7567.652 ± 154.787  ops/s
-HttpBenchmark.getPersonLinks      thrpt   40  5174.368 ±  69.700  ops/s
-HttpBenchmark.listPersons         thrpt   40  5821.622 ±  78.599  ops/s
-HttpBenchmark.programComposition  thrpt   40   748.383 ±  64.809  ops/s
+HttpBenchmark.createPerson        thrpt   40  2567.182 ± 490.607  ops/s
+HttpBenchmark.getPerson           thrpt   40  4352.536 ± 101.832  ops/s
+HttpBenchmark.getPersonLinks      thrpt   40  3535.380 ±  69.672  ops/s
+HttpBenchmark.listPersons         thrpt   40  3766.406 ±  62.676  ops/s
+HttpBenchmark.programComposition  thrpt   40   422.560 ±  30.245  ops/s
 ```
 
 * RPCProtoBenchmark Raw output:
 
 ```bash
-# Run complete. Total time: 00:09:29
+# Run complete. Total time: 00:07:02
 
 Benchmark                              Mode  Cnt     Score     Error  Units
-RPCProtoBenchmark.createPerson        thrpt   40  8203.492 ± 429.421  ops/s
-RPCProtoBenchmark.getPerson           thrpt   40  9338.080 ± 317.038  ops/s
-RPCProtoBenchmark.getPersonLinks      thrpt   40  6422.018 ± 103.726  ops/s
-RPCProtoBenchmark.listPersons         thrpt   40  7182.560 ± 116.855  ops/s
-RPCProtoBenchmark.programComposition  thrpt   40   999.718 ±  25.936  ops/s
+RPCProtoBenchmark.createPerson        thrpt   40  6417.909 ± 333.242  ops/s
+RPCProtoBenchmark.getPerson           thrpt   40  7345.886 ± 148.966  ops/s
+RPCProtoBenchmark.getPersonLinks      thrpt   40  5604.365 ± 108.714  ops/s
+RPCProtoBenchmark.listPersons         thrpt   40  6106.618 ± 114.832  ops/s
+RPCProtoBenchmark.programComposition  thrpt   40   818.099 ±  17.076  ops/s
 ```
 
 * RPCAvroBenchmark Raw output:
 
 ```bash
-# Run complete. Total time: 00:09:30
+# Run complete. Total time: 00:07:06
 
 Benchmark                             Mode  Cnt     Score     Error  Units
-RPCAvroBenchmark.createPerson        thrpt   40  7636.428 ± 296.527  ops/s
-RPCAvroBenchmark.getPerson           thrpt   40  8237.028 ± 254.020  ops/s
-RPCAvroBenchmark.getPersonLinks      thrpt   40  5809.542 ± 132.402  ops/s
-RPCAvroBenchmark.listPersons         thrpt   40  6359.060 ± 125.067  ops/s
-RPCAvroBenchmark.programComposition  thrpt   40   898.127 ±  31.652  ops/s
+RPCAvroBenchmark.createPerson        thrpt   40  3716.135 ± 208.849  ops/s
+RPCAvroBenchmark.getPerson           thrpt   40  4778.613 ± 242.627  ops/s
+RPCAvroBenchmark.getPersonLinks      thrpt   40  3812.347 ± 250.107  ops/s
+RPCAvroBenchmark.listPersons         thrpt   40  4424.835 ± 162.293  ops/s
+RPCAvroBenchmark.programComposition  thrpt   40   501.256 ±  43.743  ops/s
 ```
 
 #### Comparing benchmarks one by one
@@ -408,49 +407,49 @@ RPCAvroBenchmark.programComposition  thrpt   40   898.127 ±  31.652  ops/s
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
-HttpBenchmark.createPerson | thrpt | 40 | 5159.462 | 55.083 | ops/s
-RPCProtoBenchmark.createPerson | thrpt | 40 | 8203.492 | 429.421 | ops/s
-RPCAvroBenchmark.createPerson | thrpt | 40 | 7636.428 | 296.527 | ops/s
+HttpBenchmark.createPerson | thrpt | 40 | 2567.182 | 490.607 | ops/s
+RPCProtoBenchmark.createPerson | thrpt | 40 | 6417.909 | 333.242 | ops/s
+RPCAvroBenchmark.createPerson | thrpt | 40 | 3716.135 | 208.849 | ops/s
 
 ##### getPerson
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
-HttpBenchmark.getPerson | thrpt | 40 | 7567.652 | 154.787 | ops/s
-RPCProtoBenchmark.getPerson | thrpt | 40 | 9338.080 | 317.038 | ops/s
-RPCAvroBenchmark.getPerson | thrpt | 40 | 8237.028 | 254.020 | ops/s
+HttpBenchmark.getPerson | thrpt | 40 | 4352.536 | 101.832 | ops/s
+RPCProtoBenchmark.getPerson | thrpt | 40 | 7345.886 | 148.966 | ops/s
+RPCAvroBenchmark.getPerson | thrpt | 40 | 4778.613 | 242.627 | ops/s
 
 
 ##### getPersonLinks
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
-HttpBenchmark.getPersonLinks | thrpt | 40 | 5174.368 | 69.700 | ops/s
-RPCProtoBenchmark.getPersonLinks | thrpt | 40 | 6422.018 | 103.726 | ops/s
-RPCAvroBenchmark.getPersonLinks | thrpt | 40 | 5809.542 | 132.402 | ops/s
+HttpBenchmark.getPersonLinks | thrpt | 40 | 3535.380 |  69.672 | ops/s
+RPCProtoBenchmark.getPersonLinks | thrpt | 40 | 5604.365 | 108.714 | ops/s
+RPCAvroBenchmark.getPersonLinks | thrpt | 40 | 3812.347 | 250.107 | ops/s
 
 
 ##### listPersons
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
-HttpBenchmark.listPersons | thrpt | 40 | 5821.622 | 78.599 | ops/s
-RPCProtoBenchmark.listPersons | thrpt | 40 | 7182.560 | 116.855 | ops/s
-RPCAvroBenchmark.listPersons | thrpt | 40 | 6359.060 | 125.067 | ops/s
+HttpBenchmark.listPersons | thrpt | 40 | 3766.406 |  62.676 | ops/s
+RPCProtoBenchmark.listPersons | thrpt | 40 | 6106.618 | 114.832 | ops/s
+RPCAvroBenchmark.listPersons | thrpt | 40 | 4424.835 | 162.293 | ops/s
 
 
 ##### programComposition
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
-HttpBenchmark.programComposition | thrpt | 40 | 748.383 | 64.809 | ops/s
-RPCProtoBenchmark.programComposition | thrpt | 40 | 999.718 | 25.936 | ops/s
-RPCAvroBenchmark.programComposition | thrpt | 40 | 898.127 | 31.652 | ops/s
+HttpBenchmark.programComposition | thrpt | 40 | 422.560 |  30.245 | ops/s
+RPCProtoBenchmark.programComposition | thrpt | 40 | 818.099 |  17.076 | ops/s
+RPCAvroBenchmark.programComposition | thrpt | 40 | 501.256 |  43.743 | ops/s
 
 
 #### Comparing benchmarks in Charts
 
-You can find the following charts in [this jsfiddle](http://jsfiddle.net/qz7k61wo/).
+You can find the following charts in [this jsfiddle](http://jsfiddle.net/re6wnj84/).
 
 * Bar Chart
 ![bar-chart-bench](charts/chart-bar-local.png)
@@ -479,27 +478,27 @@ We are implementing two Google Compute Engine instances, one for the server (`n1
 * HttpBenchmark Raw output:
 
 ```bash
-# Run complete. Total time: 00:07:13
+# Run complete. Total time: 00:07:35
 
-Benchmark                          Mode  Cnt     Score     Error  Units
-HttpBenchmark.createPerson        thrpt   40  2792.105 ± 126.448  ops/s
-HttpBenchmark.getPerson           thrpt   40  2955.287 ± 139.535  ops/s
-HttpBenchmark.getPersonLinks      thrpt   40  2029.031 ± 124.303  ops/s
-HttpBenchmark.listPersons         thrpt   40  2569.887 ± 167.753  ops/s
-HttpBenchmark.programComposition  thrpt   40   318.553 ±  20.476  ops/s
+Benchmark                          Mode  Cnt    Score    Error  Units
+HttpBenchmark.createPerson        thrpt   40  599.976 ± 43.344  ops/s
+HttpBenchmark.getPerson           thrpt   40  680.914 ± 52.230  ops/s
+HttpBenchmark.getPersonLinks      thrpt   40  713.296 ± 43.999  ops/s
+HttpBenchmark.listPersons         thrpt   40  690.897 ± 76.741  ops/s
+HttpBenchmark.programComposition  thrpt   40   73.471 ± 10.356  ops/s
 ```
 
 * RPCProtoBenchmark Raw output:
 
 ```bash
-# Run complete. Total time: 00:07:14
+# Run complete. Total time: 00:07:06
 
-Benchmark                              Mode  Cnt      Score     Error  Units
-RPCProtoBenchmark.createPerson        thrpt   40   9146.401 ± 453.402  ops/s
-RPCProtoBenchmark.getPerson           thrpt   40  10290.595 ± 560.968  ops/s
-RPCProtoBenchmark.getPersonLinks      thrpt   40   4887.600 ± 439.472  ops/s
-RPCProtoBenchmark.listPersons         thrpt   40   6178.998 ± 433.640  ops/s
-RPCProtoBenchmark.programComposition  thrpt   40    946.742 ±  36.521  ops/s
+Benchmark                              Mode  Cnt     Score     Error  Units
+RPCProtoBenchmark.createPerson        thrpt   40  7366.238 ± 825.910  ops/s
+RPCProtoBenchmark.getPerson           thrpt   40  7924.244 ± 980.973  ops/s
+RPCProtoBenchmark.getPersonLinks      thrpt   40  3708.267 ± 444.061  ops/s
+RPCProtoBenchmark.listPersons         thrpt   40  5486.742 ± 465.748  ops/s
+RPCProtoBenchmark.programComposition  thrpt   40   608.205 ±  63.402  ops/s
 ```
 
 * RPCAvroBenchmark Raw output:
@@ -507,12 +506,12 @@ RPCProtoBenchmark.programComposition  thrpt   40    946.742 ±  36.521  ops/s
 ```bash
 # Run complete. Total time: 00:07:11
 
-Benchmark                             Mode  Cnt      Score     Error  Units
-RPCAvroBenchmark.createPerson        thrpt   40   9843.557 ± 700.599  ops/s
-RPCAvroBenchmark.getPerson           thrpt   40  11405.711 ± 568.813  ops/s
-RPCAvroBenchmark.getPersonLinks      thrpt   40   5146.870 ± 579.186  ops/s
-RPCAvroBenchmark.listPersons         thrpt   40   6861.396 ± 581.859  ops/s
-RPCAvroBenchmark.programComposition  thrpt   40    949.810 ±  83.805  ops/s
+Benchmark                             Mode  Cnt     Score     Error  Units
+RPCAvroBenchmark.createPerson        thrpt   40  2090.695 ± 147.251  ops/s
+RPCAvroBenchmark.getPerson           thrpt   40  2771.051 ± 253.325  ops/s
+RPCAvroBenchmark.getPersonLinks      thrpt   40  1821.527 ± 123.062  ops/s
+RPCAvroBenchmark.listPersons         thrpt   40  2002.270 ± 178.043  ops/s
+RPCAvroBenchmark.programComposition  thrpt   40   231.998 ±  14.091  ops/s
 ```
 
 #### Comparing benchmarks one by one
@@ -521,45 +520,45 @@ RPCAvroBenchmark.programComposition  thrpt   40    949.810 ±  83.805  ops/s
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
-HttpBenchmark.createPerson | thrpt | 40 | 2792.105 | 126.448 | ops/s
-RPCProtoBenchmark.createPerson | thrpt | 40 | 9146.401 | 453.402 | ops/s
-RPCAvroBenchmark.createPerson   | thrpt | 40 | 9843.557 | 700.599| ops/s
+HttpBenchmark.createPerson | thrpt | 40 | 599.976 | 43.344 | ops/s
+RPCProtoBenchmark.createPerson | thrpt | 40 | 7366.238 | 825.910 | ops/s
+RPCAvroBenchmark.createPerson   | thrpt | 40 | 2090.695 | 147.251| ops/s
 
 ##### getPerson
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
-HttpBenchmark.getPerson | thrpt | 40 | 2955.287 | 139.535 | ops/s
-RPCProtoBenchmark.getPerson | thrpt | 40 | 10290.595 | 560.968| ops/s
-RPCAvroBenchmark.getPerson | thrpt | 40 | 11405.711 | 568.813| ops/s
+HttpBenchmark.getPerson | thrpt | 40 | 680.914 | 52.230 | ops/s
+RPCProtoBenchmark.getPerson | thrpt | 40 | 7924.244 | 980.973| ops/s
+RPCAvroBenchmark.getPerson | thrpt | 40 | 2771.051 | 253.325| ops/s
 
 ##### getPersonLinks
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
-HttpBenchmark.getPersonLinks | thrpt | 40 | 2029.031 | 124.303 | ops/s
-RPCProtoBenchmark.getPersonLinks | thrpt | 40 | 4887.600 | 439.472| ops/s
-RPCAvroBenchmark.getPersonLinks | thrpt | 40 | 5146.870 | 579.186| ops/s
+HttpBenchmark.getPersonLinks | thrpt | 40 | 713.296 | 43.999 | ops/s
+RPCProtoBenchmark.getPersonLinks | thrpt | 40 | 3708.267 | 444.061 | ops/s
+RPCAvroBenchmark.getPersonLinks | thrpt | 40 | 1821.527 | 123.062 | ops/s
 
 ##### listPersons
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
-HttpBenchmark.listPersons | thrpt | 40 | 2569.887 | 167.753 | ops/s
-RPCBenchmark.listPersons | thrpt | 40 | 8224.560 | 613.983 | ops/s
-RPCAvroBenchmark.listPersons | thrpt | 40 | 6861.396 | 581.859| ops/s
+HttpBenchmark.listPersons | thrpt | 40 | 690.897 | 76.741 | ops/s
+RPCBenchmark.listPersons | thrpt | 40 | 5486.742 | 465.748 | ops/s
+RPCAvroBenchmark.listPersons | thrpt | 40 | 2002.270 ± 178.043 | ops/s
 
 ##### programComposition
 
 Source | Mode | Cnt | Score | Error | Units
 --- | --- | --- | --- | --- | ---
-HttpBenchmark.programComposition | thrpt | 40 | 318.553 |  20.476 | ops/s
-RPCProtoBenchmark.programComposition | thrpt | 40 | 946.742 |  36.521| ops/s
-RPCAvroBenchmark.programComposition | thrpt | 40 | 949.810 |  83.805| ops/s
+HttpBenchmark.programComposition | thrpt | 40 | 73.471 | 10.356 | ops/s
+RPCProtoBenchmark.programComposition | thrpt | 40 | 608.205 | 63.402 | ops/s
+RPCAvroBenchmark.programComposition | thrpt | 40 | 231.998 |  14.091 | ops/s
 
 #### Comparing benchmarks in Charts
 
-You can find the following charts in [this jsfiddle](http://jsfiddle.net/qz7k61wo/).
+You can find the following charts in [this jsfiddle](http://jsfiddle.net/re6wnj84/).
 
 * Bar Chart
 ![bar-chart-bench](charts/chart-bar-gcp.png)

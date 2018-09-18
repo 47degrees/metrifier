@@ -1,4 +1,4 @@
-import sbt.Keys._
+import sbt.Keys.{scalacOptions, _}
 import sbt._
 import sbtassembly.AssemblyPlugin
 import sbtassembly.AssemblyPlugin.autoImport._
@@ -12,35 +12,38 @@ object ProjectPlugin extends AutoPlugin {
   object autoImport {
 
     lazy val V = new {
-      lazy val frees              = "0.4.2"
-      lazy val freesRPC           = "0.3.0"
-      lazy val http4sV            = "0.15.12a"
-      lazy val argonautV          = "6.2"
-      lazy val argonautShapelessV = "1.2.0-M5"
-      lazy val config             = "1.3.1"
+      lazy val freesRPC = "0.14.1"
+      lazy val http4s   = "0.18.15"
+      lazy val config   = "1.3.3"
+      lazy val logback  = "1.2.3"
+      lazy val circe    = "0.9.3"
     }
 
+    lazy val commonSettings: Seq[Def.Setting[_]] = Seq(
+      libraryDependencies += "ch.qos.logback" % "logback-classic" % V.logback,
+      scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-language:higherKinds", "-Ypartial-unification")
+    )
+
     lazy val scalaMetaSettings: Seq[Def.Setting[_]] = Seq(
-      addCompilerPlugin("org.scalameta" % "paradise" % "3.0.0-M10" cross CrossVersion.full),
-      libraryDependencies += "org.scalameta" %% "scalameta" % "1.8.0",
-      scalacOptions += "-Xplugin-require:macroparadise",
+      addCompilerPlugin("org.scalameta" % "paradise" % "3.0.0-M11" cross CrossVersion.full),
+      scalacOptions ++= Seq("-Xplugin-require:macroparadise"),
       scalacOptions in (Compile, console) ~= (_ filterNot (_ contains "paradise")) // macroparadise plugin doesn't work in repl yet.
     )
 
     lazy val httpDependencies: Seq[ModuleID] = Seq(
-      "org.http4s"                 %% "http4s-dsl"             % V.http4sV,
-      "org.http4s"                 %% "http4s-blaze-server"    % V.http4sV,
-      "org.http4s"                 %% "http4s-blaze-client"    % V.http4sV,
-      "org.http4s"                 %% "http4s-argonaut"        % V.http4sV,
-      "com.github.alexarchambault" %% "argonaut-shapeless_6.2" % V.argonautShapelessV,
-      "io.argonaut"                %% "argonaut"               % V.argonautV,
-      "io.argonaut"                %% "argonaut-scalaz"        % V.argonautV,
-      "com.typesafe"               % "config"                  % V.config
+      "org.http4s"   %% "http4s-dsl"          % V.http4s,
+      "org.http4s"   %% "http4s-blaze-server" % V.http4s,
+      "org.http4s"   %% "http4s-blaze-client" % V.http4s,
+      "org.http4s"   %% "http4s-argonaut"     % V.http4s,
+      "org.http4s"   %% "http4s-circe"        % V.http4s,
+      "io.circe"     %% "circe-generic"       % V.circe,
+      "com.typesafe" % "config"               % V.config
     )
 
     lazy val rpcDependencies: Seq[ModuleID] = Seq(
-      "io.frees" %% "frees-rpc"               % V.freesRPC exclude ("org.typelevel", "scala-library"),
-      "io.frees" %% "frees-async-cats-effect" % V.frees exclude ("org.typelevel", "scala-library")
+      "io.frees" %% "frees-rpc-server"      % V.freesRPC,
+      "io.frees" %% "frees-rpc-client-core" % V.freesRPC,
+      "io.frees" %% "frees-rpc-config"      % V.freesRPC
     )
 
     def n(suffix: String) = s"metrifier-$suffix"
@@ -51,7 +54,7 @@ object ProjectPlugin extends AutoPlugin {
       name := "metrifier",
       organization := "47deg",
       organizationName := "47 Degrees",
-      scalaVersion := "2.12.3",
+      scalaVersion := "2.12.6",
       resolvers ++= Seq(
         Resolver.sonatypeRepo("snapshots"),
         Resolver.sonatypeRepo("releases"),
