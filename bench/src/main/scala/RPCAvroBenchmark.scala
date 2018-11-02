@@ -2,7 +2,7 @@ package metrifier
 package benchmark
 
 import cats.effect.IO
-import freestyle.rpc.protocol.Empty
+import mu.rpc.protocol.Empty
 import java.util.concurrent.TimeUnit
 import metrifier.benchmark.Utils._
 import metrifier.rpc.client.implicits._

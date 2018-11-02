@@ -2,8 +2,8 @@ package metrifier
 package rpc
 
 import cats.effect.IO
-import freestyle.rpc.ChannelFor
-import freestyle.rpc.client.config.ConfigForAddress
+import mu.rpc.ChannelFor
+import mu.rpc.client.config.ConfigForAddress
 import metrifier.rpc.protocols._
 
 package object client {

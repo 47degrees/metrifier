@@ -2,7 +2,7 @@ package metrifier
 package demo
 
 import cats.effect.IO
-import freestyle.rpc.protocol.Empty
+import mu.rpc.protocol.Empty
 import metrifier.demo.Utils._
 import metrifier.rpc.client.implicits._
 import metrifier.rpc.protocols.PersonServiceAvro

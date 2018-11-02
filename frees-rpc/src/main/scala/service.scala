@@ -1,7 +1,7 @@
 package metrifier
 package rpc
 
-import freestyle.rpc.protocol._
+import mu.rpc.protocol._
 import metrifier.shared.model._
 
 object protocols {
@@ -21,7 +21,7 @@ object protocols {
 
   }
 
-  @service(Avro)
+  @service(AvroWithSchema)
   trait PersonServiceAvro[F[_]] {
 
     def listPersons(empty: Empty.type): F[PersonList]

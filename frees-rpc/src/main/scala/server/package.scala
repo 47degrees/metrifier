@@ -4,10 +4,10 @@ package rpc
 import cats.Applicative
 import cats.effect._
 import cats.syntax.applicative._
-import freestyle.rpc._
-import freestyle.rpc.client.config._
-import freestyle.rpc.protocol.Empty
-import freestyle.rpc.server._
+import mu.rpc._
+import mu.rpc.client.config._
+import mu.rpc.protocol.Empty
+import mu.rpc.server._
 import metrifier.rpc.protocols._
 import metrifier.shared.model._
 import metrifier.shared.services

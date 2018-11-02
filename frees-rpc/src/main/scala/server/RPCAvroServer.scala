@@ -3,7 +3,7 @@ package rpc
 package server
 
 import cats.effect.IO
-import freestyle.rpc.server.GrpcServer
+import mu.rpc.server.GrpcServer
 import metrifier.rpc.server.avro.implicits._
 import org.log4s.Logger
 
