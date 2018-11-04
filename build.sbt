@@ -12,11 +12,11 @@ lazy val http = project
   .settings(commonSettings: _*)
   .settings(libraryDependencies ++= httpDependencies)
 
-lazy val `frees-rpc` = project
-  .in(file("frees-rpc"))
+lazy val `mu-rpc` = project
+  .in(file("mu-rpc"))
   .dependsOn(shared)
   .aggregate(shared)
-  .settings(moduleName := "frees-rpc")
+  .settings(moduleName := "mu-rpc")
   .settings(name := n(moduleName.value))
   .settings(commonSettings: _*)
   .settings(libraryDependencies ++= rpcDependencies)
@@ -24,8 +24,8 @@ lazy val `frees-rpc` = project
 
 lazy val demo = project
   .in(file("demo"))
-  .dependsOn(http, `frees-rpc`)
-  .aggregate(http, `frees-rpc`)
+  .dependsOn(http, `mu-rpc`)
+  .aggregate(http, `mu-rpc`)
   .settings(moduleName := "demo")
   .settings(name := n(moduleName.value))
   .settings(commonSettings: _*)
@@ -33,8 +33,8 @@ lazy val demo = project
 
 lazy val bench = project
   .in(file("bench"))
-  .dependsOn(http, `frees-rpc`)
-  .aggregate(http, `frees-rpc`)
+  .dependsOn(http, `mu-rpc`)
+  .aggregate(http, `mu-rpc`)
   .settings(moduleName := "bench")
   .settings(name := n(moduleName.value))
   .settings(commonSettings: _*)

@@ -13,12 +13,12 @@ See [README](../README.md#running-benchmarks-on-google-cloud-platform) for refer
   - [Benchmarks](#benchmarks)
 - [JMH Results](#jmh-results)
   - [HTTP](#http)
-  - [frees-rpc - Protobuf Serialization](#frees-rpc---protobuf-serialization)
-  - [frees-rpc - Avro Serialization](#frees-rpc---avro-serialization)
+  - [mu-rpc - Protobuf Serialization](#mu-rpc---protobuf-serialization)
+  - [mu-rpc - Avro Serialization](#mu-rpc---avro-serialization)
 - [Summary](#summary)
   - [HTTP](#http-1)
-  - [frees-rpc - Protobuf Serialization](#frees-rpc---protobuf-serialization-1)
-  - [frees-rpc - Avro Serialization](#frees-rpc---avro-serialization-1)
+  - [mu-rpc - Protobuf Serialization](#mu-rpc---protobuf-serialization-1)
+  - [mu-rpc - Avro Serialization](#mu-rpc---avro-serialization-1)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -577,7 +577,7 @@ HttpBenchmark.listPersons         thrpt   40  690.897 ± 76.741  ops/s
 HttpBenchmark.programComposition  thrpt   40   73.471 ± 10.356  ops/s
 ```
 
-### frees-rpc - Protobuf Serialization
+### mu-rpc - Protobuf Serialization
 
 ```bash
 # JMH version: 1.21
@@ -1116,7 +1116,7 @@ RPCProtoBenchmark.listPersons         thrpt   40  5486.742 ± 465.748  ops/s
 RPCProtoBenchmark.programComposition  thrpt   40   608.205 ±  63.402  ops/s
 ```
 
-### frees-rpc - Avro Serialization
+### mu-rpc - Avro Serialization
 
 ```bash
 # JMH version: 1.21
@@ -1670,7 +1670,7 @@ HttpBenchmark.listPersons         thrpt   40  690.897 ± 76.741  ops/s
 HttpBenchmark.programComposition  thrpt   40   73.471 ± 10.356  ops/s
 ```
 
-### frees-rpc - Protobuf Serialization
+### mu-rpc - Protobuf Serialization
 
 ```bash
 # Run complete. Total time: 00:07:06
@@ -1683,7 +1683,7 @@ RPCProtoBenchmark.listPersons         thrpt   40  5486.742 ± 465.748  ops/s
 RPCProtoBenchmark.programComposition  thrpt   40   608.205 ±  63.402  ops/s
 ```
 
-### frees-rpc - Avro Serialization
+### mu-rpc - Avro Serialization
 
 ```bash
 # Run complete. Total time: 00:07:11
