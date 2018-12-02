@@ -21,7 +21,7 @@ object protocols {
 
   }
 
-  @service(AvroWithSchema)
+  @service(Avro)
   trait PersonServiceAvro[F[_]] {
 
     def listPersons(empty: Empty.type): F[PersonList]
