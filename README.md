@@ -69,7 +69,7 @@ sbt "http/runMain metrifier.http.server.HttpServer"
 * Run Client:
 
 ```bash
-sbt "demo/runMain metrifier.demo.HttpDemoApp"
+sbt "demo-http/runMain metrifier.demo.HttpDemoApp"
 ```
 
 By default, host and port will be `localhost` and `8080`, respectively. You can override this configuration through either configuration key or environment variable:
@@ -97,7 +97,7 @@ sbt "mu-rpc/runMain metrifier.rpc.server.RPCProtoServer"
 * Run **Protobuf** based Client:
 
 ```bash
-sbt "demo/runMain metrifier.demo.RPCProtoDemoApp"
+sbt "demo-mu/runMain metrifier.demo.RPCProtoDemoApp"
 ```
 
 #### mu-rpc Avro
@@ -111,7 +111,7 @@ sbt "mu-rpc/runMain metrifier.rpc.server.RPCAvroServer"
 * Run **Avro** based Client:
 
 ```bash
-sbt "demo/runMain metrifier.demo.RPCAvroDemoApp"
+sbt "demo-mu/runMain metrifier.demo.RPCAvroDemoApp"
 ```
 
 ## Running Benchmarks Locally
@@ -135,7 +135,7 @@ sbt "http/runMain metrifier.http.server.HttpServer"
 * Run Benchmarks:
 
 ```bash
-sbt "bench/jmh:run -o http-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 -r 1 -w 1 metrifier.benchmark.HttpBenchmark"
+sbt "bench-http/jmh:run -o http-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 -r 1 -w 1 metrifier.benchmark.HttpBenchmark"
 ```
 
 Which means "20 iterations", "20 warmup iterations", "2 forks", "4 threads". `r` and `w` are specifying the minimum time (seconds) to spend at each measurement warmup iteration/iteration.
@@ -151,7 +151,7 @@ sbt "mu-rpc/runMain metrifier.rpc.server.RPCProtoServer"
 * Run Protobuf based Benchmarks:
 
 ```bash
-sbt "bench/jmh:run -o rpc-proto-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 -r 1 -w 1 metrifier.benchmark.RPCProtoBenchmark"
+sbt "bench-mu/jmh:run -o rpc-proto-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 -r 1 -w 1 metrifier.benchmark.RPCProtoBenchmark"
 ```
 
 Which means "20 iterations", "20 warmup iterations", "2 forks", "4 threads". `r` and `w` are specifying the minimum time (seconds) to spend at each measurement warmup iteration/iteration.
@@ -167,7 +167,7 @@ sbt "mu-rpc/runMain metrifier.rpc.server.RPCAvroServer"
 * Run Avro based Benchmarks:
 
 ```bash
-sbt "bench/jmh:run -o rpc-avro-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 -r 1 -w 1 metrifier.benchmark.RPCAvroBenchmark"
+sbt "bench-mu/jmh:run -o rpc-avro-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 -r 1 -w 1 metrifier.benchmark.RPCAvroBenchmark"
 ```
 
 Which means "20 iterations", "20 warmup iterations", "2 forks", "4 threads". `r` and `w` are specifying the minimum time (seconds) to spend at each measurement warmup iteration/iteration.
@@ -188,7 +188,11 @@ Output (assuming we are in the project path):
 
 ```bash
 bench/target/scala-2.12/metrifier-bench-assembly-[project-version]-deps.jar
+demo/http/target/scala-2.12/metrifier-demo-http-assembly-[project-version-deps.jar
+bench/mu/target/scala-2.12/metrifier-bench-mu-assembly-[project-version-deps.jar
 demo/target/scala-2.12/metrifier-demo-assembly-[project-version]-deps.jar
+bench/http/target/scala-2.12/metrifier-bench-http-assembly-[project-version-deps.jar
+bench/mu/target/scala-2.12/metrifier-bench-mu-assembly-[project-version-deps.jar
 mu-rpc/target/scala-2.12/metrifier-mu-rpc-assembly-[project-version]-deps.jar
 http/target/scala-2.12/metrifier-http-assembly-[project-version]-deps.jar
 shared/target/scala-2.12/metrifier-shared-assembly-[project-version]-deps.jar
@@ -204,7 +208,11 @@ And we'll get the following artifacts as the result:
 
 ```bash
 bench/target/scala-2.12/metrifier-bench-assembly-[project-version].jar
+bench/http/target/scala-2.12/metrifier-bench-assembly-[project-version].jar
+bench/my/target/scala-2.12/metrifier-bench-assembly-[project-version].jar
 demo/target/scala-2.12/metrifier-demo-assembly-[project-version].jar
+demo/http/target/scala-2.12/metrifier-demo-assembly-[project-version].jar
+demo/mu/target/scala-2.12/metrifier-demo-assembly-[project-version].jar
 mu-rpc/target/scala-2.12/metrifier-mu-rpc-assembly-[project-version].jar
 http/target/scala-2.12/metrifier-http-assembly-[project-version].jar
 shared/target/scala-2.12/metrifier-shared-assembly-[project-version].jar
@@ -217,10 +225,14 @@ In this case, we've created a bucket named as `metrifier` within our GCP project
 ```bash
 export METRIFIER_VERSION=0.1.0
 gsutil cp demo/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
+gsutil cp demo/http/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
+gsutil cp demo/mu/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
 gsutil cp mu-rpc/target/scala-2.12/metrifier-mu-rpc-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
 gsutil cp http/target/scala-2.12/metrifier-http-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
 gsutil cp shared/target/scala-2.12/metrifier-shared-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
 gsutil cp demo/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
+gsutil cp demo/http/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
+gsutil cp demo/mu/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp mu-rpc/target/scala-2.12/metrifier-mu-rpc-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp http/target/scala-2.12/metrifier-http-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp shared/target/scala-2.12/metrifier-shared-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
@@ -231,6 +243,8 @@ If the project dependencies have not changed, you could just upload the project 
 ```bash
 export METRIFIER_VERSION=0.1.0
 gsutil cp demo/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
+gsutil cp demo/http/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
+gsutil cp demo/mu/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp mu-rpc/target/scala-2.12/metrifier-mu-rpc-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp http/target/scala-2.12/metrifier-http-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp shared/target/scala-2.12/metrifier-shared-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
@@ -272,7 +286,7 @@ cd /metrifier/repo
 env \
     HTTP_HOST=http-server-vm \
     HTTP_PORT=8080 \
-    sbt "bench/jmh:run -o /metrifier/bench_results/http-benchmark-results-${METRIFIER_VERSION}.txt -i 20 -wi 20 -f 2 -t 4 -r 1 -w 1 metrifier.benchmark.HttpBenchmark"
+    sbt "bench-http/jmh:run -o /metrifier/bench_results/http-benchmark-results-${METRIFIER_VERSION}.txt -i 20 -wi 20 -f 2 -t 4 -r 1 -w 1 metrifier.benchmark.HttpBenchmark"
 ```
 
 Given the port `8080` was opened to the exterior when deploying the cluster with Google Cloud Manager, you could even run the benchmarks from your local machine, using the external IP address (changing to HTTP_HOST=[HTTP_SERVER_INSTANCE_EXTERNAL_IP]).
@@ -303,7 +317,7 @@ cd /metrifier/repo
 env \
     RPC_HOST=rpc-proto-server-vm \
     RPC_PORT=8080 \
-    sbt "bench/jmh:run -o /metrifier/bench_results/rpc-proto-benchmark-results-${METRIFIER_VERSION}.txt -i 20 -wi 20 -f 2 -t 4 -r 1 -w 1 metrifier.benchmark.RPCProtoBenchmark"
+    sbt "bench-mu/jmh:run -o /metrifier/bench_results/rpc-proto-benchmark-results-${METRIFIER_VERSION}.txt -i 20 -wi 20 -f 2 -t 4 -r 1 -w 1 metrifier.benchmark.RPCProtoBenchmark"
 ```
 
 As we mentioned for the Http benchmarks, in this case we could also run the benchmarks from our local machine, using the external IP address (changing to RPC_HOST=[RPC_SERVER_INSTANCE_EXTERNAL_IP]).
@@ -334,7 +348,7 @@ cd /metrifier/repo
 env \
     RPC_HOST=rpc-avro-server-vm \
     RPC_PORT=8080 \
-    sbt "bench/jmh:run -o /metrifier/bench_results/rpc-avro-benchmark-results-${METRIFIER_VERSION}.txt -i 20 -wi 20 -f 2 -t 4 -r 1 -w 1 metrifier.benchmark.RPCAvroBenchmark"
+    sbt "bench-mu/jmh:run -o /metrifier/bench_results/rpc-avro-benchmark-results-${METRIFIER_VERSION}.txt -i 20 -wi 20 -f 2 -t 4 -r 1 -w 1 metrifier.benchmark.RPCAvroBenchmark"
 ```
 
 As above, we could also run the benchmarks from our local machine, using the external IP address (changing to RPC_HOST=[RPC_SERVER_INSTANCE_EXTERNAL_IP]).
