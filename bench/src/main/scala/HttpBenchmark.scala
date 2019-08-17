@@ -5,11 +5,10 @@ import java.util.concurrent.TimeUnit
 
 import cats.effect.IO
 import metrifier.benchmark.Utils._
-import metrifier.benchmark.Runtime._
 import metrifier.http.HttpConf
 import metrifier.http.client.HttpClient
 import metrifier.shared.model._
-import org.http4s.client.asynchttpclient.AsyncHttpClient
+import org.http4s.client.blaze.Http1Client
 import org.openjdk.jmh.annotations._
 
 @State(Scope.Thread)
@@ -17,9 +16,7 @@ import org.openjdk.jmh.annotations._
 @OutputTimeUnit(TimeUnit.SECONDS)
 class HttpBenchmark {
 
-  val (httpClient, shutdown) = AsyncHttpClient.resource[IO]().allocated.unsafeRunSync()
-
-  val client = new HttpClient(httpClient, HttpConf.host, HttpConf.port)
+  val client = new HttpClient(Http1Client[IO]().unsafeRunSync(), HttpConf.host, HttpConf.port)
 
   @Benchmark
   def listPersons: PersonList = client.listPersons.unsafeRunSync()
@@ -68,5 +65,5 @@ class HttpBenchmark {
     )
 
   @TearDown
-  def stopClient(): Unit = shutdown.unsafeRunSync()
+  def stopClient(): Unit = client.shutdown()
 }

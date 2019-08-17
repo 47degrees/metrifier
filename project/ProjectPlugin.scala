@@ -13,10 +13,10 @@ object ProjectPlugin extends AutoPlugin {
 
     lazy val V = new {
       lazy val mu       = "0.18.4"
-      lazy val http4s   = "0.20.10"
+      lazy val http4s   = "0.18.15"
       lazy val config   = "1.3.3"
       lazy val logback  = "1.2.3"
-      lazy val circe    = "0.11.1"
+      lazy val circe    = "0.9.3"
     }
 
     lazy val commonSettings: Seq[Def.Setting[_]] = Seq(
@@ -31,13 +31,13 @@ object ProjectPlugin extends AutoPlugin {
     )
 
     lazy val httpDependencies: Seq[ModuleID] = Seq(
-      "org.http4s"   %% "http4s-dsl"               % V.http4s,
-      "org.http4s"   %% "http4s-blaze-server"      % V.http4s,
-      "org.http4s"   %% "http4s-async-http-client" % V.http4s,
-      "org.http4s"   %% "http4s-argonaut"          % V.http4s,
-      "org.http4s"   %% "http4s-circe"             % V.http4s,
-      "io.circe"     %% "circe-generic"            % V.circe,
-      "com.typesafe" % "config"                    % V.config
+      "org.http4s"   %% "http4s-dsl"          % V.http4s,
+      "org.http4s"   %% "http4s-blaze-server" % V.http4s,
+      "org.http4s"   %% "http4s-blaze-client" % V.http4s,
+      "org.http4s"   %% "http4s-argonaut"     % V.http4s,
+      "org.http4s"   %% "http4s-circe"        % V.http4s,
+      "io.circe"     %% "circe-generic"       % V.circe,
+      "com.typesafe" % "config"               % V.config
     )
 
     lazy val rpcDependencies: Seq[ModuleID] = Seq(
