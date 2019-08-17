@@ -11,7 +11,6 @@ import org.http4s.circe._
 import org.http4s.client.Client
 import org.http4s._
 
-
 class HttpClient[F[_]: Effect](c: Client[F], host: String, port: Int) {
 
   private[this] val baseUrl = s"http://$host:$port"
@@ -50,12 +49,10 @@ class HttpClient[F[_]: Effect](c: Client[F], host: String, port: Int) {
 
     val request: Request[F] = Request[F](Method.POST,baseUri)
 
-    val req = request.withBody(newPerson.asJson)
+    val req = request.withEntity(newPerson.asJson)
 
     c.expect(req)
 
   }
-
-  def shutdown(): Unit = c.shutdownNow()
 
 }

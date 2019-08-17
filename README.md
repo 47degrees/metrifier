@@ -2,7 +2,7 @@
 
 # metrifier
 
-Comparing `HTTP` against `frees-rpc` services.
+Comparing `HTTP` against `mu-rpc` services.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -10,13 +10,13 @@ Comparing `HTTP` against `frees-rpc` services.
 
 - [Running Demo](#running-demo)
   - [http](#http)
-  - [frees-rpc](#frees-rpc)
-    - [frees-rpc Protobuf](#frees-rpc-protobuf)
-    - [frees-rpc Avro](#frees-rpc-avro)
+  - [mu-rpc](#mu-rpc)
+    - [mu-rpc Protobuf](#mu-rpc-protobuf)
+    - [mu-rpc Avro](#mu-rpc-avro)
 - [Running Benchmarks Locally](#running-benchmarks-locally)
   - [HTTP Benchmarks](#http-benchmarks)
-  - [frees-rpc Protobuf Benchmarks](#frees-rpc-protobuf-benchmarks)
-  - [frees-rpc Avro Benchmarks](#frees-rpc-avro-benchmarks)
+  - [mu-rpc Protobuf Benchmarks](#mu-rpc-protobuf-benchmarks)
+  - [mu-rpc Avro Benchmarks](#mu-rpc-avro-benchmarks)
 - [Running Benchmarks on Google Cloud Platform](#running-benchmarks-on-google-cloud-platform)
   - [Assembling metrifier](#assembling-metrifier)
   - [Uploading jars to Google Cloud Storage](#uploading-jars-to-google-cloud-storage)
@@ -24,16 +24,16 @@ Comparing `HTTP` against `frees-rpc` services.
   - [HTTP Benchmarks](#http-benchmarks-1)
     - [Running the Server](#running-the-server)
     - [Running the Benchmarks](#running-the-benchmarks)
-  - [frees-rpc Proto Benchmarks](#frees-rpc-proto-benchmarks)
+  - [mu-rpc Proto Benchmarks](#mu-rpc-proto-benchmarks)
     - [Running the Server](#running-the-server-1)
     - [Running the Benchmarks](#running-the-benchmarks-1)
-  - [frees-rpc Avro Benchmarks](#frees-rpc-avro-benchmarks-1)
+  - [mu-rpc Avro Benchmarks](#mu-rpc-avro-benchmarks-1)
     - [Running the Server](#running-the-server-2)
     - [Running the Benchmarks](#running-the-benchmarks-2)
 - [Benchmark Results](#benchmark-results)
   - [Running Benchmarks Locally](#running-benchmarks-locally-1)
     - [Machine Details](#machine-details)
-    - [HTTP vs frees-rpc Protobuf vs frees-rpc Avro](#http-vs-frees-rpc-protobuf-vs-frees-rpc-avro)
+    - [HTTP vs mu-rpc Protobuf vs mu-rpc Avro](#http-vs-mu-rpc-protobuf-vs-mu-rpc-avro)
     - [Comparing benchmarks one by one](#comparing-benchmarks-one-by-one)
       - [createPerson](#createperson)
       - [getPerson](#getperson)
@@ -44,7 +44,7 @@ Comparing `HTTP` against `frees-rpc` services.
   - [Running Benchmarks on GCP](#running-benchmarks-on-gcp)
     - [Server GCE instance Details](#server-gce-instance-details)
     - [Benchmarks GCE instance Details](#benchmarks-gce-instance-details)
-    - [HTTP vs frees-rpc Protobuf vs frees-rpc Avro](#http-vs-frees-rpc-protobuf-vs-frees-rpc-avro-1)
+    - [HTTP vs mu-rpc Protobuf vs mu-rpc Avro](#http-vs-mu-rpc-protobuf-vs-mu-rpc-avro-1)
     - [Comparing benchmarks one by one](#comparing-benchmarks-one-by-one-1)
       - [createPerson](#createperson-1)
       - [getPerson](#getperson-1)
@@ -77,7 +77,7 @@ By default, host and port will be `localhost` and `8080`, respectively. You can 
 * Host: `http.host` VS `HTTP_HOST`.
 * Port: `http.port` VS `HTTP_PORT`.
 
-### frees-rpc
+### mu-rpc
 
 In this case, we will try out with two different of binary serializations: `Protobuf` and `Avro`.
 
@@ -86,12 +86,12 @@ By default, for both cases, the host and the port will be `localhost` and `8080`
 * Host: `rpc.host` VS `RPC_HOST`.
 * Port: `rpc.port` VS `RPC_PORT`.
 
-#### frees-rpc Protobuf
+#### mu-rpc Protobuf
 
 * Run **Protobuf** based Server:
 
 ```bash
-sbt "frees-rpc/runMain metrifier.rpc.server.RPCProtoServer"
+sbt "mu-rpc/runMain metrifier.rpc.server.RPCProtoServer"
 ```
 
 * Run **Protobuf** based Client:
@@ -100,12 +100,12 @@ sbt "frees-rpc/runMain metrifier.rpc.server.RPCProtoServer"
 sbt "demo/runMain metrifier.demo.RPCProtoDemoApp"
 ```
 
-#### frees-rpc Avro
+#### mu-rpc Avro
 
 * Run **Avro** based Server:
 
 ```bash
-sbt "frees-rpc/runMain metrifier.rpc.server.RPCAvroServer"
+sbt "mu-rpc/runMain metrifier.rpc.server.RPCAvroServer"
 ```
 
 * Run **Avro** based Client:
@@ -119,10 +119,10 @@ sbt "demo/runMain metrifier.demo.RPCAvroDemoApp"
 We are using the [Java Microbenchmark Harness (JMH)](http://openjdk.java.net/projects/code-tools/jmh/) tool, which is helping us to get an experimental answer to a basic question about which implementation executes fastest among:
 
 * HTTP stack based on:
-  * `http4s`, version `0.18.15`.
-  * `circe`, version `0.9.3`.
+  * `http4s`, version `0.20.10`.
+  * `circe`, version `0.11.1`.
 * RPC services stack based on:
-  * `frees-rpc`, version `0.14.1` (atop of [gRPC](https://grpc.io/), version `1.11.0`).
+  * `mu-rpc`, version `0.18.4` (atop of [gRPC](https://grpc.io/), version `1.18.0`).
 
 ### HTTP Benchmarks
 
@@ -140,12 +140,12 @@ sbt "bench/jmh:run -o http-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 -r 1 -w 
 
 Which means "20 iterations", "20 warmup iterations", "2 forks", "4 threads". `r` and `w` are specifying the minimum time (seconds) to spend at each measurement warmup iteration/iteration.
 
-### frees-rpc Protobuf Benchmarks
+### mu-rpc Protobuf Benchmarks
 
 * Run Protobuf based Server:
 
 ```bash
-sbt "frees-rpc/runMain metrifier.rpc.server.RPCProtoServer"
+sbt "mu-rpc/runMain metrifier.rpc.server.RPCProtoServer"
 ```
 
 * Run Protobuf based Benchmarks:
@@ -156,12 +156,12 @@ sbt "bench/jmh:run -o rpc-proto-benchmark-results.txt -i 20 -wi 20 -f 2 -t 4 -r 
 
 Which means "20 iterations", "20 warmup iterations", "2 forks", "4 threads". `r` and `w` are specifying the minimum time (seconds) to spend at each measurement warmup iteration/iteration.
 
-### frees-rpc Avro Benchmarks
+### mu-rpc Avro Benchmarks
 
 * Run Avro based Server:
 
 ```bash
-sbt "frees-rpc/runMain metrifier.rpc.server.RPCAvroServer"
+sbt "mu-rpc/runMain metrifier.rpc.server.RPCAvroServer"
 ```
 
 * Run Avro based Benchmarks:
@@ -189,7 +189,7 @@ Output (assuming we are in the project path):
 ```bash
 bench/target/scala-2.12/metrifier-bench-assembly-[project-version]-deps.jar
 demo/target/scala-2.12/metrifier-demo-assembly-[project-version]-deps.jar
-frees-rpc/target/scala-2.12/metrifier-frees-rpc-assembly-[project-version]-deps.jar
+mu-rpc/target/scala-2.12/metrifier-mu-rpc-assembly-[project-version]-deps.jar
 http/target/scala-2.12/metrifier-http-assembly-[project-version]-deps.jar
 shared/target/scala-2.12/metrifier-shared-assembly-[project-version]-deps.jar
 ```
@@ -205,7 +205,7 @@ And we'll get the following artifacts as the result:
 ```bash
 bench/target/scala-2.12/metrifier-bench-assembly-[project-version].jar
 demo/target/scala-2.12/metrifier-demo-assembly-[project-version].jar
-frees-rpc/target/scala-2.12/metrifier-frees-rpc-assembly-[project-version].jar
+mu-rpc/target/scala-2.12/metrifier-mu-rpc-assembly-[project-version].jar
 http/target/scala-2.12/metrifier-http-assembly-[project-version].jar
 shared/target/scala-2.12/metrifier-shared-assembly-[project-version].jar
 ```
@@ -217,11 +217,11 @@ In this case, we've created a bucket named as `metrifier` within our GCP project
 ```bash
 export METRIFIER_VERSION=0.1.0
 gsutil cp demo/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
-gsutil cp frees-rpc/target/scala-2.12/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
+gsutil cp mu-rpc/target/scala-2.12/metrifier-mu-rpc-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
 gsutil cp http/target/scala-2.12/metrifier-http-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
 gsutil cp shared/target/scala-2.12/metrifier-shared-assembly-${METRIFIER_VERSION}-deps.jar gs://metrifier/jars
 gsutil cp demo/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
-gsutil cp frees-rpc/target/scala-2.12/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
+gsutil cp mu-rpc/target/scala-2.12/metrifier-mu-rpc-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp http/target/scala-2.12/metrifier-http-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp shared/target/scala-2.12/metrifier-shared-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 ```
@@ -231,7 +231,7 @@ If the project dependencies have not changed, you could just upload the project 
 ```bash
 export METRIFIER_VERSION=0.1.0
 gsutil cp demo/target/scala-2.12/metrifier-demo-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
-gsutil cp frees-rpc/target/scala-2.12/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
+gsutil cp mu-rpc/target/scala-2.12/metrifier-mu-rpc-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp http/target/scala-2.12/metrifier-http-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 gsutil cp shared/target/scala-2.12/metrifier-shared-assembly-${METRIFIER_VERSION}.jar gs://metrifier/jars
 ```
@@ -277,7 +277,7 @@ env \
 
 Given the port `8080` was opened to the exterior when deploying the cluster with Google Cloud Manager, you could even run the benchmarks from your local machine, using the external IP address (changing to HTTP_HOST=[HTTP_SERVER_INSTANCE_EXTERNAL_IP]).
 
-### frees-rpc Proto Benchmarks
+### mu-rpc Proto Benchmarks
 
 #### Running the Server
 
@@ -289,7 +289,7 @@ env \
     RPC_HOST=rpc-proto-server-vm \
     RPC_PORT=8080 \
     java -cp \
-    /metrifier/jars/metrifier-shared-assembly-${METRIFIER_VERSION}-deps.jar:/metrifier/jars/metrifier-shared-assembly-${METRIFIER_VERSION}.jar:/metrifier/jars/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}-deps.jar:/metrifier/jars/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}.jar \
+    /metrifier/jars/metrifier-shared-assembly-${METRIFIER_VERSION}-deps.jar:/metrifier/jars/metrifier-shared-assembly-${METRIFIER_VERSION}.jar:/metrifier/jars/metrifier-mu-rpc-assembly-${METRIFIER_VERSION}-deps.jar:/metrifier/jars/metrifier-mu-rpc-assembly-${METRIFIER_VERSION}.jar \
     metrifier.rpc.server.RPCProtoServer
 ```
 
@@ -308,7 +308,7 @@ env \
 
 As we mentioned for the Http benchmarks, in this case we could also run the benchmarks from our local machine, using the external IP address (changing to RPC_HOST=[RPC_SERVER_INSTANCE_EXTERNAL_IP]).
 
-### frees-rpc Avro Benchmarks
+### mu-rpc Avro Benchmarks
 
 #### Running the Server
 
@@ -320,7 +320,7 @@ env \
     RPC_HOST=rpc-avro-server-vm \
     RPC_PORT=8080 \
     java -cp \
-    /metrifier/jars/metrifier-shared-assembly-${METRIFIER_VERSION}-deps.jar:/metrifier/jars/metrifier-shared-assembly-${METRIFIER_VERSION}.jar:/metrifier/jars/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}-deps.jar:/metrifier/jars/metrifier-frees-rpc-assembly-${METRIFIER_VERSION}.jar \
+    /metrifier/jars/metrifier-shared-assembly-${METRIFIER_VERSION}-deps.jar:/metrifier/jars/metrifier-shared-assembly-${METRIFIER_VERSION}.jar:/metrifier/jars/metrifier-mu-rpc-assembly-${METRIFIER_VERSION}-deps.jar:/metrifier/jars/metrifier-mu-rpc-assembly-${METRIFIER_VERSION}.jar \
     metrifier.rpc.server.RPCAvroServer
 ```
 
@@ -360,7 +360,7 @@ Expanded version of these results are in:
 * L3 Cache: 3 MB
 * Memory: 16 GB
 
-#### HTTP vs frees-rpc Protobuf vs frees-rpc Avro
+#### HTTP vs mu-rpc Protobuf vs mu-rpc Avro
 
 * HttpBenchmark Raw output:
 
@@ -473,7 +473,7 @@ We are implementing two Google Compute Engine instances, one for the server (`n1
 * 1 virtual CPU.
 * 3.75 GB of memory.
 
-#### HTTP vs frees-rpc Protobuf vs frees-rpc Avro
+#### HTTP vs mu-rpc Protobuf vs mu-rpc Avro
 
 * HttpBenchmark Raw output:
 

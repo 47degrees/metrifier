@@ -2,7 +2,7 @@ package metrifier
 package demo
 
 import cats.effect.IO
-import freestyle.rpc.protocol.Empty
+import higherkindness.mu.rpc.protocol.Empty
 import metrifier.demo.Utils._
 import metrifier.rpc.client.implicits._
 import metrifier.rpc.protocols.PersonServiceAvro
@@ -10,7 +10,7 @@ import metrifier.shared.model._
 
 object RPCAvroDemoApp {
 
-  def clientProgram(implicit client: PersonServiceAvro.Client[IO]): IO[PersonAggregation] = {
+  def clientProgram: IO[PersonAggregation] = personServiceAvroClient.use { client =>
     for {
       personList <- client.listPersons(Empty)
       p1         <- client.getPerson(PersonId("1"))

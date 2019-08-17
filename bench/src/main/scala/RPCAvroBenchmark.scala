@@ -2,8 +2,9 @@ package metrifier
 package benchmark
 
 import cats.effect.IO
-import freestyle.rpc.protocol.Empty
 import java.util.concurrent.TimeUnit
+
+import higherkindness.mu.rpc.protocol.Empty
 import metrifier.benchmark.Utils._
 import metrifier.rpc.client.implicits._
 import metrifier.rpc.protocols._
@@ -15,7 +16,7 @@ import org.openjdk.jmh.annotations._
 @OutputTimeUnit(TimeUnit.SECONDS)
 class RPCAvroBenchmark {
 
-  val client: PersonServiceAvro.Client[IO] = implicitly[PersonServiceAvro.Client[IO]]
+  val (client, shutdown) = personServiceAvroClient.allocated.unsafeRunSync()
 
   @Benchmark
   def listPersons: PersonList = client.listPersons(Empty).unsafeRunTimed(defaultTimeOut).get
@@ -49,5 +50,8 @@ class RPCAvroBenchmark {
 
     clientProgram.unsafeRunTimed(defaultTimeOut).get
   }
+
+  @TearDown
+  def stopClient(): Unit = shutdown.unsafeRunSync()
 
 }

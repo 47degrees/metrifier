@@ -4,23 +4,13 @@ package rpc
 import cats.Applicative
 import cats.effect._
 import cats.syntax.applicative._
-import freestyle.rpc._
-import freestyle.rpc.client.config._
-import freestyle.rpc.protocol.Empty
-import freestyle.rpc.server._
+import higherkindness.mu.rpc.protocol.Empty
+import higherkindness.mu.rpc.server.{AddService, GrpcConfig}
 import metrifier.rpc.protocols._
 import metrifier.shared.model._
 import metrifier.shared.services
 
-
 package object server {
-
-  trait ServerConf {
-
-    implicit val getConf: ChannelForAddress =
-      ConfigForAddress[IO]("rpc.host", "rpc.port").unsafeRunSync()
-
-  }
 
   abstract class HandlerImpl[F[_]: Applicative] {
 
@@ -41,7 +31,7 @@ package object server {
 
   class RPCAvroHandler[F[_]: Applicative] extends HandlerImpl[F] with PersonServiceAvro[F]
 
-  trait CommonImplicits extends PersonServiceRuntime with ServerConf
+  trait CommonImplicits extends PersonServiceRuntime
 
   object proto {
 
@@ -49,7 +39,7 @@ package object server {
 
       implicit private val personServicePBHandler: RPCProtoHandler[IO] = new RPCProtoHandler[IO]
 
-      implicit val grpcConfigsProto: List[GrpcConfig] = List(AddService(PersonServicePB.bindService[IO]))
+      val grpcConfigsProto: IO[GrpcConfig] = PersonServicePB.bindService[IO].map(AddService)
 
     }
 
@@ -62,7 +52,7 @@ package object server {
 
       implicit private val personServiceAvroHandler: RPCAvroHandler[IO] = new RPCAvroHandler[IO]
 
-      implicit val grpcConfigsAvro: List[GrpcConfig] = List(AddService(PersonServiceAvro.bindService[IO]))
+      val grpcConfigsAvro: IO[GrpcConfig] = PersonServiceAvro.bindService[IO].map(AddService)
     }
 
     object implicits extends AvroImplicits

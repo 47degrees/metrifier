@@ -1,9 +1,9 @@
 package metrifier
 package rpc
 
-import cats.effect.IO
-import freestyle.rpc.ChannelFor
-import freestyle.rpc.client.config.ConfigForAddress
+import cats.effect.{IO, Resource}
+import higherkindness.mu.rpc.ChannelFor
+import higherkindness.mu.rpc.config.channel.ConfigForAddress
 import metrifier.rpc.protocols._
 
 package object client {
@@ -17,10 +17,10 @@ package object client {
 
   trait Implicits extends PersonServiceRuntime with ClientConf {
 
-    implicit val personServicePBClient: PersonServicePB.Client[IO] =
+    val personServicePBClient: Resource[IO, PersonServicePB[IO]] =
       PersonServicePB.client[IO](channel)
 
-    implicit val personServiceAvroClient: PersonServiceAvro.Client[IO] =
+    val personServiceAvroClient: Resource[IO, PersonServiceAvro[IO]] =
       PersonServiceAvro.client[IO](channel)
   }
 

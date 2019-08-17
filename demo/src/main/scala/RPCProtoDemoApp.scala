@@ -1,16 +1,17 @@
 package metrifier
 package demo
 
-import cats.effect.IO
-import freestyle.rpc.protocol.Empty
+import cats.effect.{ExitCode, IO, IOApp}
+import cats.syntax.functor._
+import higherkindness.mu.rpc.protocol.Empty
 import metrifier.demo.Utils._
 import metrifier.rpc.client.implicits._
 import metrifier.rpc.protocols.PersonServicePB
 import metrifier.shared.model._
 
-object RPCProtoDemoApp {
+object RPCProtoDemoApp extends IOApp {
 
-  def clientProgram(implicit client: PersonServicePB.Client[IO]): IO[PersonAggregation] = {
+  def clientProgram(client: PersonServicePB[IO]): IO[PersonAggregation] = {
     for {
       personList <- client.listPersons(Empty)
       p1         <- client.getPerson(PersonId("1"))
@@ -23,13 +24,8 @@ object RPCProtoDemoApp {
     } yield (p1, p2, p3, p4, p1Links, p3Links, personList.add(pNew))
   }
 
-  def main(args: Array[String]): Unit = {
-
-    val result: PersonAggregation =
-      clientProgram.unsafeRunSync()
-
-    println(s"Result = $result")
-
-  }
+  def run(args: List[String]): IO[ExitCode] = personServicePBClient.use { client =>
+    clientProgram(client).flatMap(result => IO(println(s"Result = $result")))
+  }.as(ExitCode.Success)
 
 }

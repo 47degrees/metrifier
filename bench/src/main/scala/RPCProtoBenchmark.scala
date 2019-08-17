@@ -2,11 +2,11 @@ package metrifier
 package benchmark
 
 import cats.effect.IO
-import freestyle.rpc.protocol.Empty
 import java.util.concurrent.TimeUnit
+
+import higherkindness.mu.rpc.protocol.Empty
 import metrifier.benchmark.Utils._
 import metrifier.rpc.client.implicits._
-import metrifier.rpc.protocols.PersonServicePB
 import metrifier.shared.model._
 import org.openjdk.jmh.annotations._
 
@@ -15,7 +15,7 @@ import org.openjdk.jmh.annotations._
 @OutputTimeUnit(TimeUnit.SECONDS)
 class RPCProtoBenchmark {
 
-  val client: PersonServicePB.Client[IO] = implicitly[PersonServicePB.Client[IO]]
+  val (client, shutdown) = personServicePBClient.allocated.unsafeRunSync()
 
   @Benchmark
   def listPersons: PersonList = client.listPersons(Empty).unsafeRunTimed(defaultTimeOut).get
@@ -49,5 +49,8 @@ class RPCProtoBenchmark {
 
     clientProgram.unsafeRunTimed(defaultTimeOut).get
   }
+
+  @TearDown
+  def stopClient(): Unit = shutdown.unsafeRunSync()
 
 }

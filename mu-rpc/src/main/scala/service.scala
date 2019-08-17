@@ -1,7 +1,7 @@
 package metrifier
 package rpc
 
-import freestyle.rpc.protocol._
+import higherkindness.mu.rpc.protocol.{Avro, Empty, Protobuf, service}
 import metrifier.shared.model._
 
 object protocols {
