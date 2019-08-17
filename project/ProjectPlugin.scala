@@ -54,7 +54,7 @@ object ProjectPlugin extends AutoPlugin {
       name := "metrifier",
       organization := "47deg",
       organizationName := "47 Degrees",
-      scalaVersion := "2.12.6",
+      scalaVersion := "2.12.8",
       resolvers ++= Seq(
         Resolver.sonatypeRepo("snapshots"),
         Resolver.sonatypeRepo("releases"),

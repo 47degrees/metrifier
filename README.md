@@ -201,15 +201,13 @@ shared/target/scala-2.12/metrifier-shared-assembly-[project-version]-deps.jar
 This is intended to be used with a JAR that only contains your project, so now, you can write:
 
 ```bash
-sbt assembly
+sbt "demo-http/assembly"
+sbt "demo-mu/assembly"
 ```
 
 And we'll get the following artifacts as the result:
 
 ```bash
-bench/target/scala-2.12/metrifier-bench-assembly-[project-version].jar
-bench/http/target/scala-2.12/metrifier-bench-assembly-[project-version].jar
-bench/my/target/scala-2.12/metrifier-bench-assembly-[project-version].jar
 demo/target/scala-2.12/metrifier-demo-assembly-[project-version].jar
 demo/http/target/scala-2.12/metrifier-demo-assembly-[project-version].jar
 demo/mu/target/scala-2.12/metrifier-demo-assembly-[project-version].jar
