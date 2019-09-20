@@ -1,10 +1,11 @@
+dist: xenial
 language: scala
 
 scala:
-- 2.12.6
+- 2.12.10
 
 jdk:
-- oraclejdk8
+- openjdk8
 
 before_cache:
 - du -h -d 1 $HOME/.ivy2/
