@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/47deg/metrifier.svg?branch=master)](https://travis-ci.org/47deg/metrifier)
+[![Build Status](https://travis-ci.org/47degrees/metrifier.svg?branch=master)](https://travis-ci.org/47degrees/metrifier)
 
 # metrifier
 
