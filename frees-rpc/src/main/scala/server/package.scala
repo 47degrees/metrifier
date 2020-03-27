@@ -12,7 +12,6 @@ import metrifier.rpc.protocols._
 import metrifier.shared.model._
 import metrifier.shared.services
 
-
 package object server {
 
   trait ServerConf {
@@ -49,7 +48,9 @@ package object server {
 
       implicit private val personServicePBHandler: RPCProtoHandler[IO] = new RPCProtoHandler[IO]
 
-      implicit val grpcConfigsProto: List[GrpcConfig] = List(AddService(PersonServicePB.bindService[IO]))
+      implicit val grpcConfigsProto: List[GrpcConfig] = List(
+        AddService(PersonServicePB.bindService[IO])
+      )
 
     }
 
@@ -62,7 +63,9 @@ package object server {
 
       implicit private val personServiceAvroHandler: RPCAvroHandler[IO] = new RPCAvroHandler[IO]
 
-      implicit val grpcConfigsAvro: List[GrpcConfig] = List(AddService(PersonServiceAvro.bindService[IO]))
+      implicit val grpcConfigsAvro: List[GrpcConfig] = List(
+        AddService(PersonServiceAvro.bindService[IO])
+      )
     }
 
     object implicits extends AvroImplicits
