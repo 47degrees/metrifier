@@ -16,12 +16,18 @@ object ProjectPlugin extends AutoPlugin {
       lazy val http4s   = "0.18.15"
       lazy val config   = "1.3.3"
       lazy val logback  = "1.2.3"
-      lazy val circe    = "0.9.3"
+      lazy val circe    = "0.13.0"
     }
 
     lazy val commonSettings: Seq[Def.Setting[_]] = Seq(
       libraryDependencies += "ch.qos.logback" % "logback-classic" % V.logback,
-      scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-language:higherKinds", "-Ypartial-unification")
+      scalacOptions ++= Seq(
+        "-deprecation",
+        "-feature",
+        "-unchecked",
+        "-language:higherKinds",
+        "-Ypartial-unification"
+      )
     )
 
     lazy val scalaMetaSettings: Seq[Def.Setting[_]] = Seq(
