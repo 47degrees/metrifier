@@ -15,7 +15,8 @@ object RPCProtoServer {
 
     logger.info(s"Server is starting ...")
 
-    val pbServer = GrpcServer.default[IO](getConf.port, grpcConfigsProto).flatMap(GrpcServer.server[IO])
+    val pbServer =
+      GrpcServer.default[IO](getConf.port, grpcConfigsProto).flatMap(GrpcServer.server[IO])
 
     pbServer.unsafeRunSync()
   }
