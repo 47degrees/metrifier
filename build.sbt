@@ -40,3 +40,5 @@ lazy val bench = project
   .settings(commonSettings: _*)
   .settings(scalaMetaSettings: _*)
   .enablePlugins(JmhPlugin)
+
+addCommandAlias("ci-test", "scalafmtCheck; scalafmtSbtCheck; test")
