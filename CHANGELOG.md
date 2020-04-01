@@ -34,7 +34,6 @@
 - Benchmarks Results - Completes 0.0.3 version [\#18](https://github.com/47degrees/metrifier/pull/18) ([juanpedromoreno](https://github.com/juanpedromoreno))
 - Adds Avro benchmarks [\#17](https://github.com/47degrees/metrifier/pull/17) ([juanpedromoreno](https://github.com/juanpedromoreno))
 - Demo app for both types of Serialization in frees-rpc [\#16](https://github.com/47degrees/metrifier/pull/16) ([juanpedromoreno](https://github.com/juanpedromoreno))
-- Host&Port configurable by Env Var and Config [\#14](https://github.com/47degrees/metrifier/pull/14) ([juanpedromoreno](https://github.com/juanpedromoreno))
 
 ## [v0.0.2](https://github.com/47degrees/metrifier/tree/v0.0.2) (2017-11-02)
 
@@ -58,6 +57,7 @@
 - Radar Chart comparing both solutions [\#11](https://github.com/47degrees/metrifier/pull/11) ([juanpedromoreno](https://github.com/juanpedromoreno))
 - The Benchmark [\#10](https://github.com/47degrees/metrifier/pull/10) ([juanpedromoreno](https://github.com/juanpedromoreno))
 - Packaging Servers and Clients [\#9](https://github.com/47degrees/metrifier/pull/9) ([juanpedromoreno](https://github.com/juanpedromoreno))
+- Fixes serialization Issue [\#8](https://github.com/47degrees/metrifier/pull/8) ([juanpedromoreno](https://github.com/juanpedromoreno))
 - Fixes Http 404 issues [\#7](https://github.com/47degrees/metrifier/pull/7) ([juanpedromoreno](https://github.com/juanpedromoreno))
 - RPC Service [\#5](https://github.com/47degrees/metrifier/pull/5) ([juanpedromoreno](https://github.com/juanpedromoreno))
 - PersonService in http module [\#4](https://github.com/47degrees/metrifier/pull/4) ([rafaparadela](https://github.com/rafaparadela))
