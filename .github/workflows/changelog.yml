@@ -14,6 +14,8 @@ on:
 jobs:
   changelog:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout project
         uses: actions/checkout@v2
@@ -37,6 +39,7 @@ jobs:
             --project ${repo#*/} \
             --token $GITHUB_TOKEN \
             --exclude-labels "duplicate,question,invalid,wontfix,auto-update,auto-changelog,auto-documentation" \
+            --max-issues 1000 \
             --configure-sections \
           '{
             "breaking": {
@@ -63,16 +66,9 @@ jobs:
       - name: Create Changelog Pull Request
         uses: peter-evans/create-pull-request@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: Update CHANGELOG.md
+          token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
+          commit-message: Update CHANGELOG.md [ci skip]
           title: 'Update CHANGELOG.md'
           labels: auto-changelog
           branch: auto-update-changelog
           body: Update CHANGELOG.md with information from latest release
-      - name: Merge Changelog Pull Request
-        if: env.PULL_REQUEST_NUMBER != null
-        uses: juliangruber/merge-pull-request-action@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          number: ${{ env.PULL_REQUEST_NUMBER }}
-          method: merge
