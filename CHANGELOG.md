@@ -33,6 +33,7 @@
 
 - Benchmarks Results - Completes 0.0.3 version [\#18](https://github.com/47degrees/metrifier/pull/18) ([juanpedromoreno](https://github.com/juanpedromoreno))
 - Adds Avro benchmarks [\#17](https://github.com/47degrees/metrifier/pull/17) ([juanpedromoreno](https://github.com/juanpedromoreno))
+- Demo app for both types of Serialization in frees-rpc [\#16](https://github.com/47degrees/metrifier/pull/16) ([juanpedromoreno](https://github.com/juanpedromoreno))
 
 ## [v0.0.2](https://github.com/47degrees/metrifier/tree/v0.0.2) (2017-11-02)
 
