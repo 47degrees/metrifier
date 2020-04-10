@@ -53,6 +53,7 @@
 
 **Merged pull requests:**
 
+- Running Benchmarks on GCP [\#15](https://github.com/47degrees/metrifier/pull/15) ([juanpedromoreno](https://github.com/juanpedromoreno))
 - Project Upgrade/Simplification [\#12](https://github.com/47degrees/metrifier/pull/12) ([juanpedromoreno](https://github.com/juanpedromoreno))
 - Radar Chart comparing both solutions [\#11](https://github.com/47degrees/metrifier/pull/11) ([juanpedromoreno](https://github.com/juanpedromoreno))
 - The Benchmark [\#10](https://github.com/47degrees/metrifier/pull/10) ([juanpedromoreno](https://github.com/juanpedromoreno))
