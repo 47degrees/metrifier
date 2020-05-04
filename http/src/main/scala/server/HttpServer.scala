@@ -22,10 +22,11 @@ object HttpServer extends StreamApp[IO] {
       requestShutdown: IO[Unit]
   ): fs2.Stream[IO, StreamApp.ExitCode] =
     for {
-      b <- BlazeBuilder[IO]
-        .bindHttp(HttpConf.port, HttpConf.host)
-        .mountService(httpServices, "/")
-        .serve
+      b <-
+        BlazeBuilder[IO]
+          .bindHttp(HttpConf.port, HttpConf.host)
+          .mountService(httpServices, "/")
+          .serve
       _ <- Stream.eval(
         IO(println(s"PersonService has started at ${HttpConf.host}:${HttpConf.port}"))
       )
