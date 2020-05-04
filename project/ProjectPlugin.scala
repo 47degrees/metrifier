@@ -37,13 +37,13 @@ object ProjectPlugin extends AutoPlugin {
     )
 
     lazy val httpDependencies: Seq[ModuleID] = Seq(
-      "org.http4s"   %% "http4s-dsl"          % V.http4s,
-      "org.http4s"   %% "http4s-blaze-server" % V.http4s,
-      "org.http4s"   %% "http4s-blaze-client" % V.http4s,
-      "org.http4s"   %% "http4s-argonaut"     % V.http4s,
-      "org.http4s"   %% "http4s-circe"        % V.http4s,
-      "io.circe"     %% "circe-generic"       % V.circe,
-      "com.typesafe" % "config"               % V.config
+      "org.http4s"  %% "http4s-dsl"          % V.http4s,
+      "org.http4s"  %% "http4s-blaze-server" % V.http4s,
+      "org.http4s"  %% "http4s-blaze-client" % V.http4s,
+      "org.http4s"  %% "http4s-argonaut"     % V.http4s,
+      "org.http4s"  %% "http4s-circe"        % V.http4s,
+      "io.circe"    %% "circe-generic"       % V.circe,
+      "com.typesafe" % "config"              % V.config
     )
 
     lazy val rpcDependencies: Seq[ModuleID] = Seq(
