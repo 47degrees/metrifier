@@ -43,3 +43,4 @@ lazy val bench = project
 
 addCommandAlias("ci-test", "scalafmtCheckAll; scalafmtSbtCheck; test")
 addCommandAlias("ci-docs", "compile")
+addCommandAlias("ci-publish", "ci-release")
