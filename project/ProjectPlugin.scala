@@ -14,7 +14,7 @@ object ProjectPlugin extends AutoPlugin {
     lazy val V = new {
       lazy val freesRPC = "0.14.1"
       lazy val http4s   = "0.18.15"
-      lazy val config   = "1.3.3"
+      lazy val config   = "1.3.4"
       lazy val logback  = "1.2.3"
       lazy val circe    = "0.13.0"
     }
