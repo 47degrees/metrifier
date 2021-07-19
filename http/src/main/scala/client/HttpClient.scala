@@ -51,7 +51,7 @@ class HttpClient[F[_]: Effect](c: Client[F], host: String, port: Int) {
 
     val request: Request[F] = Request[F](Method.POST, baseUri)
 
-    val req = request.withBody(newPerson.asJson)
+    val req = request.withEntity(newPerson.asJson)
 
     c.expect(req)
 

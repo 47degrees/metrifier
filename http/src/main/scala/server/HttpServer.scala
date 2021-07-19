@@ -14,6 +14,7 @@ import org.http4s.dsl.io._
 import org.http4s.server.blaze._
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import org.http4s.server.blaze.BlazeServerBuilder
 
 object HttpServer extends StreamApp[IO] {
 
@@ -23,7 +24,7 @@ object HttpServer extends StreamApp[IO] {
   ): fs2.Stream[IO, StreamApp.ExitCode] =
     for {
       b <-
-        BlazeBuilder[IO]
+        BlazeServerBuilder[IO]
           .bindHttp(HttpConf.port, HttpConf.host)
           .mountService(httpServices, "/")
           .serve
@@ -32,7 +33,7 @@ object HttpServer extends StreamApp[IO] {
       )
     } yield b
 
-  val httpServices = HttpService[IO] {
+  val httpServices = HttpRoutes.of[IO] {
 
     case GET -> Root / "person"                => Ok(listPersons)
     case GET -> Root / "person" / id           => Ok(getPerson(PersonId(id)))
