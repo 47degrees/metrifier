@@ -57,10 +57,10 @@ object ProjectPlugin extends AutoPlugin {
 
   override def projectSettings: Seq[Def.Setting[_]] =
     Seq(
-      name := "metrifier",
-      organization := "47deg",
+      name             := "metrifier",
+      organization     := "47deg",
       organizationName := "47 Degrees",
-      scalaVersion := "2.12.6",
+      scalaVersion     := "2.12.6",
       resolvers ++= Seq(
         Resolver.sonatypeRepo("snapshots"),
         Resolver.sonatypeRepo("releases"),
