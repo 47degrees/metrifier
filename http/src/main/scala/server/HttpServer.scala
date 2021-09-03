@@ -11,7 +11,7 @@ import metrifier.shared.services._
 import org.http4s._
 import org.http4s.dsl.impl.Root
 import org.http4s.dsl.io._
-import org.http4s.server.blaze._
+import org.http4s.blaze.server._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
